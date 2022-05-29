@@ -3,7 +3,6 @@
     <config name="installed_paths" value="./vendor/slevomat/coding-standard"/>
 
     <file>./src</file>
-    <file>./test</file>
 
     <!-- Include the whole PEAR standard -->
     <rule ref="PEAR">
