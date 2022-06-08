@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Mezzio;
 
-
 use Doctrine\DBAL\Connection;
 use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
