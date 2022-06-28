@@ -6,7 +6,7 @@ namespace LessAbstractService\Http\Handler\Query;
 use JsonException;
 use LessHttp\Response\ErrorResponse;
 use LessHydrator\Hydrator;
-use LessResource\Service\Exception\NoResource;
+use LessResource\Repository\Exception\NoResource;
 use LessValueObject\ValueObject;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

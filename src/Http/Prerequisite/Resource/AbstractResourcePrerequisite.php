@@ -5,7 +5,7 @@ namespace LessAbstractService\Http\Prerequisite\Resource;
 
 use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
 use LessResource\Model\ResourceModel;
-use LessResource\Service\ResourceService;
+use LessResource\Repository\ResourceRepository;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -22,14 +22,14 @@ abstract class AbstractResourcePrerequisite implements PrerequisiteConstraint
     ) {}
 
     /**
-     * @return ResourceService<ResourceModel>
+     * @return ResourceRepository<ResourceModel>
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
-    protected function getResourceService(ServerRequestInterface $request): ResourceService
+    protected function getResourceService(ServerRequestInterface $request): ResourceRepository
     {
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
@@ -38,7 +38,7 @@ abstract class AbstractResourcePrerequisite implements PrerequisiteConstraint
         assert(array_key_exists($key, $this->resourceServices));
 
         $resourceService = $this->container->get($this->resourceServices[$key]);
-        assert($resourceService instanceof ResourceService);
+        assert($resourceService instanceof ResourceRepository);
 
         return $resourceService;
     }

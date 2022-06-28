@@ -8,7 +8,7 @@ use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 use LessHttp\Response\ErrorResponse;
 use LessResource\Model\ResourceModel;
-use LessResource\Service\Exception\NoResource;
+use LessResource\Repository\Exception\NoResource;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
