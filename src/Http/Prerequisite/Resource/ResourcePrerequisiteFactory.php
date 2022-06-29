@@ -14,7 +14,7 @@ final class ResourcePrerequisiteFactory
         assert(is_array($config['routes']));
         assert(is_subclass_of($requestedName, AbstractResourcePrerequisite::class));
 
-        return new $requestedName($container, $this->parseResourceServices($config['routes']));
+        return new $requestedName($container, $this->parseResourceRepositories($config['routes']));
     }
 
     /**
@@ -22,21 +22,21 @@ final class ResourcePrerequisiteFactory
      *
      * @return array<mixed>
      */
-    private function parseResourceServices(array $routes): array
+    private function parseResourceRepositories(array $routes): array
     {
-        $resourceServices = [];
+        $resourceRepositories = [];
 
         foreach ($routes as $key => $route) {
             assert(is_array($route));
 
-            if (!isset($route['resourceService'])) {
+            if (!isset($route['resourceRepository'])) {
                 continue;
             }
 
-            assert(is_string($route['resourceService']));
-            $resourceServices[$key] = $route['resourceService'];
+            assert(is_string($route['resourceRepository']));
+            $resourceRepositories[$key] = $route['resourceRepository'];
         }
 
-        return $resourceServices;
+        return $resourceRepositories;
     }
 }

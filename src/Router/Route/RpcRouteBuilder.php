@@ -8,14 +8,16 @@ use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
 use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
 use LessAbstractService\Http\Handler;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
+use LessResource\Model\ResourceModel;
+use LessResource\Repository\ResourceRepository;
 use LessValidator\Validator;
 use LessValueObject\ValueObject;
 use Psr\Http\Server\RequestHandlerInterface;
 
 final class RpcRouteBuilder
 {
-    /** @var class-string|null */
-    private ?string $resourceService = null;
+    /** @var class-string<ResourceRepository<ResourceModel>>|null */
+    private ?string $resourceRepository = null;
 
     /** @var class-string<Validator>|null */
     private ?string $validator = null;
@@ -58,12 +60,22 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string $resourceService
+     * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
+     *
+     * @deprecated use withResourceRepository
      */
-    public function withResourceService(string $resourceService): self
+    public function withResourceService(string $resourceRepository): self
+    {
+        return $this->withResourceRepository($resourceRepository);
+    }
+
+    /**
+     * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
+     */
+    public function withResourceRepository(string $resourceRepository): self
     {
         $clone = clone $this;
-        $clone->resourceService = $resourceService;
+        $clone->resourceRepository = $resourceRepository;
 
         return $clone;
     }
@@ -125,7 +137,7 @@ final class RpcRouteBuilder
      */
     public function buildEventRoute(string $method, string $event, string $handler): iterable
     {
-        assert($this->resourceService !== null);
+        assert($this->resourceRepository !== null);
 
         yield from $this
             ->buildRoute(
@@ -170,7 +182,7 @@ final class RpcRouteBuilder
                 $handler,
                 [
                     'proxy' => [
-                        'class' => $this->resourceService,
+                        'class' => $this->resourceRepository,
                         'method' => $method,
                     ],
                 ],
@@ -200,7 +212,7 @@ final class RpcRouteBuilder
             ],
         );
 
-        foreach (['resourceService', 'validator', 'prerequisites', 'input'] as $key) {
+        foreach (['resourceRepository', 'validator', 'prerequisites', 'input'] as $key) {
             if ($this->{$key}) {
                 $route[$key] = $this->{$key};
             }

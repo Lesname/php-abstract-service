@@ -10,7 +10,7 @@ final class ResourceExistsPrerequisite extends AbstractResourcePrerequisite
 {
     public function isSatisfied(ServerRequestInterface $request): bool
     {
-        $service = $this->getResourceService($request);
+        $service = $this->getResourceRepository($request);
 
         $body = $request->getParsedBody();
         assert(is_array($body));
