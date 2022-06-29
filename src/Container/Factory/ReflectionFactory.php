@@ -7,6 +7,7 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -66,8 +67,9 @@ final class ReflectionFactory
      *
      * @return T
      *
-     * @template T
+     * @template T of object
      *
+     * @throws ReflectionException
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      *
@@ -75,8 +77,6 @@ final class ReflectionFactory
      */
     public function __invoke(ContainerInterface $container, string $name)
     {
-        assert(class_exists($name));
-
         $reflection = new ReflectionClass($name);
         $constructor = $reflection->getConstructor();
 
