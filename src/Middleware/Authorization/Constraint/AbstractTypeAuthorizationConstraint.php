@@ -21,5 +21,5 @@ abstract class AbstractTypeAuthorizationConstraint implements AuthorizationConst
 
     abstract protected function getAllowedType(): string;
 
-    abstract protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $account): bool;
+    abstract protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool;
 }

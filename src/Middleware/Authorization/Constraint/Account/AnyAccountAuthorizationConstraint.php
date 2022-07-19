@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class AnyAccountAuthorizationConstraint extends AbstractAccountAuthorizationConstraint
 {
-    protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $account): bool
+    protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool
     {
         return true;
     }
