@@ -14,11 +14,11 @@ use Psr\Http\Message\ServerRequestInterface;
 abstract class AbstractResourcePrerequisite implements PrerequisiteConstraint
 {
     /**
-     * @param array<string, string> $resourceServices
+     * @param array<string, string> $resourceRepositories
      */
     final public function __construct(
         private readonly ContainerInterface $container,
-        private readonly array $resourceServices,
+        private readonly array $resourceRepositories,
     ) {}
 
     /**
@@ -29,17 +29,17 @@ abstract class AbstractResourcePrerequisite implements PrerequisiteConstraint
      *
      * @psalm-suppress MixedReturnTypeCoercion
      */
-    protected function getResourceService(ServerRequestInterface $request): ResourceRepository
+    protected function getResourceRepository(ServerRequestInterface $request): ResourceRepository
     {
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
         $key = "{$method}:{$path}";
 
-        assert(array_key_exists($key, $this->resourceServices));
+        assert(array_key_exists($key, $this->resourceRepositories));
 
-        $resourceService = $this->container->get($this->resourceServices[$key]);
-        assert($resourceService instanceof ResourceRepository);
+        $resourceRepository = $this->container->get($this->resourceRepositories[$key]);
+        assert($resourceRepository instanceof ResourceRepository);
 
-        return $resourceService;
+        return $resourceRepository;
     }
 }
