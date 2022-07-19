@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Middleware\Authorization\Constraint\Account;
+namespace LessAbstractService\Middleware\Authorization\Constraint\Consumer;
 
 use LessValueObject\Composite\ForeignReference;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class AnyAccountAuthorizationConstraint extends AbstractAccountAuthorizationConstraint
+final class AnyConsumerAuthorizationConstraint extends AbstractConsumerAuthorizationConstraint
 {
     protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $account): bool
     {

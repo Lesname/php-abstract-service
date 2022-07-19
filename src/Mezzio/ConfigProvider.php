@@ -39,7 +39,7 @@ use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
 use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
-use LessAbstractService\Middleware\Authorization\Constraint\Account\AnyAccountAuthorizationConstraint;
+use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
 use LessAbstractService\Token;
@@ -84,7 +84,10 @@ final class ConfigProvider
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
-                    AnyAccountAuthorizationConstraint::class => AnyAccountAuthorizationConstraint::class,
+
+                    AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class => AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class,
+                    AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class => AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class,
+                    AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
                 ],
                 'factories' => [
                     Connection::class => ConnectionFactory::class,
