@@ -18,7 +18,7 @@ final class LoadAccountRolesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->queue->put(new Name('loadAccountRoles'), []);
+        $this->queue->publish(new Name('loadAccountRoles'), []);
 
         return self::SUCCESS;
     }

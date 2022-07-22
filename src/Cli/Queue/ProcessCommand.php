@@ -49,6 +49,8 @@ final class ProcessCommand extends Command
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
+     *
+     * @psalm-suppress MixedAssignment
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -96,13 +98,15 @@ final class ProcessCommand extends Command
             throw new RuntimeException();
         }
 
-        if (is_string($this->workerMap[$name->getValue()])) {
-            $worker = $this->container->get($this->workerMap[$name->getValue()]);
+        $mapped = $this->workerMap[$name->getValue()];
+
+        if (is_string($mapped)) {
+            $worker = $this->container->get($mapped);
             assert($worker instanceof Worker);
 
             return $this->workerMap[$name->getValue()] = $worker;
         }
 
-        return $this->workerMap[$name->getValue()];
+        return $mapped;
     }
 }

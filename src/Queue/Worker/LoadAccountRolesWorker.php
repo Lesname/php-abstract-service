@@ -104,18 +104,20 @@ SQL;
         $page = $this->getPage($job);
 
         if ($pages > $page) {
-            $this->queue->put($job->name, ['page' => $page + 1]);
+            $this->queue->publish($job->getName(), ['page' => $page + 1]);
         }
     }
 
     private function getPage(Job $job): int
     {
-        if (!isset($job->data['page'])) {
+        $data = $job->getData();
+
+        if (!isset($data['page'])) {
             return 1;
         }
 
-        if (is_int($job->data['page'])) {
-            return $job->data['page'];
+        if (is_int($data['page'])) {
+            return $data['page'];
         }
 
         throw new RuntimeException();
