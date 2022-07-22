@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli;
+namespace LessAbstractService\Cli\Service;
 
 use LessQueue\Job\Property\Name;
 use LessQueue\Queue;
@@ -18,7 +18,7 @@ final class LoadAccountRolesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->queue->publish(new Name('loadAccountRoles'), []);
+        $this->queue->publish(new Name('service:loadAccountRoles'), []);
 
         return self::SUCCESS;
     }

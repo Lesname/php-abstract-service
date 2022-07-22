@@ -4,7 +4,17 @@ declare(strict_types=1);
 namespace LessAbstractService\Mezzio;
 
 use Doctrine\DBAL\Connection;
+use LessAbstractService\Cli;
+use LessAbstractService\Container\Factory\ReflectionFactory;
+use LessAbstractService\Http\Handler\Event;
+use LessAbstractService\Http\Handler\Query;
+use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
+use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
+use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\Worker;
+use LessAbstractService\Router\RpcRouter;
+use LessAbstractService\Router\RpcRouterFactory;
+use LessAbstractService\Token;
 use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
@@ -33,16 +43,6 @@ use LessHttp\Middleware\Validation\ValidationMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddlewareFactory;
 use LessHydrator\Hydrator;
 use LessHydrator\ReflectionHydrator;
-use LessAbstractService\Cli;
-use LessAbstractService\Container\Factory\ReflectionFactory;
-use LessAbstractService\Http\Handler\Event;
-use LessAbstractService\Http\Handler\Query;
-use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
-use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
-use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
-use LessAbstractService\Router\RpcRouter;
-use LessAbstractService\Router\RpcRouterFactory;
-use LessAbstractService\Token;
 use LessQueue\DbalQueue;
 use LessQueue\Queue;
 use LessValidator\Builder\GenericValidatorBuilder;
@@ -122,22 +122,22 @@ final class ConfigProvider
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
-                    Cli\LoadAccountRolesCommand::class => ReflectionFactory::class,
+                    Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
 
-                    Worker\LoadAccountRolesWorker::class => ReflectionFactory::class,
+                    Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
                 ],
             ],
             'laminas-cli' => [
                 'commands' => [
-                    'loadAccountRoles' => Cli\LoadAccountRolesCommand::class,
+                    'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
                     'queue.process' => Cli\Queue\ProcessCommand::class,
                 ],
             ],
             'workers' => [
-                'loadAccountRoles' => Worker\LoadAccountRolesWorker::class,
+                'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
             ],
         ];
     }

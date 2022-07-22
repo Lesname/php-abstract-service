@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Queue\Worker;
+namespace LessAbstractService\Queue\Worker\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
