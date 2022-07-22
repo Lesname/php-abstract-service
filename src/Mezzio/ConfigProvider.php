@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessAbstractService\Mezzio;
 
 use Doctrine\DBAL\Connection;
+use LessAbstractService\Queue\Worker;
 use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
@@ -32,8 +33,7 @@ use LessHttp\Middleware\Validation\ValidationMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddlewareFactory;
 use LessHydrator\Hydrator;
 use LessHydrator\ReflectionHydrator;
-use LessAbstractService\Cli\Documentor\WriteCommand;
-use LessAbstractService\Cli\Documentor\WriteCommandFactory;
+use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
@@ -116,13 +116,20 @@ final class ConfigProvider
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
-                    WriteCommand::class => WriteCommandFactory::class,
+                    Cli\LoadAccountRolesCommand::class => ReflectionFactory::class,
+                    Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
+
+                    Worker\LoadAccountRolesWorker::class => ReflectionFactory::class,
                 ],
             ],
             'laminas-cli' => [
                 'commands' => [
-                    'documentor.write' => WriteCommand::class,
+                    'loadAccountRoles' => Cli\LoadAccountRolesCommand::class,
+                    'documentor.write' => Cli\Documentor\WriteCommand::class,
                 ],
+            ],
+            'workers' => [
+                'loadAccountRoles' => Worker\LoadAccountRolesWorker::class,
             ],
         ];
     }
