@@ -122,6 +122,8 @@ final class ConfigProvider
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
+                    AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
+
                     Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
