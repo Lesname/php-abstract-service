@@ -118,6 +118,7 @@ final class ConfigProvider
 
                     Cli\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
+                    Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
 
                     Worker\LoadAccountRolesWorker::class => ReflectionFactory::class,
                 ],
@@ -126,6 +127,7 @@ final class ConfigProvider
                 'commands' => [
                     'loadAccountRoles' => Cli\LoadAccountRolesCommand::class,
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
+                    'queue.process' => Cli\Queue\ProcessCommand::class,
                 ],
             ],
             'workers' => [
