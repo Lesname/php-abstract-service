@@ -15,24 +15,27 @@
 
     "psr/http-server-handler": "^1.0.1",
 
-    "lessname/documentor": "^0.1.20",
-    "lessname/resource": "^0.2.0",
+    "lessname/documentor": "^0.1.1",
+    "lessname/resource": "^0.2.1",
     "lessname/domain": "^0.1.8",
     "lessname/validator": "^0.1.10",
+    "lessname/queue": "^0.2.1",
     "lessname/http": "^0.1.10",
 
-    "laminas/laminas-stratigility": "^3.5.0",
-    "laminas/laminas-router": "^3.4.0",
+    "laminas/laminas-stratigility": "^3.7.0",
+    "laminas/laminas-router": "^3.7.0",
 
-    "mezzio/mezzio": "^3.10.0",
+    "mezzio/mezzio": "^3.11.0",
     "mezzio/mezzio-router": "^3.8.0",
-    "mezzio/mezzio-helpers": "^5.6.0",
-    "mezzio/mezzio-laminasrouter": "^3.1.0"
+    "mezzio/mezzio-helpers": "^5.8.0",
+    "mezzio/mezzio-laminasrouter": "^3.4.0"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.6.0",
-    "phpstan/phpstan": "^1.0.0",
-    "vimeo/psalm": "^4.10.0"
+    "squizlabs/php_codesniffer": "^3.7.0",
+    "phpstan/phpstan": "^1.8.0",
+    "vimeo/psalm": "^4.24.0",
+
+    "lessname/identity-client": "^0.1.0"
   },
   "autoload": {
     "psr-4": {
