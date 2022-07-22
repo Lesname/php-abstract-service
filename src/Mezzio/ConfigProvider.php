@@ -43,6 +43,8 @@ use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationCons
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
 use LessAbstractService\Token;
+use LessQueue\DbalQueue;
+use LessQueue\Queue;
 use LessValidator\Builder\GenericValidatorBuilder;
 use LessValidator\Builder\TypeDocumentValidatorBuilder;
 use Mezzio\Router\RouterInterface;
@@ -60,6 +62,8 @@ final class ConfigProvider
                     Hydrator::class => ReflectionHydrator::class,
 
                     Store::class => DbalStore::class,
+
+                    Queue::class => DbalQueue::class,
 
                     Publisher::class => FifoPublisher::class,
 
@@ -93,6 +97,8 @@ final class ConfigProvider
                     Connection::class => ConnectionFactory::class,
 
                     DbalStore::class => ReflectionFactory::class,
+
+                    DbalQueue::class => ReflectionFactory::class,
 
                     Token\JwTokenService::class => Token\JwTokenServiceFactory::class,
 
