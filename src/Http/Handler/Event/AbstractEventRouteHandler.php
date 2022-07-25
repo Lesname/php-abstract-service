@@ -33,6 +33,14 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
         private readonly array $routes,
     ) {}
 
+    /**
+     * @throws MaxOutBounds
+     * @throws MinOutBounds
+     * @throws NotFormat
+     * @throws PrecisionOutBounds
+     * @throws TooLong
+     * @throws TooShort
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $event = $this->makeEvent($request);
@@ -41,6 +49,14 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
         return $this->createResponse($request, $event);
     }
 
+    /**
+     * @throws MaxOutBounds
+     * @throws MinOutBounds
+     * @throws NotFormat
+     * @throws PrecisionOutBounds
+     * @throws TooLong
+     * @throws TooShort
+     */
     protected function makeEvent(ServerRequestInterface $request): Event
     {
         return $this->hydrator->hydrate(

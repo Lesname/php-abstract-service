@@ -4,9 +4,15 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Prerequisite\Resource;
 
 use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 final class ResourcePrerequisiteFactory
 {
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function __invoke(ContainerInterface $container, string $requestedName): AbstractResourcePrerequisite
     {
         $config = $container->get('config');

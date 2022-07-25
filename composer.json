@@ -20,7 +20,7 @@
     "lessname/domain": "^0.1.8",
     "lessname/validator": "^0.1.10",
     "lessname/queue": "^0.2.1",
-    "lessname/http": "^0.1.10",
+    "lessname/http": "^0.2.0",
 
     "laminas/laminas-stratigility": "^3.7.0",
     "laminas/laminas-router": "^3.7.0",

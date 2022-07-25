@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Http\Handler\Query;
 
+use JsonException;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
 use Psr\Http\Message\ResponseInterface;
@@ -10,6 +11,9 @@ use Psr\Http\Message\ResponseInterface;
 #[DocTypeWrapper(ResultsTypeDocumentWrapper::class)]
 final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
 {
+    /**
+     * @throws JsonException
+     */
     protected function makeResponse(mixed $output): ResponseInterface
     {
         assert(is_iterable($output));
