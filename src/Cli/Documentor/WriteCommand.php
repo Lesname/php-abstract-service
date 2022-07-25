@@ -87,6 +87,7 @@ final class WriteCommand extends Command
 
     /**
      * @throws JsonException
+     * @throws ReflectionException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -148,6 +149,8 @@ final class WriteCommand extends Command
      * @return array<mixed>
      *
      * @psalm-suppress MixedAssignment
+     *
+     * @throws ReflectionException
      */
     private function compasePaths(): array
     {
@@ -166,6 +169,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @throws ReflectionException
      */
     private function composeSchemaComponents(): array
     {
@@ -222,6 +227,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @throws ReflectionException
      */
     private function composePathDocument(RouteDocument $routeDocument): array
     {
@@ -245,6 +252,7 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     * @throws ReflectionException
      */
     private function composeTypeDocument(TypeDocument $typeDocument, bool $useRef): array
     {
@@ -309,6 +317,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @throws ReflectionException
      */
     private function composeCollectionDocument(CollectionTypeDocument $typeDocument, bool $useRef): array
     {
@@ -322,6 +332,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @throws ReflectionException
      */
     private function composeCompositeDocument(CompositeTypeDocument $typeDocument, bool $useRef): array
     {
@@ -394,6 +406,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<int, array<mixed>|stdClass>
+     *
+     * @throws ReflectionException
      */
     private function composeResponses(RouteDocument $routeDocument): array
     {

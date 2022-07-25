@@ -14,7 +14,6 @@ use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationCons
 use LessAbstractService\Queue\Worker;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
-use LessAbstractService\Token;
 use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
@@ -30,6 +29,7 @@ use LessDomain\Identifier\Uuid6IdentifierService;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LessHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
+use LessHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
 use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
 use LessHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
 use LessHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
@@ -74,8 +74,6 @@ final class ConfigProvider
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
-
-                    Token\TokenService::class => Token\JwTokenService::class,
                 ],
                 'invokables' => [
                     ReflectionHydrator::class => ReflectionHydrator::class,
@@ -100,11 +98,9 @@ final class ConfigProvider
 
                     DbalQueue::class => ReflectionFactory::class,
 
-                    Token\JwTokenService::class => Token\JwTokenServiceFactory::class,
-
                     FifoPublisher::class => FifoPublisherFactory::class,
 
-                    AuthenticationMiddleware::class => ReflectionFactory::class,
+                    AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
                     ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
                     CorsMiddleware::class => CorsMiddlewareFactory::class,

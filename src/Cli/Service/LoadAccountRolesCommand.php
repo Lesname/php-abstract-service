@@ -16,7 +16,7 @@ final class LoadAccountRolesCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->queue->publish(new Name('service:loadAccountRoles'), []);
 

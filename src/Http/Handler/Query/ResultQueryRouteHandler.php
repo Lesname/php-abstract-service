@@ -46,6 +46,9 @@ final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
         }
     }
 
+    /**
+     * @throws JsonException
+     */
     protected function makeResponse(mixed $output): ResponseInterface
     {
         assert($output instanceof ResourceModel);
