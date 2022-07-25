@@ -45,6 +45,8 @@ use LessHydrator\Hydrator;
 use LessHydrator\ReflectionHydrator;
 use LessQueue\DbalQueue;
 use LessQueue\Queue;
+use LessToken\Codec\TokenCodec;
+use LessToken\Codec\TokenCodecFactory;
 use LessValidator\Builder\GenericValidatorBuilder;
 use LessValidator\Builder\TypeDocumentValidatorBuilder;
 use Mezzio\Router\RouterInterface;
@@ -125,6 +127,8 @@ final class ConfigProvider
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
 
                     Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
+
+                    TokenCodec::class => TokenCodecFactory::class,
                 ],
             ],
             'laminas-cli' => [
