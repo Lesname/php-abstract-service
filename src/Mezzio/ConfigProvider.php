@@ -122,9 +122,10 @@ final class ConfigProvider
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
-                    Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
+                    Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
+                    Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
                     Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
 
@@ -133,9 +134,10 @@ final class ConfigProvider
             ],
             'laminas-cli' => [
                 'commands' => [
-                    'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
                     'queue.process' => Cli\Queue\ProcessCommand::class,
+                    'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
+                    'service.update' => Cli\Service\UpdateCommand::class,
                 ],
             ],
             'workers' => [
