@@ -8,6 +8,7 @@ use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDomain\Event\Event;
 use LessDomain\Event\Store\Store;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessDomain\Identifier\IdentifierService;
 use LessHydrator\Hydrator;
 use LessAbstractService\Http\Handler\Event\Response\CreatedResponse;
@@ -27,17 +28,12 @@ use Psr\Http\Message\StreamFactoryInterface;
 final class CreateEventRouteHandler extends AbstractEventRouteHandler
 {
     /**
-     * @param ResponseFactoryInterface $responseFactory
-     * @param StreamFactoryInterface $streamFactory
-     * @param IdentifierService $identifierService
-     * @param Hydrator $hydrator
-     * @param Store $store
      * @param array<mixed> $routes
      */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly StreamFactoryInterface $streamFactory,
-        private readonly IdentifierService $identifierService,
+        private readonly IdentifierGenerator $identifierGenerator,
         Hydrator $hydrator,
         Store $store,
         array $routes,
@@ -82,7 +78,7 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
     {
         $data = parent::getEventData($request);
 
-        $data['id'] = $this->identifierService->generate();
+        $data['id'] = $this->identifierGenerator->generate();
 
         return $data;
     }

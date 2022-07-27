@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Handler\Event;
 
 use LessDomain\Event\Store\Store;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessDomain\Identifier\IdentifierService;
 use LessHydrator\Hydrator;
 use Psr\Container\ContainerExceptionInterface;
@@ -30,8 +31,8 @@ final class CreateEventRouteHandlerFactory
         $streamFactory = $container->get(StreamFactoryInterface::class);
         assert($streamFactory instanceof StreamFactoryInterface);
 
-        $identifierService = $container->get(IdentifierService::class);
-        assert($identifierService instanceof IdentifierService);
+        $identifierGenerator = $container->get(IdentifierGenerator::class);
+        assert($identifierGenerator instanceof IdentifierGenerator);
 
         $hydrator = $container->get(Hydrator::class);
         assert($hydrator instanceof Hydrator);
@@ -42,7 +43,7 @@ final class CreateEventRouteHandlerFactory
         return new CreateEventRouteHandler(
             $responseFactory,
             $streamFactory,
-            $identifierService,
+            $identifierGenerator,
             $hydrator,
             $store,
             $config['routes'],
