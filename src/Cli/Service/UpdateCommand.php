@@ -10,9 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class UpdateCommand extends Command
 {
-    public function __construct(
-        private readonly CacheInterface $cache
-    ) {
+    public function __construct(private readonly CacheInterface $cache)
+    {
         parent::__construct();
     }
 
