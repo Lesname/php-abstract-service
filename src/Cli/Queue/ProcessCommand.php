@@ -80,6 +80,8 @@ final class ProcessCommand extends Command
                     'Failed processing job',
                     ['exception' => $e],
                 );
+
+                continue;
             }
 
             $this->queue->delete($job);
