@@ -25,6 +25,7 @@ use LessValueObject\Number\Int\Date\Timestamp;
 use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
 use LessValueObject\String\Format\EmailAddress;
 use LessValueObject\String\Format\Resource\Identifier;
+use LessValueObject\String\Format\Uri;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
@@ -55,6 +56,8 @@ final class WriteCommand extends Command
         Identifier::class,
 
         EmailAddress::class,
+
+        Uri\Https::class,
 
         Paginate::class,
 
