@@ -24,6 +24,8 @@ use LessDomain\Event\Publisher\FifoPublisherFactory;
 use LessDomain\Event\Publisher\Publisher;
 use LessDomain\Event\Store\DbalStore;
 use LessDomain\Event\Store\Store;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
+use LessDomain\Identifier\Generator\Uuid6IdentifierGenerator;
 use LessDomain\Identifier\IdentifierService;
 use LessDomain\Identifier\Uuid6IdentifierService;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
@@ -72,6 +74,7 @@ final class ConfigProvider
                     Publisher::class => FifoPublisher::class,
 
                     IdentifierService::class => Uuid6IdentifierService::class,
+                    IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     TypeDocumentValidatorBuilder::class => GenericValidatorBuilder::class,
                     RouteDocumentor::class => MezzioRouteDocumentor::class,
@@ -83,6 +86,7 @@ final class ConfigProvider
                     ReflectionHydrator::class => ReflectionHydrator::class,
 
                     Uuid6IdentifierService::class => Uuid6IdentifierService::class,
+                    Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     GenericValidatorBuilder::class => GenericValidatorBuilder::class,
 
