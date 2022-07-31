@@ -151,8 +151,6 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      *
-     * @psalm-suppress MixedAssignment
-     *
      * @throws ReflectionException
      */
     private function compasePaths(): array

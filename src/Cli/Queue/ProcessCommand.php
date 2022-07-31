@@ -49,8 +49,6 @@ final class ProcessCommand extends Command
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
-     *
-     * @psalm-suppress MixedAssignment
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

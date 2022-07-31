@@ -14,8 +14,6 @@ final class ProcessCommandFactory
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
-     *
-     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function __invoke(ContainerInterface $container): ProcessCommand
     {
