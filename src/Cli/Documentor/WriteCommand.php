@@ -151,8 +151,6 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      *
-     * @psalm-suppress MixedAssignment
-     *
      * @throws ReflectionException
      */
     private function compasePaths(): array
@@ -277,8 +275,8 @@ final class WriteCommand extends Command
         } else {
             $document = match ($typeDocument::class) {
                 BoolTypeDocument::class => $this->composeBoolDocument(),
-                CollectionTypeDocument::class => $this->composeCollectionDocument($typeDocument, true),
-                CompositeTypeDocument::class => $this->composeCompositeDocument($typeDocument, true),
+                CollectionTypeDocument::class => $this->composeCollectionDocument($typeDocument),
+                CompositeTypeDocument::class => $this->composeCompositeDocument($typeDocument),
                 EnumTypeDocument::class => $this->composeEnumDocument($typeDocument),
                 NumberTypeDocument::class => $this->composeNumberDocument($typeDocument),
                 StringTypeDocument::class => $this->composeStringDocument($typeDocument),
@@ -323,11 +321,11 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function composeCollectionDocument(CollectionTypeDocument $typeDocument, bool $useRef): array
+    private function composeCollectionDocument(CollectionTypeDocument $typeDocument): array
     {
         return [
             'type' => 'array',
-            'items' => $this->composeTypeDocument($typeDocument->item, $useRef),
+            'items' => $this->composeTypeDocument($typeDocument->item, true),
             'minItems' => $typeDocument->length->minimal,
             'maxItems' => $typeDocument->length->maximal,
         ];
@@ -338,13 +336,13 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function composeCompositeDocument(CompositeTypeDocument $typeDocument, bool $useRef): array
+    private function composeCompositeDocument(CompositeTypeDocument $typeDocument): array
     {
         return [
             'type' => 'object',
-            'additionalProperties' => false,
+            'additionalProperties' => $typeDocument->allowAdditionalProperties,
             'properties' => array_map(
-                fn (TypeDocument $property): array => $this->composeTypeDocument($property, $useRef),
+                fn (TypeDocument $property): array => $this->composeTypeDocument($property, true),
                 $typeDocument->properties,
             ),
             'required' => $typeDocument->required,

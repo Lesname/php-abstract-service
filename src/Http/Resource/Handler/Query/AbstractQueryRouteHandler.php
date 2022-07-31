@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler\Query;
 
 use JsonException;
 use LessHttp\Response\ErrorResponse;
@@ -22,9 +22,6 @@ use ReflectionNamedType;
 use ReflectionParameter;
 use RuntimeException;
 
-/**
- * @deprecated use Resource namespaced
- */
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
     abstract protected function makeResponse(mixed $output): ResponseInterface;

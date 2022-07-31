@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="v4.25.0@d7cd84c4ebca74ba3419b9601f81d177bcbe2aac">
+  <file src="src/Cli/Documentor/WriteCommandFactory.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$config['routes']</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/Cli/Queue/ProcessCommand.php">
+    <MixedAssignment occurrences="1">
+      <code>$timeout</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Cli/Queue/ProcessCommandFactory.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$config['workers']</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/Container/Factory/ReflectionFactory.php">
+    <MixedMethodCall occurrences="1">
+      <code>new $name(...$this-&gt;getParameters($container, $constructor))</code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Http/Handler/Event/CreateEventRouteHandler.php">
+    <DeprecatedClass occurrences="4">
+      <code>AbstractEventRouteHandler</code>
+      <code>CreatedResponse::class</code>
+      <code>parent::__construct($hydrator, $store, $routes)</code>
+      <code>parent::getEventData($request)</code>
+    </DeprecatedClass>
+    <NoInterfaceProperties occurrences="1">
+      <code>$event-&gt;id</code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="src/Http/Handler/Event/CreateEventRouteHandlerFactory.php">
+    <DeprecatedClass occurrences="2">
+      <code>CreateEventRouteHandler</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Handler/Event/UpdateEventRouteHandler.php">
+    <DeprecatedClass occurrences="2">
+      <code>AbstractEventRouteHandler</code>
+      <code>parent::__construct($hydrator, $store, $routes)</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Handler/Event/UpdateEventRouteHandlerFactory.php">
+    <DeprecatedClass occurrences="2">
+      <code>UpdateEventRouteHandler</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Handler/Query/AbstractQueryRouteHandler.php">
+    <MixedMethodCall occurrences="1">
+      <code>$route['proxy']['method']</code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Http/Handler/Query/QueryRouteHandlerFactory.php">
+    <DeprecatedClass occurrences="2">
+      <code>AbstractQueryRouteHandler</code>
+      <code>class-string&lt;AbstractQueryRouteHandler&gt;</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Handler/Query/ResultQueryRouteHandler.php">
+    <DeprecatedClass occurrences="2">
+      <code>AbstractQueryRouteHandler</code>
+      <code>parent::handle($request)</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Handler/Query/ResultsQueryRouteHandler.php">
+    <DeprecatedClass occurrences="1">
+      <code>AbstractQueryRouteHandler</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Prerequisite/Resource/ResourceExistsPrerequisite.php">
+    <DeprecatedClass occurrences="1">
+      <code>AbstractResourcePrerequisite</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Prerequisite/Resource/ResourcePrerequisiteFactory.php">
+    <DeprecatedClass occurrences="2">
+      <code>AbstractResourcePrerequisite</code>
+      <code>AbstractResourcePrerequisite::class</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Resource/Handler/Command/CreateEventRouteHandler.php">
+    <NoInterfaceProperties occurrences="1">
+      <code>$event-&gt;id</code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="src/Http/Resource/Handler/Query/AbstractQueryRouteHandler.php">
+    <MixedMethodCall occurrences="1">
+      <code>$route['proxy']['method']</code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Mezzio/ConfigProvider.php">
+    <DeprecatedClass occurrences="13">
+      <code>Event\CreateEventRouteHandler::class</code>
+      <code>Event\CreateEventRouteHandlerFactory::class</code>
+      <code>Event\UpdateEventRouteHandler::class</code>
+      <code>Event\UpdateEventRouteHandlerFactory::class</code>
+      <code>Query\QueryRouteHandlerFactory::class</code>
+      <code>Query\QueryRouteHandlerFactory::class</code>
+      <code>Query\ResultQueryRouteHandler::class</code>
+      <code>Query\ResultsQueryRouteHandler::class</code>
+      <code>ResourceExistsPrerequisite::class</code>
+      <code>ResourcePrerequisiteFactory::class</code>
+      <code>Uuid6IdentifierService::class</code>
+      <code>Uuid6IdentifierService::class</code>
+      <code>Uuid6IdentifierService::class</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Account/DeveloperAccountAuthorizationConstraint.php">
+    <MixedAssignment occurrences="1">
+      <code>$role</code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Router/Route/RpcRouteBuilder.php">
+    <MixedAssignment occurrences="1">
+      <code>$route[$key]</code>
+    </MixedAssignment>
+  </file>
+</files>

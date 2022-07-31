@@ -10,8 +10,18 @@ use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
 use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
+use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Query\QueryRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
+use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
+use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\Worker;
+use LessAbstractService\Router\Route\Type;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
 use LessDatabase\Factory\ConnectionFactory;
@@ -57,8 +67,6 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
-     *
-     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -119,14 +127,25 @@ final class ConfigProvider
                     Event\CreateEventRouteHandler::class => Event\CreateEventRouteHandlerFactory::class,
                     Event\UpdateEventRouteHandler::class => Event\UpdateEventRouteHandlerFactory::class,
 
+                    CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
+                    UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
+
                     Query\ResultsQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
                     Query\ResultQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
+
+                    ResultsQueryRouteHandler::class => QueryRouteHandlerFactory::class,
+                    ResultQueryRouteHandler::class => QueryRouteHandlerFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
+                    \LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite::class =>
+                        \LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory::class,
+
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
+
+                    PushHandler::class => PushHandlerFactory::class,
 
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
@@ -144,6 +163,15 @@ final class ConfigProvider
                     'queue.process' => Cli\Queue\ProcessCommand::class,
                     'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'service.update' => Cli\Service\UpdateCommand::class,
+                ],
+            ],
+            'routes' => [
+                'POST:/service.hook.push' => [
+                    'path' => '/service.hook.push',
+                    'authorizations' => [AnyOneAuthorizationConstraint::class],
+                    'resource' => 'service.hook',
+                    'middleware' => PushHandler::class,
+                    'type' => Type::Command,
                 ],
             ],
             'workers' => [

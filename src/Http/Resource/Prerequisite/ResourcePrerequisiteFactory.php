@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Prerequisite\Resource;
+namespace LessAbstractService\Http\Resource\Prerequisite;
 
 use Interop\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 final class ResourcePrerequisiteFactory
 {
     /**

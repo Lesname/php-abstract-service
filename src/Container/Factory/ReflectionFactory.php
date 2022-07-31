@@ -72,8 +72,6 @@ final class ReflectionFactory
      * @throws ReflectionException
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
-     *
-     * @psalm-suppress MixedMethodCall
      */
     public function __invoke(ContainerInterface $container, string $name)
     {

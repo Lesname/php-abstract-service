@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Prerequisite\Resource;
+namespace LessAbstractService\Http\Resource\Prerequisite;
 
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
@@ -11,9 +11,6 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 final class ResourceExistsPrerequisite extends AbstractResourcePrerequisite
 {
     /**

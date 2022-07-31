@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler\Command;
 
+use LessDomain\Event\Store\Store;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHydrator\Hydrator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -10,19 +12,13 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
-final class QueryRouteHandlerFactory
+final class CreateEventRouteHandlerFactory
 {
     /**
-     * @param ContainerInterface $container
-     * @param class-string<AbstractQueryRouteHandler> $name
-     *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    public function __invoke(ContainerInterface $container, string $name): AbstractQueryRouteHandler
+    public function __invoke(ContainerInterface $container): CreateEventRouteHandler
     {
         $config = $container->get('config');
         assert(is_array($config));
@@ -34,14 +30,21 @@ final class QueryRouteHandlerFactory
         $streamFactory = $container->get(StreamFactoryInterface::class);
         assert($streamFactory instanceof StreamFactoryInterface);
 
+        $identifierGenerator = $container->get(IdentifierGenerator::class);
+        assert($identifierGenerator instanceof IdentifierGenerator);
+
         $hydrator = $container->get(Hydrator::class);
         assert($hydrator instanceof Hydrator);
 
-        return new $name(
+        $store = $container->get(Store::class);
+        assert($store instanceof Store);
+
+        return new CreateEventRouteHandler(
             $responseFactory,
             $streamFactory,
-            $container,
+            $identifierGenerator,
             $hydrator,
+            $store,
             $config['routes'],
         );
     }

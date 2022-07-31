@@ -3,11 +3,14 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Router\Route;
 
+use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
+use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
 use LessDomain\Event\Event;
 use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
 use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
-use LessAbstractService\Http\Handler;
-use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
 use LessResource\Model\ResourceModel;
 use LessResource\Repository\ResourceRepository;
 use LessValidator\Validator;
@@ -109,7 +112,7 @@ final class RpcRouteBuilder
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildCreateEventRoute(string $method, string $event, string $handler = Handler\Event\CreateEventRouteHandler::class): iterable
+    public function buildCreateEventRoute(string $method, string $event, string $handler = CreateEventRouteHandler::class): iterable
     {
         yield from $this->buildEventRoute($method, $event, $handler);
     }
@@ -121,7 +124,7 @@ final class RpcRouteBuilder
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildUpdateEventRoute(string $method, string $event, string $handler = Handler\Event\UpdateEventRouteHandler::class): iterable
+    public function buildUpdateEventRoute(string $method, string $event, string $handler = UpdateEventRouteHandler::class): iterable
     {
         yield from $this
             ->withPrerequisites([ResourceExistsPrerequisite::class, ...$this->prerequisites])
@@ -142,7 +145,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                'command',
+                Type::Command,
                 $handler,
                 [
                     'event' => $event,
@@ -156,7 +159,7 @@ final class RpcRouteBuilder
      */
     public function buildResultQueryRoute(string $method): iterable
     {
-        yield from $this->buildQueryRoute($method, Handler\Query\ResultQueryRouteHandler::class);
+        yield from $this->buildQueryRoute($method, ResultQueryRouteHandler::class);
     }
 
     /**
@@ -164,7 +167,7 @@ final class RpcRouteBuilder
      */
     public function buildResultsQueryRoute(string $method): iterable
     {
-        yield from $this->buildQueryRoute($method, Handler\Query\ResultsQueryRouteHandler::class);
+        yield from $this->buildQueryRoute($method, ResultsQueryRouteHandler::class);
     }
 
     /**
@@ -178,7 +181,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                'query',
+                Type::Query,
                 $handler,
                 [
                     'proxy' => [
@@ -191,15 +194,13 @@ final class RpcRouteBuilder
 
     /**
      * @param string $method
-     * @param 'query' | 'command' $type
+     * @param Type $type
      * @param class-string<RequestHandlerInterface> $handler
      * @param array<string, mixed> $baseRoute
      *
      * @return iterable<string, array<mixed>>
-     *
-     * @psalm-suppress MixedAssignment
      */
-    public function buildRoute(string $method, string $type, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(string $method, Type | string $type, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,

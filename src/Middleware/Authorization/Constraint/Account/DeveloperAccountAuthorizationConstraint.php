@@ -15,8 +15,6 @@ final class DeveloperAccountAuthorizationConstraint extends AbstractAccountAutho
 
     /**
      * @throws Exception
-     *
-     * @psalm-suppress MixedAssignment
      */
     protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool
     {
