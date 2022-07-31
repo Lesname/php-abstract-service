@@ -80,7 +80,7 @@
       <code>AbstractResourcePrerequisite::class</code>
     </DeprecatedClass>
   </file>
-  <file src="src/Http/Resource/Handler/Event/CreateEventRouteHandler.php">
+  <file src="src/Http/Resource/Handler/Command/CreateEventRouteHandler.php">
     <NoInterfaceProperties occurrences="1">
       <code>$event-&gt;id</code>
     </NoInterfaceProperties>

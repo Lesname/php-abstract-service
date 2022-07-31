@@ -10,6 +10,9 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
  */
 final class PushParameters extends AbstractCompositeValueObject
 {
+    /**
+     * @param array<mixed> $body
+     */
     public function __construct(
         public readonly Push\Type $type,
         public readonly array $body,
