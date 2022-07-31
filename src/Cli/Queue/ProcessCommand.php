@@ -46,9 +46,12 @@ final class ProcessCommand extends Command
     }
 
     /**
+     * @throws NotFoundExceptionInterface
+     * @throws PrecisionOutBounds
+     * @throws Throwable
+     * @throws ContainerExceptionInterface
      * @throws MaxOutBounds
      * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -72,6 +75,10 @@ final class ProcessCommand extends Command
             try {
                 $this->getWorkerForJob($job->getName())->process($job);
             } catch (Throwable $e) {
+                if ($output->isVerbose()) {
+                    throw $e;
+                }
+
                 $this->queue->bury($job);
 
                 $this->logger->critical(

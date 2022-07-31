@@ -168,7 +168,7 @@ final class ConfigProvider
             'routes' => [
                 'POST:/service.hook.push' => [
                     'path' => '/service.hook.push',
-                    'authorizations' => [AnyOneAuthorizationConstraint::class],
+                    AuthorizationMiddlewareFactory::ROUTE_KEY => [AnyOneAuthorizationConstraint::class],
                     'resource' => 'service.hook',
                     'middleware' => PushHandler::class,
                     'type' => Category::Command,
