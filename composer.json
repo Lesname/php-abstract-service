@@ -23,6 +23,8 @@
     "lessname/http": "^0.2.0",
     "lessname/value-object": "^0.2.17",
 
+    "lessname/abstract-client": "^0.2.0",
+
     "laminas/laminas-stratigility": "^3.7.0",
     "laminas/laminas-router": "^3.7.0",
 
