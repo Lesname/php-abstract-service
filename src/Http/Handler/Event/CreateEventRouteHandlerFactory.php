@@ -5,7 +5,6 @@ namespace LessAbstractService\Http\Handler\Event;
 
 use LessDomain\Event\Store\Store;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
-use LessDomain\Identifier\IdentifierService;
 use LessHydrator\Hydrator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -13,6 +12,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
+/**
+ * @deprecated use Resource namespaced
+ */
 final class CreateEventRouteHandlerFactory
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Prerequisite\Resource;
+namespace LessAbstractService\Http\Resource\Prerequisite;
 
 use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
 use LessResource\Model\ResourceModel;
@@ -11,9 +11,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 abstract class AbstractResourcePrerequisite implements PrerequisiteConstraint
 {
     /**

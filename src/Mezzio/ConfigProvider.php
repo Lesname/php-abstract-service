@@ -10,6 +10,13 @@ use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
 use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
+use LessAbstractService\Http\Resource\Handler\Event\CreateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Event\CreateEventRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Event\UpdateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Event\UpdateEventRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Query\QueryRouteHandlerFactory;
+use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\Worker;
 use LessAbstractService\Router\RpcRouter;
@@ -57,8 +64,6 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
-     *
-     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -119,12 +124,21 @@ final class ConfigProvider
                     Event\CreateEventRouteHandler::class => Event\CreateEventRouteHandlerFactory::class,
                     Event\UpdateEventRouteHandler::class => Event\UpdateEventRouteHandlerFactory::class,
 
+                    CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
+                    UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
+
                     Query\ResultsQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
                     Query\ResultQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
+
+                    ResultsQueryRouteHandler::class => QueryRouteHandlerFactory::class,
+                    ResultQueryRouteHandler::class => QueryRouteHandlerFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
+
+                    \LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite::class =>
+                        \LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 

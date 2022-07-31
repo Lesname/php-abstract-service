@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Event;
+namespace LessAbstractService\Http\Resource\Handler\Event;
 
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
@@ -12,9 +12,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 #[DocInputProvided(['occurredOn', 'headers'])]
 #[DocHttpResponse(code: 204)]
 final class UpdateEventRouteHandler extends AbstractEventRouteHandler

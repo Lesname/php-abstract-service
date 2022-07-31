@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Event;
+namespace LessAbstractService\Http\Resource\Handler\Event;
 
 use JsonException;
+use LessAbstractService\Http\Resource\Handler\Event\Response\CreatedResponse;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDomain\Event\Event;
 use LessDomain\Event\Store\Store;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHydrator\Hydrator;
-use LessAbstractService\Http\Handler\Event\Response\CreatedResponse;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
 use LessValueObject\Number\Exception\PrecisionOutBounds;
@@ -22,9 +22,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 #[DocInputProvided(['id', 'occurredOn', 'headers'])]
 #[DocHttpResponse(CreatedResponse::class, 201)]
 final class CreateEventRouteHandler extends AbstractEventRouteHandler

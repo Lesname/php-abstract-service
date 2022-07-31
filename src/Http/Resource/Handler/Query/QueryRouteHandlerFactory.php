@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler\Query;
 
 use LessHydrator\Hydrator;
 use Psr\Container\ContainerExceptionInterface;
@@ -10,9 +10,6 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 final class QueryRouteHandlerFactory
 {
     /**

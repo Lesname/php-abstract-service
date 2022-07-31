@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Handler\Event;
+namespace LessAbstractService\Http\Resource\Handler\Event;
 
 use LessDomain\Event\Event;
 use LessDomain\Event\Property\Headers;
@@ -18,9 +18,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-/**
- * @deprecated use Resource namespaced
- */
 abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;

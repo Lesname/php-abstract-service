@@ -10,6 +10,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
+/**
+ * @deprecated use Resource namespaced
+ */
 final class UpdateEventRouteHandlerFactory
 {
     /**
