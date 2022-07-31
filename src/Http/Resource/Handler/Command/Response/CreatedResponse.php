@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Event\Response;
+namespace LessAbstractService\Http\Resource\Handler\Command\Response;
 
 use LessValueObject\Composite\AbstractCompositeValueObject;
 use LessValueObject\String\Format\Resource\Identifier;

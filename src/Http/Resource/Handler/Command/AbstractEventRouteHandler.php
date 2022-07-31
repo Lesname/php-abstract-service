@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Event;
+namespace LessAbstractService\Http\Resource\Handler\Command;
 
 use LessDomain\Event\Event;
 use LessDomain\Event\Property\Headers;

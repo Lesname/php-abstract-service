@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Router\Route;
 
-use LessAbstractService\Http\Resource\Handler\Event\CreateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\Event\UpdateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
 use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;

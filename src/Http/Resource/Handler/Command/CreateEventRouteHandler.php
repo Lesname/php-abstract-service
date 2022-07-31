@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Event;
+namespace LessAbstractService\Http\Resource\Handler\Command;
 
 use JsonException;
-use LessAbstractService\Http\Resource\Handler\Event\Response\CreatedResponse;
+use LessAbstractService\Http\Resource\Handler\Command\Response\CreatedResponse;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDomain\Event\Event;
