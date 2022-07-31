@@ -21,10 +21,10 @@ use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\Worker;
-use LessAbstractService\Router\Route\Type;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
 use LessDatabase\Factory\ConnectionFactory;
+use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
 use LessDocumentor\Route\MezzioRouteDocumentor;
@@ -171,7 +171,8 @@ final class ConfigProvider
                     'authorizations' => [AnyOneAuthorizationConstraint::class],
                     'resource' => 'service.hook',
                     'middleware' => PushHandler::class,
-                    'type' => Type::Command,
+                    'type' => Category::Command,
+                    'category' => Category::Command,
                 ],
             ],
             'workers' => [

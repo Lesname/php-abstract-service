@@ -8,6 +8,7 @@ use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
 use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
+use LessDocumentor\Route\Document\Property\Category;
 use LessDomain\Event\Event;
 use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
 use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
@@ -145,7 +146,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                Type::Command,
+                Category::Command,
                 $handler,
                 [
                     'event' => $event,
@@ -181,7 +182,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                Type::Query,
+                Category::Query,
                 $handler,
                 [
                     'proxy' => [
@@ -193,14 +194,12 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param string $method
-     * @param Type $type
      * @param class-string<RequestHandlerInterface> $handler
      * @param array<string, mixed> $baseRoute
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildRoute(string $method, Type | string $type, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(string $method, Category | string $type, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,
@@ -209,6 +208,7 @@ final class RpcRouteBuilder
                 'authorizations' => $this->authorizations,
                 'resource' => $this->resourceName,
                 'middleware' => $handler,
+                'category' => $type,
                 'type' => $type,
             ],
         );
