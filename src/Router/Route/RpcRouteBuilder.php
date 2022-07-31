@@ -142,7 +142,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                'command',
+                Type::Command,
                 $handler,
                 [
                     'event' => $event,
@@ -178,7 +178,7 @@ final class RpcRouteBuilder
         yield from $this
             ->buildRoute(
                 $method,
-                'query',
+                Type::Query,
                 $handler,
                 [
                     'proxy' => [
@@ -191,7 +191,7 @@ final class RpcRouteBuilder
 
     /**
      * @param string $method
-     * @param 'query' | 'command' $type
+     * @param Type $type
      * @param class-string<RequestHandlerInterface> $handler
      * @param array<string, mixed> $baseRoute
      *
@@ -199,7 +199,7 @@ final class RpcRouteBuilder
      *
      * @psalm-suppress MixedAssignment
      */
-    public function buildRoute(string $method, string $type, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(string $method, Type | string $type, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,
