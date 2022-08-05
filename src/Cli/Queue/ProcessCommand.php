@@ -72,6 +72,13 @@ final class ProcessCommand extends Command
         $till = time() + $timeout;
 
         while ($till >= time() && ($job = $this->queue->reserve(new Second($till - time())))) {
+            if ($job->getName()->getValue() === 'queue:stop') {
+                $output->writeln('Queue stopped');
+                $this->queue->delete($job);
+
+                break;
+            }
+
             try {
                 $this->getWorkerForJob($job->getName())->process($job);
             } catch (Throwable $e) {
