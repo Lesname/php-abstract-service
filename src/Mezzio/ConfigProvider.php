@@ -153,6 +153,7 @@ final class ConfigProvider
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
                     Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
+                    Worker\Service\LoadAccountRoleWorker::class => ReflectionFactory::class,
 
                     TokenCodec::class => TokenCodecFactory::class,
                 ],
@@ -177,6 +178,7 @@ final class ConfigProvider
             ],
             'workers' => [
                 'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
+                'service:loadAccountRole' => Worker\Service\LoadAccountRoleWorker::class,
             ],
         ];
     }
