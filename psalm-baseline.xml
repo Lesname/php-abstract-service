@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="v4.25.0@d7cd84c4ebca74ba3419b9601f81d177bcbe2aac">
+<files psalm-version="4.26.0@6998fabb2bf528b65777bf9941920888d23c03ac">
   <file src="src/Cli/Documentor/WriteCommandFactory.php">
     <MixedArgumentTypeCoercion occurrences="1">
       <code>$config['routes']</code>
@@ -90,6 +90,16 @@
       <code>$route['proxy']['method']</code>
     </MixedMethodCall>
   </file>
+  <file src="src/Http/Service/Hook/Handler/Command/PushHandler.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$body</code>
+    </MixedArgumentTypeCoercion>
+  </file>
+  <file src="src/Http/Service/Hook/Handler/Command/PushHandlerFactory.php">
+    <MixedArgumentTypeCoercion occurrences="1">
+      <code>$config[PushHandler::class]['eventQueueJobMap']</code>
+    </MixedArgumentTypeCoercion>
+  </file>
   <file src="src/Mezzio/ConfigProvider.php">
     <DeprecatedClass occurrences="13">
       <code>Event\CreateEventRouteHandler::class</code>
@@ -106,11 +116,6 @@
       <code>Uuid6IdentifierService::class</code>
       <code>Uuid6IdentifierService::class</code>
     </DeprecatedClass>
-  </file>
-  <file src="src/Middleware/Authorization/Constraint/Account/DeveloperAccountAuthorizationConstraint.php">
-    <MixedAssignment occurrences="1">
-      <code>$role</code>
-    </MixedAssignment>
   </file>
   <file src="src/Router/Route/RpcRouteBuilder.php">
     <MixedAssignment occurrences="1">
