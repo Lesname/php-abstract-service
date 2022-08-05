@@ -28,6 +28,8 @@ final class DeveloperAccountAuthorizationConstraint extends AbstractAccountAutho
             ->setParameter('account_id', $identity->id)
             ->fetchOne();
 
+        assert(is_string($role));
+
         return $role === 'developer';
     }
 }
