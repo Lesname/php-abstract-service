@@ -49,10 +49,10 @@ final class PushHandler extends AbstractParametersHandler
             $this->handleVerification($parameters);
         } elseif ($parameters->type === Type::Event) {
             $body = $parameters->body;
-            $target = $body['target'] ?? null;
-            $action = $body['action'] ?? null;
+            assert(is_string($body['target']));
+            assert(is_string($body['action']));
 
-            $name = new Name($this->eventQueueJobMap["{$target}:{$action}"] ?? 'hook:process');
+            $name = new Name($this->eventQueueJobMap["{$body['target']}:{$body['action']}"] ?? 'hook:process');
 
             $this
                 ->queue
