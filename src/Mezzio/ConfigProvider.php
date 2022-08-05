@@ -71,6 +71,12 @@ final class ConfigProvider
     public function __invoke(): array
     {
         return [
+            PushHandler::class => [
+                'eventQueueJobMap' => [
+                    'account:registered' => 'service:loadAccountRole',
+                    'account:roleChanged' => 'service:loadAccountRole',
+                ],
+            ],
             'dependencies' => [
                 'aliases' => [
                     Hydrator::class => ReflectionHydrator::class,
