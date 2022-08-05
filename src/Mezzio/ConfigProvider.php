@@ -57,6 +57,7 @@ use LessHydrator\Hydrator;
 use LessHydrator\ReflectionHydrator;
 use LessQueue\DbalQueue;
 use LessQueue\Queue;
+use LessQueue\Worker\PingWorker;
 use LessToken\Codec\TokenCodec;
 use LessToken\Codec\TokenCodecFactory;
 use LessValidator\Builder\GenericValidatorBuilder;
@@ -108,6 +109,8 @@ final class ConfigProvider
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
+
+                    PingWorker::class => PingWorker::class,
 
                     AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class => AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class,
                     AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class => AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class,
@@ -185,6 +188,8 @@ final class ConfigProvider
             'workers' => [
                 'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
                 'service:loadAccountRole' => Worker\Service\LoadAccountRoleWorker::class,
+
+                'queue:ping' => PingWorker::class,
             ],
         ];
     }
