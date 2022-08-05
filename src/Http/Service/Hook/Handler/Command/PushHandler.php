@@ -10,6 +10,11 @@ use LessAbstractService\Http\Service\Hook\Handler\Command\Parameters\PushParamet
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInput;
 use LessHydrator\Hydrator;
+use LessQueue\Job\Property\Name;
+use LessQueue\Queue;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessValueObject\String\Format\Exception\NotFormat;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,20 +23,43 @@ use Psr\Http\Message\ServerRequestInterface;
 #[DocHttpResponse(code: 204)]
 final class PushHandler extends AbstractParametersHandler
 {
+    /**
+     * @param array<string, string> $eventQueueJobMap
+     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly Requester $requester,
+        private readonly Queue $queue,
+        private readonly array $eventQueueJobMap,
         Hydrator $hydrator,
     ) {
         parent::__construct($hydrator);
     }
 
+    /**
+     * @throws TooLong
+     * @throws TooShort
+     * @throws NotFormat
+     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $parameters = $this->getParameters($request, PushParameters::class);
 
         if ($parameters->type === Type::Verification) {
             $this->handleVerification($parameters);
+        } elseif ($parameters->type === Type::Event) {
+            $body = $parameters->body;
+            $target = $body['target'] ?? null;
+            $action = $body['action'] ?? null;
+
+            $name = new Name($this->eventQueueJobMap["{$target}:{$action}"] ?? 'hook:process');
+
+            $this
+                ->queue
+                ->publish(
+                    $name,
+                    $body,
+                );
         }
 
         return $this->responseFactory->createResponse(204);
