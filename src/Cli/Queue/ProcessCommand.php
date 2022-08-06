@@ -70,33 +70,39 @@ final class ProcessCommand extends Command
         }
 
         $till = time() + $timeout;
+        $first = true;
 
-        while ($till >= time() && ($job = $this->queue->reserve(new Second($till - time())))) {
-            if ($job->getName()->getValue() === 'queue:stop') {
-                $output->writeln('Queue stopped');
-                $this->queue->delete($job);
+        while ($first || $till >= time()) {
+            $job = $this->queue->reserve(new Second(min($till - time(), 30)));
+            $first = false;
 
-                break;
-            }
+            if ($job) {
+                if ($job->getName()->getValue() === 'queue:stop') {
+                    $output->writeln('Queue stopped');
+                    $this->queue->delete($job);
 
-            try {
-                $this->getWorkerForJob($job->getName())->process($job);
-            } catch (Throwable $e) {
-                if ($output->isVerbose()) {
-                    throw $e;
+                    break;
                 }
 
-                $this->queue->bury($job);
+                try {
+                    $this->getWorkerForJob($job->getName())->process($job);
+                } catch (Throwable $e) {
+                    if ($output->isVerbose()) {
+                        throw $e;
+                    }
 
-                $this->logger->critical(
-                    'Failed processing job',
-                    ['exception' => $e],
-                );
+                    $this->queue->bury($job);
 
-                continue;
+                    $this->logger->critical(
+                        'Failed processing job',
+                        ['exception' => $e],
+                    );
+
+                    continue;
+                }
+
+                $this->queue->delete($job);
             }
-
-            $this->queue->delete($job);
         }
 
         return Command::SUCCESS;
