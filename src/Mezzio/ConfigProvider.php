@@ -6,6 +6,7 @@ namespace LessAbstractService\Mezzio;
 use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
+use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
@@ -124,6 +125,8 @@ final class ConfigProvider
                     DbalQueue::class => ReflectionFactory::class,
 
                     FifoPublisher::class => FifoPublisherFactory::class,
+
+                    HookPushListener::class => ReflectionFactory::class,
 
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
