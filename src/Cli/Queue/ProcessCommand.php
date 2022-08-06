@@ -87,11 +87,11 @@ final class ProcessCommand extends Command
                 try {
                     $this->getWorkerForJob($job->getName())->process($job);
                 } catch (Throwable $e) {
+                    $this->queue->bury($job);
+
                     if ($output->isVerbose()) {
                         throw $e;
                     }
-
-                    $this->queue->bury($job);
 
                     $this->logger->critical(
                         'Failed processing job',
