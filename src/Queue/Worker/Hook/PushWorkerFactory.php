@@ -5,10 +5,24 @@ namespace LessAbstractService\Queue\Worker\Hook;
 
 use LessHook\Producer\Service\ProducerService;
 use LessValueObject\Composite\ForeignReference;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessValueObject\String\Format\Exception\NotFormat;
+use LessValueObject\String\Format\Resource\Identifier;
+use LessValueObject\String\Format\Resource\Type;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 final class PushWorkerFactory
 {
+    /**
+     * @throws TooLong
+     * @throws TooShort
+     * @throws NotFormat
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     public function __invoke(ContainerInterface $container): PushWorker
     {
         $config = $container->get('config');
@@ -25,8 +39,8 @@ final class PushWorkerFactory
         return new PushWorker(
             $producerService,
             new ForeignReference(
-                $config[PushWorker::class]['producer']['type'],
-                $config[PushWorker::class]['producer']['id'],
+                new Type($config[PushWorker::class]['producer']['type']),
+                new Identifier($config[PushWorker::class]['producer']['id']),
             ),
         );
     }

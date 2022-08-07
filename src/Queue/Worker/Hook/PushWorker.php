@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Queue\Worker\Hook;
 
+use LessDomain\Event\Property\Action;
+use LessDomain\Event\Property\Target;
 use LessHook\Producer\Service\ProducerService;
 use LessQueue\Job\Job;
 use LessQueue\Worker\Worker;
 use LessValueObject\Composite\ForeignReference;
+use LessValueObject\String\Format\Resource\Identifier;
 
 final class PushWorker implements Worker
 {
@@ -18,6 +21,10 @@ final class PushWorker implements Worker
     public function process(Job $job): void
     {
         $data = $job->getData();
+
+        assert($data['target'] instanceof Target);
+        assert($data['action'] instanceof Action);
+        assert($data['id'] instanceof Identifier);
 
         $this
             ->producerService

@@ -47,12 +47,10 @@ final class LoadAccountRoleWorker implements Worker
     {
         $data = $job->getData();
 
-        if (isset($data['id'])) {
-            $id = $data['id'];
-            assert(is_string($id));
-        } elseif (isset($data['reference'])) {
+        if (isset($data['reference']) && is_string($data['reference'])) {
             $id = $data['reference'];
-            assert(is_string($id));
+        } elseif (isset($data['id']) && is_string($data['id'])) {
+            $id = $data['id'];
         } else {
             throw new RuntimeException();
         }

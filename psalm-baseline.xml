@@ -20,6 +20,11 @@
       <code>new $name(...$this-&gt;getParameters($container, $constructor))</code>
     </MixedMethodCall>
   </file>
+  <file src="src/Event/Listener/HookPushListener.php">
+    <NoInterfaceProperties occurrences="1">
+      <code>$event-&gt;id</code>
+    </NoInterfaceProperties>
+  </file>
   <file src="src/Http/Handler/Event/CreateEventRouteHandler.php">
     <DeprecatedClass occurrences="4">
       <code>AbstractEventRouteHandler</code>
@@ -89,11 +94,6 @@
     <MixedMethodCall occurrences="1">
       <code>$route['proxy']['method']</code>
     </MixedMethodCall>
-  </file>
-  <file src="src/Http/Service/Hook/Handler/Command/PushHandler.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$body</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Http/Service/Hook/Handler/Command/PushHandlerFactory.php">
     <MixedArgumentTypeCoercion occurrences="1">
