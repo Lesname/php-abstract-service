@@ -14,6 +14,7 @@ use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
 use LessValueObject\String\Format\Exception\NotFormat;
 use LessValueObject\String\Format\Resource\Identifier;
+use RuntimeException;
 
 final class LoadAccountRoleWorker implements Worker
 {
@@ -45,13 +46,16 @@ final class LoadAccountRoleWorker implements Worker
     private function request(Job $job): Account
     {
         $data = $job->getData();
-        assert(is_string($data['id']));
 
-        return $this
-            ->accountRepository
-            ->getWithId(
-                new Identifier($data['id']),
-            );
+        if (isset($data['reference']) && is_string($data['reference'])) {
+            $id = $data['reference'];
+        } elseif (isset($data['id']) && is_string($data['id'])) {
+            $id = $data['id'];
+        } else {
+            throw new RuntimeException();
+        }
+
+        return $this->accountRepository->getWithId(new Identifier($id));
     }
 
     /**

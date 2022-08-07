@@ -6,6 +6,7 @@ namespace LessAbstractService\Mezzio;
 use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
+use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Http\Handler\Event;
 use LessAbstractService\Http\Handler\Query;
 use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
@@ -125,6 +126,8 @@ final class ConfigProvider
 
                     FifoPublisher::class => FifoPublisherFactory::class,
 
+                    HookPushListener::class => ReflectionFactory::class,
+
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
                     ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
@@ -164,6 +167,8 @@ final class ConfigProvider
                     Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
                     Worker\Service\LoadAccountRoleWorker::class => ReflectionFactory::class,
 
+                    Worker\Hook\PushWorker::class => Worker\Hook\PushWorkerFactory::class,
+
                     TokenCodec::class => TokenCodecFactory::class,
                 ],
             ],
@@ -188,6 +193,8 @@ final class ConfigProvider
             'workers' => [
                 'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
                 'service:loadAccountRole' => Worker\Service\LoadAccountRoleWorker::class,
+
+                'hook:push' => Worker\Hook\PushWorker::class,
 
                 'queue:ping' => PingWorker::class,
             ],
