@@ -39,6 +39,7 @@
     "vimeo/psalm": "^4.26.0",
 
     "lessname/identity-client": "^0.1.0",
+    "lessname/hook-client": "^0.1.0",
 
     "lessname/token": "^0.1.3"
   },
