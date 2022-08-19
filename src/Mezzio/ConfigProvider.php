@@ -27,6 +27,8 @@ use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationCons
 use LessAbstractService\Queue\Worker;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
+use LessCache\Redis\RedisCache;
+use LessCache\Redis\RedisCacheFactory;
 use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
@@ -69,6 +71,7 @@ use LessValidator\Builder\TypeDocumentValidatorBuilder;
 use Mezzio\Router\RouterInterface;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
 
@@ -88,6 +91,8 @@ final class ConfigProvider
             ],
             'dependencies' => [
                 'aliases' => [
+                    CacheInterface::class => RedisCache::class,
+
                     Hydrator::class => ReflectionHydrator::class,
 
                     Store::class => DbalStore::class,
@@ -133,6 +138,8 @@ final class ConfigProvider
                     AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
                 ],
                 'factories' => [
+                    RedisCache::class => RedisCacheFactory::class,
+
                     Connection::class => ConnectionFactory::class,
 
                     DbalStore::class => ReflectionFactory::class,
