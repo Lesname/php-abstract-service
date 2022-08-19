@@ -20,6 +20,9 @@ use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
+use LessAbstractService\Logger\HubFactory;
+use LessAbstractService\Logger\MonologFactory;
+use LessAbstractService\Logger\SentryMonologDelegatorFactory;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\Worker;
 use LessAbstractService\Router\RpcRouter;
@@ -64,6 +67,10 @@ use LessToken\Codec\TokenCodecFactory;
 use LessValidator\Builder\GenericValidatorBuilder;
 use LessValidator\Builder\TypeDocumentValidatorBuilder;
 use Mezzio\Router\RouterInterface;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
+use Sentry\State\Hub;
+use Sentry\State\HubInterface;
 
 final class ConfigProvider
 {
@@ -97,6 +104,14 @@ final class ConfigProvider
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
+
+                    LoggerInterface::class => Logger::class,
+                    HubInterface::class => Hub::class,
+                ],
+                'delegators' => [
+                    Logger::class => [
+                        SentryMonologDelegatorFactory::class,
+                    ],
                 ],
                 'invokables' => [
                     ReflectionHydrator::class => ReflectionHydrator::class,
@@ -168,6 +183,9 @@ final class ConfigProvider
                     Worker\Service\LoadAccountRoleWorker::class => ReflectionFactory::class,
 
                     Worker\Hook\PushWorker::class => Worker\Hook\PushWorkerFactory::class,
+
+                    Logger::class => MonologFactory::class,
+                    Hub::class => HubFactory::class,
 
                     TokenCodec::class => TokenCodecFactory::class,
                 ],
