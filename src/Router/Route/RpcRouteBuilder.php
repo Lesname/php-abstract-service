@@ -81,16 +81,6 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
-     *
-     * @deprecated use withResourceRepository
-     */
-    public function withResourceService(string $resourceRepository): self
-    {
-        return $this->withResourceRepository($resourceRepository);
-    }
-
-    /**
-     * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
      */
     public function withResourceRepository(string $resourceRepository): self
     {

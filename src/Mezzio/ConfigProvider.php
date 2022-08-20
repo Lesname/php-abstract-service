@@ -7,10 +7,6 @@ use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
-use LessAbstractService\Http\Handler\Event;
-use LessAbstractService\Http\Handler\Query;
-use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
-use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
@@ -18,6 +14,8 @@ use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandlerFac
 use LessAbstractService\Http\Resource\Handler\Query\QueryRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
+use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
+use LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
 use LessAbstractService\Logger\HubFactory;
@@ -33,6 +31,7 @@ use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
+use LessDocumentor\Route\LessRouteDocumentor;
 use LessDocumentor\Route\MezzioRouteDocumentor;
 use LessDocumentor\Route\RouteDocumentor;
 use LessDomain\Event\Publisher\FifoPublisher;
@@ -42,8 +41,6 @@ use LessDomain\Event\Store\DbalStore;
 use LessDomain\Event\Store\Store;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessDomain\Identifier\Generator\Uuid6IdentifierGenerator;
-use LessDomain\Identifier\IdentifierService;
-use LessDomain\Identifier\Uuid6IdentifierService;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LessHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
@@ -79,6 +76,8 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -101,11 +100,10 @@ final class ConfigProvider
 
                     Publisher::class => FifoPublisher::class,
 
-                    IdentifierService::class => Uuid6IdentifierService::class,
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     TypeDocumentValidatorBuilder::class => GenericValidatorBuilder::class,
-                    RouteDocumentor::class => MezzioRouteDocumentor::class,
+                    RouteDocumentor::class => LessRouteDocumentor::class,
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
@@ -121,12 +119,12 @@ final class ConfigProvider
                 'invokables' => [
                     ReflectionHydrator::class => ReflectionHydrator::class,
 
-                    Uuid6IdentifierService::class => Uuid6IdentifierService::class,
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     GenericValidatorBuilder::class => GenericValidatorBuilder::class,
 
                     MezzioRouteDocumentor::class => MezzioRouteDocumentor::class,
+                    LessRouteDocumentor::class => LessRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
@@ -158,24 +156,16 @@ final class ConfigProvider
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
 
-                    Event\CreateEventRouteHandler::class => Event\CreateEventRouteHandlerFactory::class,
-                    Event\UpdateEventRouteHandler::class => Event\UpdateEventRouteHandlerFactory::class,
-
                     CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
                     UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
-
-                    Query\ResultsQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
-                    Query\ResultQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
 
                     ResultsQueryRouteHandler::class => QueryRouteHandlerFactory::class,
                     ResultQueryRouteHandler::class => QueryRouteHandlerFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
-
-                    \LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite::class =>
-                        \LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory::class,
+                    ResourceExistsPrerequisite::class =>
+                        ResourcePrerequisiteFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 

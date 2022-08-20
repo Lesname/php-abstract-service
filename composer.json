@@ -15,12 +15,12 @@
 
     "psr/http-server-handler": "^1.0.1",
 
-    "lessname/documentor": "^0.1.24",
-    "lessname/resource": "^0.2.1",
-    "lessname/domain": "^0.1.9",
-    "lessname/validator": "^0.1.11",
+    "lessname/documentor": "^0.2.0",
+    "lessname/resource": "^0.3.0",
+    "lessname/domain": "^0.2.0",
+    "lessname/validator": "^0.2.0",
     "lessname/queue": "^0.2.4",
-    "lessname/http": "^0.2.2",
+    "lessname/http": "^0.3.0",
     "lessname/value-object": "^0.2.17",
 
     "lessname/abstract-client": "^0.2.0",
@@ -41,8 +41,8 @@
     "phpstan/phpstan": "^1.8.0",
     "vimeo/psalm": "^4.26.0",
 
-    "lessname/identity-client": "^0.1.0",
-    "lessname/hook-client": "^0.1.0",
+    "lessname/identity-client": "^0.2.0",
+    "lessname/hook-client": "^0.2.0",
 
     "lessname/token": "^0.1.3"
   },
