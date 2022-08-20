@@ -7,10 +7,6 @@ use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
-use LessAbstractService\Http\Handler\Event;
-use LessAbstractService\Http\Handler\Query;
-use LessAbstractService\Http\Prerequisite\Resource\ResourceExistsPrerequisite;
-use LessAbstractService\Http\Prerequisite\Resource\ResourcePrerequisiteFactory;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
@@ -158,21 +154,13 @@ final class ConfigProvider
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
 
-                    Event\CreateEventRouteHandler::class => Event\CreateEventRouteHandlerFactory::class,
-                    Event\UpdateEventRouteHandler::class => Event\UpdateEventRouteHandlerFactory::class,
-
                     CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
                     UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
-
-                    Query\ResultsQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
-                    Query\ResultQueryRouteHandler::class => Query\QueryRouteHandlerFactory::class,
 
                     ResultsQueryRouteHandler::class => QueryRouteHandlerFactory::class,
                     ResultQueryRouteHandler::class => QueryRouteHandlerFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
-
-                    ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
                     \LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite::class =>
                         \LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory::class,
