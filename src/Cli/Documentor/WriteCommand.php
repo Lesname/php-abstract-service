@@ -8,6 +8,7 @@ use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\RouteDocumentor;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
 use LessDocumentor\Type\Document\NumberTypeDocument;
@@ -29,7 +30,6 @@ use LessValueObject\String\Format\Uri;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
-use stdClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -161,7 +161,7 @@ final class WriteCommand extends Command
             $routeDocument = $this->routeDocumentor->document($route);
 
             $paths[$routeDocument->getPath()] = [
-                $routeDocument->getMethod()->getValue() => $this->composePathDocument($routeDocument),
+                $routeDocument->getMethod()->value => $this->composePathDocument($routeDocument),
             ];
         }
 
@@ -212,7 +212,7 @@ final class WriteCommand extends Command
     {
         if ($typeDocument instanceof CompositeTypeDocument) {
             foreach ($typeDocument->properties as $property) {
-                yield from $this->getSchemasFromTypeDocument($property);
+                yield from $this->getSchemasFromTypeDocument($property->type);
             }
         } elseif ($typeDocument instanceof CollectionTypeDocument) {
             yield from $this->getSchemasFromTypeDocument($typeDocument->item);
@@ -326,8 +326,8 @@ final class WriteCommand extends Command
         return [
             'type' => 'array',
             'items' => $this->composeTypeDocument($typeDocument->item, true),
-            'minItems' => $typeDocument->length->minimal,
-            'maxItems' => $typeDocument->length->maximal,
+            'minItems' => $typeDocument->size->minimal,
+            'maxItems' => $typeDocument->size->maximal,
         ];
     }
 
@@ -338,14 +338,21 @@ final class WriteCommand extends Command
      */
     private function composeCompositeDocument(CompositeTypeDocument $typeDocument): array
     {
+        $properties = $required = [];
+
+        foreach ($typeDocument->properties as $key => $property) {
+            $properties[$key] = $this->composeTypeDocument($property->type, true);
+
+            if ($property->required) {
+                $required[] = $key;
+            }
+        }
+
         return [
             'type' => 'object',
-            'additionalProperties' => $typeDocument->allowAdditionalProperties,
-            'properties' => array_map(
-                fn (TypeDocument $property): array => $this->composeTypeDocument($property, true),
-                $typeDocument->properties,
-            ),
-            'required' => $typeDocument->required,
+            'additionalProperties' => $typeDocument->allowExtraProperties,
+            'properties' => $properties,
+            'required' => $required,
         ];
     }
 
@@ -366,10 +373,12 @@ final class WriteCommand extends Command
     private function composeNumberDocument(NumberTypeDocument $typeDocument): array
     {
         return [
-            'type' => $typeDocument->precision->getValue() === 0
+            'type' => $typeDocument->precision === 0
                 ? 'integer'
                 : 'number',
-            'multipleOf' => 1 / pow(10, $typeDocument->precision->getValue()),
+            'multipleOf' => $typeDocument->precision !== null
+                ? 1 / pow(10, $typeDocument->precision)
+                : null,
             'minimum' => $typeDocument->range->minimal,
             'maximum' => $typeDocument->range->maximal,
         ];
@@ -390,6 +399,10 @@ final class WriteCommand extends Command
         ];
 
         if ($reference) {
+            if (!class_exists($reference)) {
+                throw new RuntimeException("Reference '{$reference}' unknown");
+            }
+
             if (is_subclass_of($reference, AbstractRegexpFormattedStringValueObject::class)) {
                 $document['pattern'] = $reference::getRegexPattern();
             }
@@ -406,18 +419,21 @@ final class WriteCommand extends Command
     }
 
     /**
-     * @return array<int, array<mixed>|stdClass>
+     * @return array<mixed>
      *
      * @throws ReflectionException
      */
     private function composeResponses(RouteDocument $routeDocument): array
     {
+        /** @var array<int, array<mixed>> $responses */
         $responses = [];
 
         foreach ($routeDocument->getRespones() as $response) {
+            $key = $response->code->code;
+
             if ($response->output) {
-                $responses[$response->code->getValue()]  = [
-                    'description' => self::RESPONSE_MESSAGE[$response->code->getValue()],
+                $responses[$key]  = [
+                    'description' => self::RESPONSE_MESSAGE[$key],
                     'content' => [
                         'application/json' => [
                             'schema' => $this->composeTypeDocument($response->output, true),
@@ -425,8 +441,8 @@ final class WriteCommand extends Command
                     ],
                 ];
             } else {
-                $responses[$response->code->getValue()]  = [
-                    'description' => self::RESPONSE_MESSAGE[$response->code->getValue()],
+                $responses[$key]  = [
+                    'description' => self::RESPONSE_MESSAGE[$key],
                 ];
             }
         }

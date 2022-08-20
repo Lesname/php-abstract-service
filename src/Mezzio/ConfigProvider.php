@@ -33,6 +33,7 @@ use LessDatabase\Factory\ConnectionFactory;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
+use LessDocumentor\Route\LessRouteDocumentor;
 use LessDocumentor\Route\MezzioRouteDocumentor;
 use LessDocumentor\Route\RouteDocumentor;
 use LessDomain\Event\Publisher\FifoPublisher;
@@ -42,8 +43,6 @@ use LessDomain\Event\Store\DbalStore;
 use LessDomain\Event\Store\Store;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessDomain\Identifier\Generator\Uuid6IdentifierGenerator;
-use LessDomain\Identifier\IdentifierService;
-use LessDomain\Identifier\Uuid6IdentifierService;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LessHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
@@ -79,6 +78,8 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -101,11 +102,10 @@ final class ConfigProvider
 
                     Publisher::class => FifoPublisher::class,
 
-                    IdentifierService::class => Uuid6IdentifierService::class,
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     TypeDocumentValidatorBuilder::class => GenericValidatorBuilder::class,
-                    RouteDocumentor::class => MezzioRouteDocumentor::class,
+                    RouteDocumentor::class => LessRouteDocumentor::class,
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
@@ -121,12 +121,12 @@ final class ConfigProvider
                 'invokables' => [
                     ReflectionHydrator::class => ReflectionHydrator::class,
 
-                    Uuid6IdentifierService::class => Uuid6IdentifierService::class,
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     GenericValidatorBuilder::class => GenericValidatorBuilder::class,
 
                     MezzioRouteDocumentor::class => MezzioRouteDocumentor::class,
+                    LessRouteDocumentor::class => LessRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
