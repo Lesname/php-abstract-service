@@ -14,6 +14,8 @@ use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandlerFac
 use LessAbstractService\Http\Resource\Handler\Query\QueryRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
+use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
+use LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
 use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
 use LessAbstractService\Logger\HubFactory;
@@ -162,8 +164,8 @@ final class ConfigProvider
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    \LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite::class =>
-                        \LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory::class,
+                    ResourceExistsPrerequisite::class =>
+                        ResourcePrerequisiteFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 

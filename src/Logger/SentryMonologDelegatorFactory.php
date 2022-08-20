@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Logger;
 
-use BsLibrary\Container\Factory\Helper\Exception\ExpectedService;
 use Monolog\Logger;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

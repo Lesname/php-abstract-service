@@ -8,7 +8,6 @@ use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\RouteDocumentor;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
 use LessDocumentor\Type\Document\NumberTypeDocument;
@@ -386,8 +385,6 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
-     *
-     * @throws ReflectionException
      */
     private function composeStringDocument(StringTypeDocument $typeDocument): array
     {
