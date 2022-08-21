@@ -21,8 +21,14 @@ final class UpdateCommand extends Command
 
         exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist > /dev/null 2>&1');
 
-        if (file_exists('config/cache.php')) {
-            unlink('config/cache.php');
+        if (file_exists('config/development.config.php')) {
+            $output->writeln('<comment>Beware development config active</comment>');
+        } else {
+            if (file_exists('config/cache.php')) {
+                unlink('config/cache.php');
+            } else {
+                $output->writeln('<comment>Beware no cache config active</comment>');
+            }
         }
 
         exec('git fetch --depth 1');
