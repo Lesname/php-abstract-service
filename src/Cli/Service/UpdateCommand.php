@@ -19,7 +19,7 @@ final class UpdateCommand extends Command
     {
         exec('git pull --strategy-option=theirs > /dev/null 2>&1');
 
-        exec('~/bin/composer install --no-dev --optimize-autoloader --prefer-dist > /dev/null 2>&1');
+        exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist > /dev/null 2>&1');
 
         if (file_exists('config/cache.php')) {
             unlink('config/cache.php');
