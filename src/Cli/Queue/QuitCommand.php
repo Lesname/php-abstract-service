@@ -16,7 +16,7 @@ final class QuitCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $count = $this->queue->countProcessing();
 

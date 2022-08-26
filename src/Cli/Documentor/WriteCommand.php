@@ -438,7 +438,7 @@ final class WriteCommand extends Command
         $responses = [];
 
         foreach ($routeDocument->getRespones() as $response) {
-            $key = $response->code->code;
+            $key = $response->code->value;
 
             if ($response->output) {
                 $responses[$key]  = [
