@@ -50,10 +50,5 @@
     "psr-4": {
       "LessAbstractService\\": "src/"
     }
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/package-versions-deprecated": true
-    }
   }
 }
