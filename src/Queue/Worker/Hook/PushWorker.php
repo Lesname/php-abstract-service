@@ -20,7 +20,7 @@ final class PushWorker implements Worker
 
     public function process(Job $job): void
     {
-        $data = $job->getData();
+        $data = $job->data;
 
         assert($data['target'] instanceof Target);
         assert($data['action'] instanceof Action);

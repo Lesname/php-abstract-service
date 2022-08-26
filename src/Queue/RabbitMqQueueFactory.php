@@ -19,10 +19,11 @@ final class RabbitMqQueueFactory
     public function __invoke(ContainerInterface $container): RabbitMqQueue
     {
         $config = $container->get('config');
+        assert(is_array($config));
         assert(is_array($config[AMQPStreamConnection::class]));
 
         assert(is_string($config[AMQPStreamConnection::class]['host']));
-        assert(is_string($config[AMQPStreamConnection::class]['port']));
+        assert(is_int($config[AMQPStreamConnection::class]['port']));
         assert(is_string($config[AMQPStreamConnection::class]['user']));
         assert(is_string($config[AMQPStreamConnection::class]['pass']));
         assert(is_string($config[AMQPStreamConnection::class]['vhost']));
