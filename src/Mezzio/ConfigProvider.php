@@ -172,7 +172,10 @@ final class ConfigProvider
                     PushHandler::class => PushHandlerFactory::class,
 
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
+
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
+                    Cli\Queue\QuitCommand::class => ReflectionFactory::class,
+
                     Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
@@ -190,7 +193,10 @@ final class ConfigProvider
             'laminas-cli' => [
                 'commands' => [
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
+
                     'queue.process' => Cli\Queue\ProcessCommand::class,
+                    'queue.quit' => Cli\Queue\QuitCommand::class,
+
                     'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'service.update' => Cli\Service\UpdateCommand::class,
                 ],
