@@ -34,6 +34,10 @@ final class UpdateCommand extends Command
             $output->writeln('Look into local config usage');
         }
 
+        if (file_exists('config/autoload')) {
+            $output->writeln('<comment>Autoload config available</comment>');
+        }
+
         if (file_exists('config/development.config.php')) {
             $output->writeln('<comment>Beware development config active</comment>');
         } else {

@@ -76,8 +76,6 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
-     *
-     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {

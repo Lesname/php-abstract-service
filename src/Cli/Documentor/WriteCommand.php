@@ -287,6 +287,14 @@ final class WriteCommand extends Command
             }
         }
 
+        if ($typeDocument->getDescription()) {
+            $document['description'] = $typeDocument->getDescription();
+        }
+
+        if ($typeDocument->getDeprecated()) {
+            $document['deprecated'] = true;
+        }
+
         return $document;
     }
 
@@ -341,6 +349,10 @@ final class WriteCommand extends Command
 
         foreach ($typeDocument->properties as $key => $property) {
             $properties[$key] = $this->composeTypeDocument($property->type, true);
+
+            if ($property->required === false) {
+                $properties[$key]['default'] = $property->default;
+            }
 
             if ($property->required) {
                 $required[] = $key;
@@ -426,7 +438,7 @@ final class WriteCommand extends Command
         $responses = [];
 
         foreach ($routeDocument->getRespones() as $response) {
-            $key = $response->code->code;
+            $key = $response->code->value;
 
             if ($response->output) {
                 $responses[$key]  = [
