@@ -30,6 +30,10 @@ final class UpdateCommand extends Command
 
         exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist');
 
+        if (!file_exists('config/local')) {
+            $output->writeln('Look into local config usage');
+        }
+
         if (file_exists('config/development.config.php')) {
             $output->writeln('<comment>Beware development config active</comment>');
         } else {
