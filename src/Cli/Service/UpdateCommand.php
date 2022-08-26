@@ -28,7 +28,7 @@ final class UpdateCommand extends Command
 
         exec('git pull --strategy-option=theirs > /dev/null 2>&1');
 
-        exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist > /dev/null 2>&1');
+        exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist');
 
         if (file_exists('config/development.config.php')) {
             $output->writeln('<comment>Beware development config active</comment>');
