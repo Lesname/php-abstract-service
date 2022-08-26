@@ -350,6 +350,10 @@ final class WriteCommand extends Command
         foreach ($typeDocument->properties as $key => $property) {
             $properties[$key] = $this->composeTypeDocument($property->type, true);
 
+            if ($property->required === false) {
+                $properties[$key]['default'] = $property->default;
+            }
+
             if ($property->required) {
                 $required[] = $key;
             }
