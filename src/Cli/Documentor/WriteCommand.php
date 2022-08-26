@@ -342,8 +342,6 @@ final class WriteCommand extends Command
      * @return array<mixed>
      *
      * @throws ReflectionException
-     *
-     * @psalm-suppress MixedAssignment
      */
     private function composeCompositeDocument(CompositeTypeDocument $typeDocument): array
     {
