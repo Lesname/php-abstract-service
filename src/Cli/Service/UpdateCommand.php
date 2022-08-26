@@ -26,7 +26,7 @@ final class UpdateCommand extends Command
             return self::FAILURE;
         }
 
-        exec('git pull --strategy-option=theirs > /dev/null 2>&1');
+        exec('git pull --strategy-option=theirs');
 
         exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist');
 
