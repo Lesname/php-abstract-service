@@ -22,6 +22,7 @@ use LessAbstractService\Logger\HubFactory;
 use LessAbstractService\Logger\MonologFactory;
 use LessAbstractService\Logger\SentryMonologDelegatorFactory;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
+use LessAbstractService\Queue\RabbitMqQueueFactory;
 use LessAbstractService\Queue\Worker;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
@@ -58,8 +59,7 @@ use LessHttp\Middleware\Validation\ValidationMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddlewareFactory;
 use LessHydrator\Hydrator;
 use LessHydrator\ReflectionHydrator;
-use LessQueue\DbalQueue;
-use LessQueue\Queue;
+use LessQueue as Queue;
 use LessQueue\Worker\PingWorker;
 use LessToken\Codec\TokenCodec;
 use LessToken\Codec\TokenCodecFactory;
@@ -96,7 +96,7 @@ final class ConfigProvider
 
                     Store::class => DbalStore::class,
 
-                    Queue::class => DbalQueue::class,
+                    Queue\Queue::class => Queue\DbalQueue::class,
 
                     Publisher::class => FifoPublisher::class,
 
@@ -142,7 +142,8 @@ final class ConfigProvider
 
                     DbalStore::class => ReflectionFactory::class,
 
-                    DbalQueue::class => ReflectionFactory::class,
+                    Queue\RabbitMqQueue::class => RabbitMqQueueFactory::class,
+                    Queue\DbalQueue::class => ReflectionFactory::class,
 
                     FifoPublisher::class => FifoPublisherFactory::class,
 
