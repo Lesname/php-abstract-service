@@ -287,6 +287,14 @@ final class WriteCommand extends Command
             }
         }
 
+        if ($typeDocument->getDescription()) {
+            $document['description'] = $typeDocument->getDescription();
+        }
+
+        if ($typeDocument->getDeprecated()) {
+            $document['deprecated'] = true;
+        }
+
         return $document;
     }
 
