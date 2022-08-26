@@ -5,6 +5,7 @@ namespace LessAbstractService\Http\Resource\Handler\Query;
 
 use JsonException;
 use LessHttp\Response\ErrorResponse;
+use LessHydrator\Attribute\DefaultValue;
 use LessHydrator\Hydrator;
 use LessResource\Repository\Exception\NoResource;
 use LessValueObject\ValueObject;
@@ -106,6 +107,14 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
     {
         $body = $request->getParsedBody();
         assert(is_array($body));
+
+        if (!array_key_exists($parameter->getName(), $body)) {
+            foreach ($parameter->getAttributes(DefaultValue::class) as $attribute) {
+                $body[$parameter->getName()] = $attribute->newInstance()->default;
+
+                break;
+            }
+        }
 
         if (!isset($body[$parameter->getName()])) {
             if (!$parameter->allowsNull()) {
