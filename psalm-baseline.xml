@@ -31,6 +31,9 @@
     </NoInterfaceProperties>
   </file>
   <file src="src/Http/Resource/Handler/Query/AbstractQueryRouteHandler.php">
+    <MixedAssignment occurrences="1">
+      <code>$body[$parameter-&gt;getName()]</code>
+    </MixedAssignment>
     <MixedMethodCall occurrences="1">
       <code>$route['proxy']['method']</code>
     </MixedMethodCall>
