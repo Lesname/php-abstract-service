@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Cli\Service;
 
+use LessQueue\Queue;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,13 +11,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class UpdateCommand extends Command
 {
-    public function __construct(private readonly CacheInterface $cache)
-    {
+    public function __construct(
+        private readonly CacheInterface $cache,
+        private readonly Queue $queue,
+    ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($this->queue->countProcessing() > 0) {
+            $output->writeln('Active queue processing cannot update during');
+
+            return self::FAILURE;
+        }
+
         exec('git pull --strategy-option=theirs > /dev/null 2>&1');
 
         exec('/usr/local/bin/composer install --no-dev --optimize-autoloader --prefer-dist > /dev/null 2>&1');
