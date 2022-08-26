@@ -47,7 +47,9 @@ final class UpdateCommand extends Command
 
         $this->cache->clear();
 
-        exec("./vendor/bin/laminas documentor.write");
+        exec("./vendor/bin/laminas documentor.write", $output, $resultCode);
+
+        $output->writeln("Documentor write result code: {$resultCode}");
 
         return self::SUCCESS;
     }
