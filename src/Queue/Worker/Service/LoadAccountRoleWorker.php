@@ -45,7 +45,7 @@ final class LoadAccountRoleWorker implements Worker
      */
     private function request(Job $job): Account
     {
-        $data = $job->getData();
+        $data = $job->data;
 
         if (isset($data['reference']) && is_string($data['reference'])) {
             $id = $data['reference'];

@@ -104,13 +104,13 @@ SQL;
         $page = $this->getPage($job);
 
         if ($pages > $page) {
-            $this->queue->publish($job->getName(), ['page' => $page + 1]);
+            $this->queue->publish($job->name, ['page' => $page + 1]);
         }
     }
 
     private function getPage(Job $job): int
     {
-        $data = $job->getData();
+        $data = $job->data;
 
         if (!isset($data['page'])) {
             return 1;

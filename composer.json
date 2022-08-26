@@ -19,7 +19,7 @@
     "lessname/resource": "^0.3.0",
     "lessname/domain": "^0.2.0",
     "lessname/validator": "^0.2.0",
-    "lessname/queue": "^0.2.4",
+    "lessname/queue": "^0.3.2",
     "lessname/http": "^0.3.0",
     "lessname/value-object": "^0.2.17",
 
@@ -44,16 +44,13 @@
     "lessname/identity-client": "^0.2.0",
     "lessname/hook-client": "^0.2.0",
 
-    "lessname/token": "^0.1.3"
+    "lessname/token": "^0.1.3",
+
+    "php-amqplib/php-amqplib": "^3.2"
   },
   "autoload": {
     "psr-4": {
       "LessAbstractService\\": "src/"
-    }
-  },
-  "config": {
-    "allow-plugins": {
-      "composer/package-versions-deprecated": true
     }
   }
 }
