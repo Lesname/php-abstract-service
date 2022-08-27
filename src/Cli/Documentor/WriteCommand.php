@@ -407,6 +407,10 @@ final class WriteCommand extends Command
             'maxLength' => $typeDocument->length->maximal,
         ];
 
+        if ($typeDocument->format) {
+            $document['format'] = $typeDocument->format;
+        }
+
         if ($reference) {
             if (!class_exists($reference)) {
                 throw new RuntimeException("Reference '{$reference}' unknown");

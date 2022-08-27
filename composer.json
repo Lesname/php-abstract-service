@@ -15,7 +15,7 @@
 
     "psr/http-server-handler": "^1.0.1",
 
-    "lessname/documentor": "^0.2.0",
+    "lessname/documentor": "^0.2.5",
     "lessname/resource": "^0.3.0",
     "lessname/domain": "^0.2.0",
     "lessname/validator": "^0.2.0",
