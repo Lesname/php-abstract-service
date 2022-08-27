@@ -81,14 +81,15 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
         assert(is_array($route));
         assert(is_array($route['proxy']));
         assert(is_string($route['proxy']['class']));
+        assert(interface_exists($route['proxy']['class']));
         assert(is_string($route['proxy']['method']));
+
+        $refMethod = new ReflectionMethod($route['proxy']['class'], $route['proxy']['method']);
+
+        $parameters = $this->getParametersForMethod($refMethod, $request);
 
         $proxy = $this->container->get($route['proxy']['class']);
         assert(is_object($proxy));
-
-        $refMethod = new ReflectionMethod($proxy, $route['proxy']['method']);
-
-        $parameters = $this->getParametersForMethod($refMethod, $request);
 
         return $proxy->{$route['proxy']['method']}(...$parameters);
     }
