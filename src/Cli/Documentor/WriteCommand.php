@@ -159,7 +159,7 @@ final class WriteCommand extends Command
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[$routeDocument->getPath()] = [
+            $paths[(string)$routeDocument->getPath()] = [
                 $routeDocument->getMethod()->value => $this->composePathDocument($routeDocument),
             ];
         }
