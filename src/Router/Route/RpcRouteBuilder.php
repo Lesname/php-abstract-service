@@ -23,6 +23,9 @@ final class RpcRouteBuilder
     /** @var class-string<ResourceRepository<ResourceModel>>|null */
     private ?string $resourceRepository = null;
 
+    /** @var class-string|null */
+    private ?string $proxyClass = null;
+
     /** @var class-string<Validator>|null */
     private ?string $validator = null;
 
@@ -86,6 +89,18 @@ final class RpcRouteBuilder
     {
         $clone = clone $this;
         $clone->resourceRepository = $resourceRepository;
+        $clone->proxyClass = $resourceRepository;
+
+        return $clone;
+    }
+
+    /**
+     * @param class-string $proxyClass
+     */
+    public function withProxyClass(string $proxyClass): self
+    {
+        $clone = clone $this;
+        $clone->proxyClass = $proxyClass;
 
         return $clone;
     }
@@ -192,7 +207,7 @@ final class RpcRouteBuilder
                 $handler,
                 [
                     'proxy' => [
-                        'class' => $this->resourceRepository,
+                        'class' => $this->proxyClass,
                         'method' => $method,
                     ],
                 ],

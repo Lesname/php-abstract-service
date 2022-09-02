@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
+use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
@@ -24,6 +25,7 @@ use LessAbstractService\Logger\SentryMonologDelegatorFactory;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LessAbstractService\Queue\RabbitMqQueueFactory;
 use LessAbstractService\Queue\Worker;
+use LessAbstractService\Router\Route\RpcRouteBuilder;
 use LessAbstractService\Router\RpcRouter;
 use LessAbstractService\Router\RpcRouterFactory;
 use LessCache\Redis\RedisCache;
@@ -155,6 +157,8 @@ final class ConfigProvider
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
 
+                    ReanimateHandler::class => ReflectionFactory::class,
+
                     CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
                     UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
 
@@ -205,14 +209,8 @@ final class ConfigProvider
                 ],
             ],
             'routes' => [
-                'POST:/service.hook.push' => [
-                    'path' => '/service.hook.push',
-                    AuthorizationMiddlewareFactory::ROUTE_KEY => [AnyOneAuthorizationConstraint::class],
-                    'resource' => 'service.hook',
-                    'middleware' => PushHandler::class,
-                    'type' => Category::Command,
-                    'category' => Category::Command,
-                ],
+                ...$this->composeServiceHookRoutes(),
+                ...$this->composeQueueRoutes(),
             ],
             'workers' => [
                 'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
@@ -223,5 +221,30 @@ final class ConfigProvider
                 'queue:ping' => PingWorker::class,
             ],
         ];
+    }
+
+    /**
+     * @return iterable<string, array<mixed>>
+     */
+    private function composeServiceHookRoutes(): iterable
+    {
+        $builder = new RpcRouteBuilder('service.hook', [AnyOneAuthorizationConstraint::class]);
+
+        yield from $builder->buildRoute('push', Category::Command, PushHandler::class);
+    }
+
+    /**
+     * @return iterable<string, array<mixed>>
+     */
+    private function composeQueueRoutes(): iterable
+    {
+        $builder = (new RpcRouteBuilder('queue', [AnyOneAuthorizationConstraint::class]))
+            ->withProxyClass(Queue\Queue::class);
+
+        yield from $builder->buildResultQueryRoute('countProcessing');
+        yield from $builder->buildResultQueryRoute('countProcessable');
+        yield from $builder->buildResultsQueryRoute('getBuried');
+
+        yield from $builder->buildRoute('reanimate', Category::Command, ReanimateHandler::class);
     }
 }
