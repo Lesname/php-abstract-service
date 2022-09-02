@@ -5,6 +5,9 @@ namespace LessAbstractService\Cli\Documentor\Attribute;
 
 use Attribute;
 
+/**
+ * @deprecated use DocStringFormat
+ */
 #[Attribute(Attribute::TARGET_CLASS)]
 final class Format
 {
