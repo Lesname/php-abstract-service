@@ -383,16 +383,29 @@ final class WriteCommand extends Command
      */
     private function composeNumberDocument(NumberTypeDocument $typeDocument): array
     {
-        return [
+        $document = [
             'type' => $typeDocument->precision === 0
                 ? 'integer'
                 : 'number',
-            'multipleOf' => $typeDocument->precision !== null
-                ? 1 / pow(10, $typeDocument->precision)
-                : null,
-            'minimum' => $typeDocument->range->minimal,
-            'maximum' => $typeDocument->range->maximal,
         ];
+
+        if ($typeDocument->precision !== null) {
+            $document['multipleOf'] = 1 / pow(10, $typeDocument->precision);
+        }
+
+        if ($typeDocument->format) {
+            $document['format'] = $typeDocument->format;
+        }
+
+        if ($typeDocument->range->minimal) {
+            $document['minimum'] = $typeDocument->range->minimal;
+        }
+
+        if ($typeDocument->range->maximal) {
+            $document['maximum'] = $typeDocument->range->maximal;
+        }
+
+        return $document;
     }
 
     /**
