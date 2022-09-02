@@ -172,6 +172,8 @@ final class ConfigProvider
 
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
 
+                    Cli\Queue\CountProcessableCommand::class => ReflectionFactory::class,
+                    Cli\Queue\CountProcessingCommand::class => ReflectionFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
                     Cli\Queue\QuitCommand::class => ReflectionFactory::class,
 
@@ -193,6 +195,8 @@ final class ConfigProvider
                 'commands' => [
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
 
+                    'queue.countProcessable' => Cli\Queue\CountProcessableCommand::class,
+                    'queue.countProcessing' => Cli\Queue\CountProcessingCommand::class,
                     'queue.process' => Cli\Queue\ProcessCommand::class,
                     'queue.quit' => Cli\Queue\QuitCommand::class,
 
