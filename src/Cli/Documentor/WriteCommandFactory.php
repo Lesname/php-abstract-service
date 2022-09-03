@@ -13,6 +13,8 @@ final class WriteCommandFactory
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @psalm-suppress MixedArgumentTypeCoercion
      */
     public function __invoke(ContainerInterface $container): WriteCommand
     {
@@ -32,7 +34,10 @@ final class WriteCommandFactory
 
         return new WriteCommand(
             $routeDocumentor,
-            $config['routes'],
+            array_filter(
+                $config['routes'],
+                static fn (array $route): bool => !(isset($route['document']) && $route['document'] === false),
+            ),
             $self['workDirectory'] . 'public/openapi.json',
             $self['baseUri'],
             $self['name'],

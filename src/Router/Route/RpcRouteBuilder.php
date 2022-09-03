@@ -35,6 +35,9 @@ final class RpcRouteBuilder
     /** @var array<class-string<PrerequisiteConstraint>> */
     private array $prerequisites = [];
 
+    /** @var array<string, mixed> */
+    private array $extraOptions = [];
+
     /**
      * @param non-empty-string $resourceName
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
@@ -43,6 +46,14 @@ final class RpcRouteBuilder
         private readonly string $resourceName,
         private array $authorizations,
     ) {}
+
+    public function withExtraOption(string $key, mixed $value): self
+    {
+        $clone = clone $this;
+        $clone->extraOptions[$key] = $value;
+
+        return $clone;
+    }
 
     /**
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
@@ -224,6 +235,7 @@ final class RpcRouteBuilder
     {
         $route = array_replace(
             $baseRoute,
+            $this->extraOptions,
             [
                 'path' => "/{$this->resourceName}.{$method}",
                 'authorizations' => $this->authorizations,

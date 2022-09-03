@@ -228,7 +228,8 @@ final class ConfigProvider
      */
     private function composeServiceHookRoutes(): iterable
     {
-        $builder = new RpcRouteBuilder('service.hook', [AnyOneAuthorizationConstraint::class]);
+        $builder = (new RpcRouteBuilder('service.hook', [AnyOneAuthorizationConstraint::class]))
+            ->withExtraOption('document', false);
 
         yield from $builder->buildRoute('push', Category::Command, PushHandler::class);
     }
@@ -239,7 +240,8 @@ final class ConfigProvider
     private function composeQueueRoutes(): iterable
     {
         $builder = (new RpcRouteBuilder('queue', [AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]))
-            ->withProxyClass(Queue\Queue::class);
+            ->withProxyClass(Queue\Queue::class)
+            ->withExtraOption('document', false);
 
         yield from $builder->buildResultQueryRoute('countProcessing');
         yield from $builder->buildResultQueryRoute('countProcessable');
