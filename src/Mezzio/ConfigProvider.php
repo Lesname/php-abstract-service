@@ -238,7 +238,7 @@ final class ConfigProvider
      */
     private function composeQueueRoutes(): iterable
     {
-        $builder = (new RpcRouteBuilder('queue', [AnyOneAuthorizationConstraint::class]))
+        $builder = (new RpcRouteBuilder('queue', [AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]))
             ->withProxyClass(Queue\Queue::class);
 
         yield from $builder->buildResultQueryRoute('countProcessing');
