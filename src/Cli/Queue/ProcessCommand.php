@@ -43,6 +43,8 @@ final class ProcessCommand extends Command
                 if ($job->name->getValue() === 'queue:quit') {
                     $output->writeln('Queue quit');
                     $this->queue->stopProcessing();
+
+                    $this->queue->delete($job);
                 } else {
                     try {
                         $this
