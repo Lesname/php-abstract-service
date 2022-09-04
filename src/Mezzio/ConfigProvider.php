@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
+use LessAbstractService\Http\Queue\Handler\Command\DeleteHandler;
 use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
@@ -157,6 +158,7 @@ final class ConfigProvider
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
 
+                    DeleteHandler::class => ReflectionFactory::class,
                     ReanimateHandler::class => ReflectionFactory::class,
 
                     CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
@@ -248,5 +250,6 @@ final class ConfigProvider
         yield from $builder->buildResultsQueryRoute('getBuried');
 
         yield from $builder->buildRoute('reanimate', Category::Command, ReanimateHandler::class);
+        yield from $builder->buildRoute('delete', Category::Command, DeleteHandler::class);
     }
 }

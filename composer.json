@@ -19,7 +19,7 @@
     "lessname/resource": "^0.3.0",
     "lessname/domain": "^0.2.0",
     "lessname/validator": "^0.2.0",
-    "lessname/queue": "^0.3.4",
+    "lessname/queue": "^0.3.6",
     "lessname/http": "^0.3.0",
     "lessname/value-object": "^0.2.17",
 
