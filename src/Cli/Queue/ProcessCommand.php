@@ -40,8 +40,8 @@ final class ProcessCommand extends Command
     {
         $this->queue->process(
             function (Job $job) use ($output) {
-                if ($job->name->getValue() === 'queue:stop') {
-                    $output->writeln('Queue stopped');
+                if ($job->name->getValue() === 'queue:quit') {
+                    $output->writeln('Queue quit');
                     $this->queue->stopProcessing();
                 } else {
                     try {
