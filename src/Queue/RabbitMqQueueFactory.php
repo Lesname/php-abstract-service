@@ -28,12 +28,16 @@ final class RabbitMqQueueFactory
         assert(is_string($config[AMQPStreamConnection::class]['pass']));
         assert(is_string($config[AMQPStreamConnection::class]['vhost']));
 
+        $heartbeat = $config[AMQPStreamConnection::class]['heartbeat'] ?? 30;
+        assert(is_int($heartbeat));
+
         $connection = new AMQPStreamConnection(
             $config[AMQPStreamConnection::class]['host'],
             $config[AMQPStreamConnection::class]['port'],
             $config[AMQPStreamConnection::class]['user'],
             $config[AMQPStreamConnection::class]['pass'],
             $config[AMQPStreamConnection::class]['vhost'],
+            heartbeat: $heartbeat,
         );
 
         $database = $container->get(Connection::class);
