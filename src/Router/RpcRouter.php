@@ -39,6 +39,10 @@ final class RpcRouter implements RouterInterface
         $method = $request->getMethod();
         $path = $request->getUri()->getPath();
 
+        if ($path === '') {
+            throw new RuntimeException();
+        }
+
         if (!isset($this->routes["{$method}:{$path}"])) {
             return RouteResult::fromRouteFailure(Route::HTTP_METHOD_ANY);
         }

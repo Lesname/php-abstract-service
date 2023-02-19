@@ -15,17 +15,11 @@ use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessAbstractService\Cli\Documentor\Attribute\Format;
 use LessResource\Model\ResourceModel;
-use LessValueObject\Composite\Activity;
-use LessValueObject\Composite\Content;
-use LessValueObject\Composite\ForeignReference;
-use LessValueObject\Composite\Occurred;
-use LessValueObject\Composite\Paginate;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\Number\Int\Date\Timestamp;
+use LessValueObject\Composite;
+use LessValueObject\Enum;
+use LessValueObject\Number;
+use LessValueObject\String;
 use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
-use LessValueObject\String\Format\EmailAddress;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Uri;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
@@ -39,7 +33,7 @@ final class WriteCommand extends Command
         200 => 'Ok, see content',
         201 => 'Resource created',
         202 => 'Accepted, action will be done in due time',
-        204 => 'Call successfull, nothing to output',
+        204 => 'Call successful, nothing to output',
         400 => 'Bad request, see body for more info',
         401 => 'Authentication failed',
         403 => 'Forbidden to do this request',
@@ -52,39 +46,50 @@ final class WriteCommand extends Command
     ];
 
     private const SHARED_REFERENCES = [
-        Identifier::class,
-
-        EmailAddress::class,
-
-        Uri\Https::class,
-
-        Paginate::class,
-
-        Occurred::class,
-        Activity::class,
-
-        Content::class,
-
-        ForeignReference::class,
-
-        Timestamp::class,
-        MilliTimestamp::class,
+        // Composite
+        Composite\Occurred::class,
+        Composite\Activity::class,
+        Composite\Content::class,
+        Composite\ForeignReference::class,
+        Composite\Paginate::class,
+        // Enum
+        Enum\OrderDirection::class,
+        // Number
+        Number\Int\Date\Day::class,
+        Number\Int\Date\MilliTimestamp::class,
+        Number\Int\Date\Month::class,
+        Number\Int\Date\Timestamp::class,
+        Number\Int\Date\Week::class,
+        Number\Int\Date\Year::class,
+        Number\Int\Time\Hour::class,
+        Number\Int\Time\Minute::class,
+        Number\Int\Time\Second::class,
+        Number\Int\Negative::class,
+        Number\Int\Positive::class,
+        Number\Int\Unsigned::class,
+        // String
+        String\Format\Resource\Identifier::class,
+        String\Format\Resource\Type::class,
+        String\Format\Uri\Https::class,
+        String\Format\Date::class,
+        String\Format\EmailAddress::class,
+        String\Format\Ip::class,
+        String\Format\SearchTerm::class,
+        String\PhoneNumber::class,
+        String\UserAgent::class,
     ];
 
     /**
      * @param array<array<mixed>> $routes
-     * @param string $fileLocation
-     * @param string $baseUri
-     * @param string $name
      */
     public function __construct(
         private readonly RouteDocumentor $routeDocumentor,
         private readonly array $routes,
         private readonly string $fileLocation,
         private readonly string $baseUri,
-        private readonly string $name,
+        private readonly ?string $name,
     ) {
-        parent::__construct();
+        parent::__construct($name);
     }
 
     /**
@@ -96,7 +101,7 @@ final class WriteCommand extends Command
         $document = $this->getBaseDocument();
         assert(is_array($document['paths']));
 
-        $document['paths'] = $this->compasePaths();
+        $document['paths'] = $this->composePaths();
         $document['components'] = [
             'schemas' => $this->composeSchemaComponents(),
         ];
@@ -152,15 +157,15 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function compasePaths(): array
+    private function composePaths(): array
     {
         $paths = [];
 
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[(string)$routeDocument->getPath()] = [
-                $routeDocument->getMethod()->value => $this->composePathDocument($routeDocument),
+            $paths[(string)$routeDocument->path] = [
+                $routeDocument->method->value => $this->composePathDocument($routeDocument),
             ];
         }
 
@@ -194,11 +199,11 @@ final class WriteCommand extends Command
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            yield from $this->getSchemasFromTypeDocument($routeDocument->getInput());
+            yield from $this->getSchemasFromTypeDocument($routeDocument->input);
 
-            foreach ($routeDocument->getRespones() as $respone) {
-                if ($respone->output) {
-                    yield from $this->getSchemasFromTypeDocument($respone->output);
+            foreach ($routeDocument->getRespones() as $response) {
+                if ($response->output) {
+                    yield from $this->getSchemasFromTypeDocument($response->output);
                 }
             }
         }
@@ -234,15 +239,15 @@ final class WriteCommand extends Command
     {
         return [
             'tags' => [
-                $routeDocument->getResource(),
-                $routeDocument->getCategory()->value,
+                $routeDocument->resource,
+                $routeDocument->category,
             ],
-            'deprecated' => $routeDocument->getDeprecated() !== null,
+            'deprecated' => $routeDocument->deprecated !== null,
             'requestBody' => [
                 'required' => true,
                 'content' => [
                     'application/json' => [
-                        'schema' => $this->composeTypeDocument($routeDocument->getInput(), true),
+                        'schema' => $this->composeTypeDocument($routeDocument->input, true),
                     ],
                 ],
             ],
@@ -330,12 +335,17 @@ final class WriteCommand extends Command
      */
     private function composeCollectionDocument(CollectionTypeDocument $typeDocument): array
     {
-        return [
+        $document = [
             'type' => 'array',
             'items' => $this->composeTypeDocument($typeDocument->item, true),
-            'minItems' => $typeDocument->size->minimal,
-            'maxItems' => $typeDocument->size->maximal,
         ];
+
+        if ($typeDocument->size) {
+            $document['minItems'] = $typeDocument->size->minimal;
+            $document['maxItems'] = $typeDocument->size->maximal;
+        }
+
+        return $document;
     }
 
     /**
@@ -397,11 +407,8 @@ final class WriteCommand extends Command
             $document['format'] = $typeDocument->format;
         }
 
-        if ($typeDocument->range->minimal) {
+        if ($typeDocument->range) {
             $document['minimum'] = $typeDocument->range->minimal;
-        }
-
-        if ($typeDocument->range->maximal) {
             $document['maximum'] = $typeDocument->range->maximal;
         }
 
@@ -414,11 +421,12 @@ final class WriteCommand extends Command
     private function composeStringDocument(StringTypeDocument $typeDocument): array
     {
         $reference = $typeDocument->getReference();
-        $document = [
-            'type' => 'string',
-            'minLength' => $typeDocument->length->minimal,
-            'maxLength' => $typeDocument->length->maximal,
-        ];
+        $document = ['type' => 'string'];
+
+        if ($typeDocument->length) {
+            $document['minLength'] = $typeDocument->length->minimal;
+            $document['maxLength'] = $typeDocument->length->maximal;
+        }
 
         if ($typeDocument->format) {
             $document['format'] = $typeDocument->format;
