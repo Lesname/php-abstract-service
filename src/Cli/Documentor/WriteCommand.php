@@ -15,17 +15,11 @@ use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessAbstractService\Cli\Documentor\Attribute\Format;
 use LessResource\Model\ResourceModel;
-use LessValueObject\Composite\Activity;
-use LessValueObject\Composite\Content;
-use LessValueObject\Composite\ForeignReference;
-use LessValueObject\Composite\Occurred;
-use LessValueObject\Composite\Paginate;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\Number\Int\Date\Timestamp;
+use LessValueObject\Composite;
+use LessValueObject\Enum;
+use LessValueObject\Number;
+use LessValueObject\String;
 use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
-use LessValueObject\String\Format\EmailAddress;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Uri;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
@@ -39,7 +33,7 @@ final class WriteCommand extends Command
         200 => 'Ok, see content',
         201 => 'Resource created',
         202 => 'Accepted, action will be done in due time',
-        204 => 'Call successfull, nothing to output',
+        204 => 'Call successful, nothing to output',
         400 => 'Bad request, see body for more info',
         401 => 'Authentication failed',
         403 => 'Forbidden to do this request',
@@ -52,30 +46,41 @@ final class WriteCommand extends Command
     ];
 
     private const SHARED_REFERENCES = [
-        Identifier::class,
-
-        EmailAddress::class,
-
-        Uri\Https::class,
-
-        Paginate::class,
-
-        Occurred::class,
-        Activity::class,
-
-        Content::class,
-
-        ForeignReference::class,
-
-        Timestamp::class,
-        MilliTimestamp::class,
+        // Composite
+        Composite\Occurred::class,
+        Composite\Activity::class,
+        Composite\Content::class,
+        Composite\ForeignReference::class,
+        Composite\Paginate::class,
+        // Enum
+        Enum\OrderDirection::class,
+        // Number
+        Number\Int\Date\Day::class,
+        Number\Int\Date\MilliTimestamp::class,
+        Number\Int\Date\Month::class,
+        Number\Int\Date\Timestamp::class,
+        Number\Int\Date\Week::class,
+        Number\Int\Date\Year::class,
+        Number\Int\Time\Hour::class,
+        Number\Int\Time\Minute::class,
+        Number\Int\Time\Second::class,
+        Number\Int\Negative::class,
+        Number\Int\Positive::class,
+        Number\Int\Unsigned::class,
+        // String
+        String\Format\Resource\Identifier::class,
+        String\Format\Resource\Type::class,
+        String\Format\Uri\Https::class,
+        String\Format\Date::class,
+        String\Format\EmailAddress::class,
+        String\Format\Ip::class,
+        String\Format\SearchTerm::class,
+        String\PhoneNumber::class,
+        String\UserAgent::class,
     ];
 
     /**
      * @param array<array<mixed>> $routes
-     * @param string $fileLocation
-     * @param string $baseUri
-     * @param string $name
      */
     public function __construct(
         private readonly RouteDocumentor $routeDocumentor,
