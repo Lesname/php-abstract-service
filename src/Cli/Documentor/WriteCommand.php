@@ -101,7 +101,7 @@ final class WriteCommand extends Command
         $document = $this->getBaseDocument();
         assert(is_array($document['paths']));
 
-        $document['paths'] = $this->compasePaths();
+        $document['paths'] = $this->composePaths();
         $document['components'] = [
             'schemas' => $this->composeSchemaComponents(),
         ];
@@ -157,15 +157,15 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function compasePaths(): array
+    private function composePaths(): array
     {
         $paths = [];
 
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[(string)$routeDocument->getPath()] = [
-                $routeDocument->getMethod()->value => $this->composePathDocument($routeDocument),
+            $paths[(string)$routeDocument->path] = [
+                $routeDocument->method->value => $this->composePathDocument($routeDocument),
             ];
         }
 
@@ -199,11 +199,11 @@ final class WriteCommand extends Command
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            yield from $this->getSchemasFromTypeDocument($routeDocument->getInput());
+            yield from $this->getSchemasFromTypeDocument($routeDocument->input);
 
-            foreach ($routeDocument->getRespones() as $respone) {
-                if ($respone->output) {
-                    yield from $this->getSchemasFromTypeDocument($respone->output);
+            foreach ($routeDocument->getRespones() as $response) {
+                if ($response->output) {
+                    yield from $this->getSchemasFromTypeDocument($response->output);
                 }
             }
         }
@@ -239,15 +239,15 @@ final class WriteCommand extends Command
     {
         return [
             'tags' => [
-                $routeDocument->getResource(),
-                $routeDocument->getCategory()->value,
+                $routeDocument->resource,
+                $routeDocument->category,
             ],
-            'deprecated' => $routeDocument->getDeprecated() !== null,
+            'deprecated' => $routeDocument->deprecated !== null,
             'requestBody' => [
                 'required' => true,
                 'content' => [
                     'application/json' => [
-                        'schema' => $this->composeTypeDocument($routeDocument->getInput(), true),
+                        'schema' => $this->composeTypeDocument($routeDocument->input, true),
                     ],
                 ],
             ],
@@ -335,12 +335,17 @@ final class WriteCommand extends Command
      */
     private function composeCollectionDocument(CollectionTypeDocument $typeDocument): array
     {
-        return [
+        $document = [
             'type' => 'array',
             'items' => $this->composeTypeDocument($typeDocument->item, true),
-            'minItems' => $typeDocument->size->minimal,
-            'maxItems' => $typeDocument->size->maximal,
         ];
+
+        if ($typeDocument->size) {
+            $document['minItems'] = $typeDocument->size->minimal;
+            $document['maxItems'] = $typeDocument->size->maximal;
+        }
+
+        return $document;
     }
 
     /**
@@ -402,11 +407,8 @@ final class WriteCommand extends Command
             $document['format'] = $typeDocument->format;
         }
 
-        if ($typeDocument->range->minimal) {
+        if ($typeDocument->range) {
             $document['minimum'] = $typeDocument->range->minimal;
-        }
-
-        if ($typeDocument->range->maximal) {
             $document['maximum'] = $typeDocument->range->maximal;
         }
 
@@ -419,11 +421,12 @@ final class WriteCommand extends Command
     private function composeStringDocument(StringTypeDocument $typeDocument): array
     {
         $reference = $typeDocument->getReference();
-        $document = [
-            'type' => 'string',
-            'minLength' => $typeDocument->length->minimal,
-            'maxLength' => $typeDocument->length->maximal,
-        ];
+        $document = ['type' => 'string'];
+
+        if ($typeDocument->length) {
+            $document['minLength'] = $typeDocument->length->minimal;
+            $document['maxLength'] = $typeDocument->length->maximal;
+        }
 
         if ($typeDocument->format) {
             $document['format'] = $typeDocument->format;
