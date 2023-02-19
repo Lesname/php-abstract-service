@@ -87,9 +87,9 @@ final class WriteCommand extends Command
         private readonly array $routes,
         private readonly string $fileLocation,
         private readonly string $baseUri,
-        private readonly string $name,
+        private readonly ?string $name,
     ) {
-        parent::__construct();
+        parent::__construct($name);
     }
 
     /**
