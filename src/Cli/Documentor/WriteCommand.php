@@ -18,7 +18,7 @@ use LessResource\Model\ResourceModel;
 use LessValueObject\Composite;
 use LessValueObject\Enum;
 use LessValueObject\Number;
-use LessValueObject\String;
+use LessValueObject\String as StringVo;
 use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
 use ReflectionClass;
 use ReflectionException;
@@ -68,15 +68,15 @@ final class WriteCommand extends Command
         Number\Int\Positive::class,
         Number\Int\Unsigned::class,
         // String
-        String\Format\Resource\Identifier::class,
-        String\Format\Resource\Type::class,
-        String\Format\Uri\Https::class,
-        String\Format\Date::class,
-        String\Format\EmailAddress::class,
-        String\Format\Ip::class,
-        String\Format\SearchTerm::class,
-        String\PhoneNumber::class,
-        String\UserAgent::class,
+        StringVo\Format\Resource\Identifier::class,
+        StringVo\Format\Resource\Type::class,
+        StringVo\Format\Uri\Https::class,
+        StringVo\Format\Date::class,
+        StringVo\Format\EmailAddress::class,
+        StringVo\Format\Ip::class,
+        StringVo\Format\SearchTerm::class,
+        StringVo\PhoneNumber::class,
+        StringVo\UserAgent::class,
     ];
 
     /**
