@@ -102,8 +102,12 @@ final class WriteCommand extends Command
         assert(is_array($document['paths']));
 
         $document['paths'] = $this->composePaths();
+
+        $schemaComponents = $this->composeSchemaComponents();
+        ksort($schemaComponents);
+
         $document['components'] = [
-            'schemas' => $this->composeSchemaComponents(),
+            'schemas' => $schemaComponents,
         ];
 
         assert(is_array($document['info']));
@@ -307,17 +311,43 @@ final class WriteCommand extends Command
     {
         $class = $typeDocument->getReference();
 
-        return $class !== null && (
+        return $class !== null
+            &&
+            (
                 in_array($class, self::SHARED_REFERENCES, true)
-                || is_subclass_of($class, ResourceModel::class)
+                ||
+                str_contains($class, '\\Model\\')
             );
     }
 
     private function getReferenceName(string $class): string
     {
+        if (
+            str_contains($class, '\\Model\\')
+            &&
+            !is_subclass_of($class, ResourceModel::class)
+            &&
+            preg_match(
+                '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                $class,
+                $matches,
+            )
+        ) {
+            $model = str_replace('\\', '', $matches['model']);
+            $part = preg_replace_callback(
+                '/\\\\(.)/',
+                static function (array $input) {
+                    return '.' . strtolower($input[1]);
+                },
+                $matches['part'],
+            );
+
+            return lcfirst($model) . '.' . lcfirst($part);
+        }
+
         $parts = explode('\\', $class);
 
-        return array_pop($parts);
+        return lcfirst(array_pop($parts));
     }
 
     /**
@@ -466,7 +496,7 @@ final class WriteCommand extends Command
             $key = $response->code->value;
 
             if ($response->output) {
-                $responses[$key]  = [
+                $responses[$key] = [
                     'description' => self::RESPONSE_MESSAGE[$key],
                     'content' => [
                         'application/json' => [
@@ -475,7 +505,7 @@ final class WriteCommand extends Command
                     ],
                 ];
             } else {
-                $responses[$key]  = [
+                $responses[$key] = [
                     'description' => self::RESPONSE_MESSAGE[$key],
                 ];
             }
