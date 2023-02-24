@@ -317,6 +317,8 @@ final class WriteCommand extends Command
                 in_array($class, self::SHARED_REFERENCES, true)
                 ||
                 str_contains($class, '\\Model\\')
+                ||
+                str_contains($class, '\\Repository\\')
             );
     }
 
@@ -342,7 +344,30 @@ final class WriteCommand extends Command
                 $matches['part'],
             );
 
+            assert(is_string($part));
+
             return lcfirst($model) . '.' . lcfirst($part);
+        }
+
+        if (
+            str_contains($class, '\\Repository\\')
+            &&
+            preg_match(
+                '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Repository\\\\[a-zA-Z]+\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                $class,
+                $matches,
+            )
+        ) {
+            $model = str_replace('\\', '', $matches['model']);
+            $part = preg_replace_callback(
+                '/\\\\(.)/',
+                static function (array $input) {
+                    return '.' . strtolower($input[1]);
+                },
+                $matches['part'],
+            );
+
+            return lcfirst($model) . '.repository.' . lcfirst($part);
         }
 
         $parts = explode('\\', $class);
