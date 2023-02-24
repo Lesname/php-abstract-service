@@ -367,6 +367,8 @@ final class WriteCommand extends Command
                 $matches['part'],
             );
 
+            assert(is_string($part));
+
             return lcfirst($model) . '.repository.' . lcfirst($part);
         }
 
