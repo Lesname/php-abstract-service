@@ -230,7 +230,7 @@ final class WriteCommand extends Command
             $reference = $typeDocument->getReference();
             assert(is_string($reference));
 
-            yield $typeDocument;
+            yield $typeDocument->withNullable(false);
         }
     }
 
