@@ -189,6 +189,10 @@ final class WriteCommand extends Command
             $reference = $schema->getReference();
             assert(is_string($reference));
 
+            if (isset($document[$this->getReferenceName($reference)])) {
+                continue;
+            }
+
             $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
         }
 
@@ -230,7 +234,7 @@ final class WriteCommand extends Command
             $reference = $typeDocument->getReference();
             assert(is_string($reference));
 
-            yield $typeDocument;
+            yield $typeDocument->withNullable(false);
         }
     }
 

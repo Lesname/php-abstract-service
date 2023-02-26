@@ -83,6 +83,7 @@ final class ConfigProvider
     public function __invoke(): array
     {
         return [
+            'shared_by_default' => php_sapi_name() !== 'cli',
             PushHandler::class => [
                 'eventQueueJobMap' => [
                     'account:registered' => 'service:loadAccountRole',
