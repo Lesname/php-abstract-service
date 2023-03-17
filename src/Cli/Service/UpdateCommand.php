@@ -41,10 +41,14 @@ final class UpdateCommand extends Command
         if (file_exists('config/development.config.php')) {
             $output->writeln('<comment>Beware development config active</comment>');
         } else {
-            if (file_exists('config/cache.php')) {
-                unlink('config/cache.php');
-            } else {
+            $files = glob('config/cache*.php');
+
+            if ($files === false || count($files) === 0) {
                 $output->writeln('<comment>Beware no cache config active</comment>');
+            } else {
+                foreach ($files as $file) {
+                    unlink($file);
+                }
             }
         }
 
