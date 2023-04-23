@@ -33,6 +33,7 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly StreamFactoryInterface $streamFactory,
         private readonly IdentifierGenerator $identifierGenerator,
+        private readonly string $projectName,
         Hydrator $hydrator,
         Store $store,
         array $routes,
@@ -49,7 +50,10 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
 
         $body = $this->streamFactory->createStream(
             json_encode(
-                ['id' => $event->id],
+                [
+                    'type' => "{$this->projectName}.{$event->getTarget()}",
+                    'id' => $event->id,
+                ],
                 JSON_THROW_ON_ERROR,
             ),
         );

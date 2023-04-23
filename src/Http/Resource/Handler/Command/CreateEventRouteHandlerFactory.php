@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Http\Resource\Handler\Command;
 
+use RuntimeException;
 use LessDomain\Event\Store\Store;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHydrator\Hydrator;
@@ -24,6 +25,13 @@ final class CreateEventRouteHandlerFactory
         assert(is_array($config));
         assert(is_array($config['routes']));
 
+        assert(is_array($config['self']));
+        assert(is_string($config['self']['name']));
+
+        if (preg_match('/^[a-z]+\.(?<projectName>[a-z]+)\.(prod|dev|local)$/i', $config['self']['name'], $matches) !== 1) {
+            throw new RuntimeException('Cannot find project name');
+        }
+
         $responseFactory = $container->get(ResponseFactoryInterface::class);
         assert($responseFactory instanceof ResponseFactoryInterface);
 
@@ -43,6 +51,7 @@ final class CreateEventRouteHandlerFactory
             $responseFactory,
             $streamFactory,
             $identifierGenerator,
+            $matches['projectName'],
             $hydrator,
             $store,
             $config['routes'],
