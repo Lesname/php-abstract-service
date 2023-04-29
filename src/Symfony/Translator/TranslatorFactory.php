@@ -27,8 +27,6 @@ final class TranslatorFactory
             assert(is_array($files));
 
             foreach ($files as $file) {
-                assert(is_string($file));
-
                 $translator->addResource('file', $file, $locale);
             }
         }
