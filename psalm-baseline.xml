@@ -54,4 +54,9 @@
       <code>$route[$key]</code>
     </MixedAssignment>
   </file>
+  <file src="src/Symfony/Translator/TranslatorFactory.php">
+    <MixedAssignment occurrences="1">
+      <code>$file</code>
+    </MixedAssignment>
+  </file>
 </files>

@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Mezzio;
 
+use RuntimeException;
 use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
+use LessValidator\TranslationHelper;
+use Symfony\Component\Translation\Translator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
+use LessAbstractService\Symfony\Translator\TranslatorFactory;
 use LessAbstractService\Http\Queue\Handler\Command\DeleteHandler;
 use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
@@ -83,6 +88,7 @@ final class ConfigProvider
     public function __invoke(): array
     {
         return [
+            'translator' => $this->getTranslator(),
             'shared_by_default' => php_sapi_name() !== 'cli',
             PushHandler::class => [
                 'eventQueueJobMap' => [
@@ -109,6 +115,8 @@ final class ConfigProvider
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
+
+                    TranslatorInterface::class => Translator::class,
 
                     LoggerInterface::class => Logger::class,
                     HubInterface::class => Hub::class,
@@ -196,6 +204,8 @@ final class ConfigProvider
                     Hub::class => HubFactory::class,
 
                     TokenCodec::class => TokenCodecFactory::class,
+
+                    Translator::class => TranslatorFactory::class,
                 ],
             ],
             'laminas-cli' => [
@@ -224,6 +234,39 @@ final class ConfigProvider
                 'queue:ping' => PingWorker::class,
             ],
         ];
+    }
+
+    /**
+     * @return array{defaultLocale: string, translation: array<string, array<string>>}
+     */
+    private function getTranslator(): array
+    {
+        $translator = [
+            'defaultLocale' => 'nl_NL',
+            'translation' => [],
+        ];
+
+        $libFiles = glob(TranslationHelper::getTranslationDirectory() . '/[a-z][a-z]_[A-Z][A-Z].php');
+
+        if ($libFiles === false) {
+            throw new RuntimeException();
+        }
+
+        foreach ($libFiles as $file) {
+            if (!is_file($file) || !is_readable($file)) {
+                continue;
+            }
+
+            $locale = pathinfo($file, PATHINFO_FILENAME);
+
+            if (!isset($translator['translation'][$locale])) {
+                $translator['translation'][$locale] = [];
+            }
+
+            $translator['translation'][$locale][] = $file;
+        }
+
+        return $translator;
     }
 
     /**
