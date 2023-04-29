@@ -8,7 +8,9 @@ use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessValidator\TranslationHelper;
 use Symfony\Component\Translation\Translator;
+use LessHttp\Middleware\Locale\LocaleMiddleware;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Symfony\Translator\TranslatorFactory;
@@ -206,6 +208,8 @@ final class ConfigProvider
                     TokenCodec::class => TokenCodecFactory::class,
 
                     Translator::class => TranslatorFactory::class,
+
+                    LocaleMiddleware::class => LocaleMiddlewareFactory::class,
                 ],
             ],
             'laminas-cli' => [
@@ -232,6 +236,13 @@ final class ConfigProvider
                 'hook:push' => Worker\Hook\PushWorker::class,
 
                 'queue:ping' => PingWorker::class,
+            ],
+            LocaleMiddleware::class => [
+                'defaultLocale' => 'nl_NL',
+                'allowedLocales' => [
+                    'nl_NL',
+                    'en_US',
+                ],
             ],
         ];
     }
