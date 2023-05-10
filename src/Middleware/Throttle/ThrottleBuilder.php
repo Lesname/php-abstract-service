@@ -7,7 +7,7 @@ use LessHttp\Middleware\Throttle\Parameter\By;
 
 final class ThrottleBuilder
 {
-    private ?string $path = null;
+    private ?string $action = null;
 
     private ?By $by = null;
 
@@ -25,10 +25,10 @@ final class ThrottleBuilder
     ) {
     }
 
-    public function withPath(?string $path): self
+    public function withAction(?string $action): self
     {
         $clone = clone $this;
-        $clone->path = $path;
+        $clone->action = $action;
 
         return $clone;
     }
@@ -69,12 +69,12 @@ final class ThrottleBuilder
     }
 
     /**
-     * @return iterable<array{path: string | null, by: By | null, duration: int, points: int}>
+     * @return iterable<array{action: string | null, by: By | null, duration: int, points: int}>
      */
     public function build(): iterable
     {
         yield [
-            'path' => $this->path,
+            'action' => $this->action,
             'by' => $this->by,
             'duration' => $this->baseDuration,
             'points' => $this->basePoints,
@@ -82,7 +82,7 @@ final class ThrottleBuilder
 
         foreach ($this->multiples as $multipleDuration => $multiplePoints) {
             yield [
-                'path' => $this->path,
+                'action' => $this->action,
                 'by' => $this->by,
                 'duration' => $this->baseDuration * $multipleDuration,
                 'points' => $this->basePoints * $multiplePoints,
