@@ -4,9 +4,18 @@ declare(strict_types=1);
 namespace LessAbstractService\Cli\Documentor;
 
 use JsonException;
+use LessValueObject\String\UserAgent;
+use LessValueObject\String\Format\Ip;
+use LessValueObject\String\PhoneNumber;
+use LessValueObject\String\Format\Date;
+use LessValueObject\String\Format\Uri\Https;
+use LessValueObject\String\Format\SearchTerm;
+use LessValueObject\String\Format\EmailAddress;
 use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\RouteDocumentor;
+use LessValueObject\String\Format\Resource\Type;
 use LessDocumentor\Type\Document\BoolTypeDocument;
+use LessValueObject\String\Format\Resource\Identifier;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
@@ -18,7 +27,6 @@ use LessResource\Model\ResourceModel;
 use LessValueObject\Composite;
 use LessValueObject\Enum;
 use LessValueObject\Number;
-use LessValueObject\String as StringVo;
 use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
 use ReflectionClass;
 use ReflectionException;
@@ -68,15 +76,15 @@ final class WriteCommand extends Command
         Number\Int\Positive::class,
         Number\Int\Unsigned::class,
         // String
-        StringVo\Format\Resource\Identifier::class,
-        StringVo\Format\Resource\Type::class,
-        StringVo\Format\Uri\Https::class,
-        StringVo\Format\Date::class,
-        StringVo\Format\EmailAddress::class,
-        StringVo\Format\Ip::class,
-        StringVo\Format\SearchTerm::class,
-        StringVo\PhoneNumber::class,
-        StringVo\UserAgent::class,
+        Identifier::class,
+        Type::class,
+        Https::class,
+        Date::class,
+        EmailAddress::class,
+        Ip::class,
+        SearchTerm::class,
+        PhoneNumber::class,
+        UserAgent::class,
     ];
 
     /**
