@@ -18,34 +18,64 @@ use LessValidator\Validator;
 use LessValueObject\ValueObject;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * @psalm-immutable
+ */
 final class RpcRouteBuilder
 {
-    /** @var class-string<ResourceRepository<ResourceModel>>|null */
-    private ?string $resourceRepository = null;
+    /**
+     * @var class-string<ResourceRepository<ResourceModel>>|null
+     * @readonly
+     */
+    public ?string $resourceRepository = null;
 
-    /** @var class-string|null */
-    private ?string $proxyClass = null;
+    /**
+     * @var class-string|null
+     * @readonly
+     */
+    public ?string $proxyClass = null;
 
-    /** @var class-string<Validator>|null */
-    private ?string $validator = null;
+    /**
+     * @var class-string<Validator>|null
+     * @readonly
+     */
+    public ?string $validator = null;
 
-    /** @var class-string<ValueObject>|null */
-    private ?string $input = null;
+    /**
+     * @var class-string<ValueObject>|null
+     * @readonly
+     */
+    public ?string $input = null;
 
-    /** @var array<class-string<PrerequisiteConstraint>> */
-    private array $prerequisites = [];
+    /**
+     * @var array<class-string<PrerequisiteConstraint>>
+     * @readonly
+     *
+     */
+    public array $prerequisites = [];
 
-    /** @var array<string, mixed> */
-    private array $extraOptions = [];
+    /**
+     * @var array<string, mixed>
+     * @readonly
+     */
+    public array $extraOptions = [];
+
+    /**
+     * @var non-empty-array<class-string<AuthorizationConstraint>>
+     * @readonly
+     */
+    public array $authorizations;
 
     /**
      * @param non-empty-string $resourceName
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
      */
     public function __construct(
-        private readonly string $resourceName,
-        private array $authorizations,
-    ) {}
+        public readonly string $resourceName,
+        array $authorizations,
+    ) {
+        $this->authorizations = $authorizations;
+    }
 
     public function withExtraOption(string $key, mixed $value): self
     {
@@ -68,10 +98,23 @@ final class RpcRouteBuilder
 
     /**
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     *
+     * @deprecated use withAddedAuthorization
      */
     public function withAddedAuthorizations(array $authorizations): self
     {
         return $this->withAuthorizations([...$this->authorizations, ...$authorizations]);
+    }
+
+    /**
+     * @param class-string<AuthorizationConstraint> $authorization
+     */
+    public function withAddedAuthorization(string $authorization): self
+    {
+        $clone = clone $this;
+        $clone->authorizations[] = $authorization;
+
+        return $clone;
     }
 
     /**
@@ -87,10 +130,23 @@ final class RpcRouteBuilder
 
     /**
      * @param array<class-string<PrerequisiteConstraint>> $prerequisites
+     *
+     * @deprecated use withAddedPrerequisite
      */
     public function withAddedPrerequisites(array $prerequisites): self
     {
         return $this->withPrerequisites([...$this->prerequisites, ...$prerequisites]);
+    }
+
+    /**
+     * @param class-string<PrerequisiteConstraint> $prerequisite
+     */
+    public function withAddedPrerequisite(string $prerequisite): self
+    {
+        $clone = clone $this;
+        $clone->prerequisites[] = $prerequisite;
+
+        return $clone;
     }
 
     /**
