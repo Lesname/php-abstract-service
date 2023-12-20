@@ -15,7 +15,7 @@
 
     "psr/http-server-handler": "^1.0.1",
 
-    "lessname/documentor": "^0.3.0",
+    "lessname/documentor": "^0.3.1",
     "lessname/resource": "^0.4.1",
     "lessname/domain": "^0.3.0",
     "lessname/validator": "^0.3.0",
@@ -42,7 +42,7 @@
     "phpstan/phpstan": "^1.8.0",
     "vimeo/psalm": "^5.12.0",
 
-    "lessname/identity-client": "^0.4.1",
+    "lessname/identity-client": "^0.4.2",
     "lessname/hook-client": "^0.4.0",
 
     "lessname/token": "^0.2.0",
