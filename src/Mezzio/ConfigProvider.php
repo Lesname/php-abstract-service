@@ -135,7 +135,6 @@ final class ConfigProvider
 
                     GenericValidatorBuilder::class => GenericValidatorBuilder::class,
 
-                    MezzioRouteDocumentor::class => MezzioRouteDocumentor::class,
                     LessRouteDocumentor::class => LessRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 

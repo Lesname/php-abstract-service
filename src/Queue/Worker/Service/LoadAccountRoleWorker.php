@@ -6,12 +6,11 @@ namespace LessAbstractService\Queue\Worker\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use LessIdentity\Account\Model\Account;
-use LessIdentity\Account\Repository\AccountRepository;
-use LessIdentity\Account\Repository\Exception\NoAccount;
 use LessQueue\Job\Job;
 use LessQueue\Worker\Worker;
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
+use LessIdentity\Account\Service\AccountService;
 use LessValueObject\String\Format\Exception\NotFormat;
 use LessValueObject\String\Format\Resource\Identifier;
 use RuntimeException;
@@ -19,13 +18,12 @@ use RuntimeException;
 final class LoadAccountRoleWorker implements Worker
 {
     public function __construct(
-        private readonly AccountRepository $accountRepository,
+        private readonly AccountService $accountService,
         private readonly Connection $connection,
     ) {}
 
     /**
      * @throws Exception
-     * @throws NoAccount
      * @throws NotFormat
      * @throws TooLong
      * @throws TooShort
@@ -38,7 +36,6 @@ final class LoadAccountRoleWorker implements Worker
     }
 
     /**
-     * @throws NoAccount
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
@@ -55,7 +52,7 @@ final class LoadAccountRoleWorker implements Worker
             throw new RuntimeException();
         }
 
-        return $this->accountRepository->getWithId(new Identifier($id));
+        return $this->accountService->getWithId(new Identifier($id))->result;
     }
 
     /**
