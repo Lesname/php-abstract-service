@@ -9,10 +9,10 @@ use LessDomain\Event\Store\Store;
 use LessHydrator\Hydrator;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
+use LessValueObject\Number\Exception\NotMultipleOf;
 use LessValueObject\String\Format\Exception\NotFormat;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,8 +23,6 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
 
     /**
-     * @param Hydrator $hydrator
-     * @param Store $store
      * @param array<mixed> $routes
      */
     public function __construct(
@@ -37,7 +35,6 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws NotFormat
-     * @throws PrecisionOutBounds
      * @throws TooLong
      * @throws TooShort
      */
@@ -53,7 +50,6 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws NotFormat
-     * @throws PrecisionOutBounds
      * @throws TooLong
      * @throws TooShort
      */
@@ -85,14 +81,14 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     }
 
     /**
-     * @throws MaxOutBounds
+     * @return array<mixed>
+     *
      * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
-     *
-     * @return array<mixed>
+     * @throws NotMultipleOf
+     * @throws MaxOutBounds
      */
     protected function getEventData(ServerRequestInterface $request): array
     {

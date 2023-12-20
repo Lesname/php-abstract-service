@@ -6,8 +6,7 @@ namespace LessAbstractService\Queue\Worker\Service;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use LessIdentity\Account\Model\Account;
-use LessIdentity\Account\Repository\AccountRepository;
-use LessIdentity\Account\Repository\Vo\SortableOptions;
+use LessIdentity\Account\Service\AccountService;
 use LessQueue\Job\Job;
 use LessQueue\Queue;
 use LessQueue\Worker\Worker;
@@ -16,17 +15,19 @@ use LessValueObject\Composite\Paginate;
 use LessValueObject\Enum\OrderDirection;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use LessValueObject\Number\Int\Paginate\Page;
 use LessValueObject\Number\Int\Paginate\PerPage;
 use RuntimeException;
+use LessValueObject\Number\Exception\NotMultipleOf;
+use LessResource\Set\CollectionValueObjectResourceSet;
+use LessIdentity\Account\Service\Parameters\SortableOptions;
 
 final class LoadAccountRolesWorker implements Worker
 {
     private const PER_PAGE = 20;
 
     public function __construct(
-        private readonly AccountRepository $accountRepository,
+        private readonly AccountService $accountService,
         private readonly Connection $connection,
         private readonly Queue $queue,
     ) {}
@@ -35,7 +36,7 @@ final class LoadAccountRolesWorker implements Worker
      * @throws Exception
      * @throws MaxOutBounds
      * @throws MinOutBounds
-     * @throws PrecisionOutBounds
+     * @throws NotMultipleOf
      */
     public function process(Job $job): void
     {
@@ -48,16 +49,16 @@ final class LoadAccountRolesWorker implements Worker
     /**
      * @return ResourceSet<Account>
      *
+     * @throws NotMultipleOf
      * @throws MaxOutBounds
      * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      */
     private function request(Job $job): ResourceSet
     {
         $page = $this->getPage($job);
 
-        return $this
-            ->accountRepository
+        $response = $this
+            ->accountService
             ->getByRegistered(
                 new Paginate(
                     new PerPage(self::PER_PAGE),
@@ -67,6 +68,8 @@ final class LoadAccountRolesWorker implements Worker
                     direction: OrderDirection::Ascending,
                 ),
             );
+
+        return new CollectionValueObjectResourceSet($response->results, (int)$response->meta->total);
     }
 
     /**

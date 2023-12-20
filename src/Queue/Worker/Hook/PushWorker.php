@@ -30,8 +30,8 @@ final class PushWorker implements Worker
             ->producerService
             ->publish(
                 $this->producer,
-                $data['target'],
-                $data['action'],
+                $data['target']->getValue(),
+                $data['action']->getValue(),
                 $data['id'],
             );
     }

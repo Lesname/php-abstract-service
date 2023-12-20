@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Resource\Handler\Command;
 
 use JsonException;
+use LessValueObject\Number\Exception\NotMultipleOf;
 use LessAbstractService\Http\Resource\Handler\Command\Response\CreatedResponse;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
@@ -66,14 +67,14 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
     }
 
     /**
-     * @throws MaxOutBounds
+     * @return array<mixed>
+     *
      * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
-     *
-     * @return array<mixed>
+     * @throws NotMultipleOf
+     * @throws MaxOutBounds
      */
     protected function getEventData(ServerRequestInterface $request): array
     {

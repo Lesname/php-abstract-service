@@ -27,7 +27,7 @@ use LessResource\Model\ResourceModel;
 use LessValueObject\Composite;
 use LessValueObject\Enum;
 use LessValueObject\Number;
-use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
+use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
@@ -104,7 +104,7 @@ final class WriteCommand extends Command
      * @throws JsonException
      * @throws ReflectionException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $document = $this->getBaseDocument();
         assert(is_array($document['paths']));
@@ -217,7 +217,7 @@ final class WriteCommand extends Command
 
             yield from $this->getSchemasFromTypeDocument($routeDocument->input);
 
-            foreach ($routeDocument->getRespones() as $response) {
+            foreach ($routeDocument->responses as $response) {
                 if ($response->output) {
                     yield from $this->getSchemasFromTypeDocument($response->output);
                 }
@@ -310,10 +310,6 @@ final class WriteCommand extends Command
 
         if ($typeDocument->getDescription()) {
             $document['description'] = $typeDocument->getDescription();
-        }
-
-        if ($typeDocument->getDeprecated()) {
-            $document['deprecated'] = true;
         }
 
         return $document;
@@ -463,13 +459,13 @@ final class WriteCommand extends Command
     private function composeNumberDocument(NumberTypeDocument $typeDocument): array
     {
         $document = [
-            'type' => $typeDocument->precision === 0
+            'type' => is_int($typeDocument->multipleOf)
                 ? 'integer'
                 : 'number',
         ];
 
-        if ($typeDocument->precision !== null) {
-            $document['multipleOf'] = 1 / pow(10, $typeDocument->precision);
+        if ($typeDocument->multipleOf !== null) {
+            $document['multipleOf'] = $typeDocument->multipleOf;
         }
 
         if ($typeDocument->format) {
@@ -506,8 +502,8 @@ final class WriteCommand extends Command
                 throw new RuntimeException("Reference '{$reference}' unknown");
             }
 
-            if (is_subclass_of($reference, AbstractRegexpFormattedStringValueObject::class)) {
-                $document['pattern'] = $reference::getRegexPattern();
+            if (is_subclass_of($reference, AbstractRegexStringFormatValueObject::class)) {
+                $document['pattern'] = $reference::getRegularExpression();
             }
 
             $reflection = new ReflectionClass($reference);
@@ -531,7 +527,7 @@ final class WriteCommand extends Command
         /** @var array<int, array<mixed>> $responses */
         $responses = [];
 
-        foreach ($routeDocument->getRespones() as $response) {
+        foreach ($routeDocument->responses as $response) {
             $key = $response->code->value;
 
             if ($response->output) {

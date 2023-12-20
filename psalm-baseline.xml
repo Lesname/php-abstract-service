@@ -1,61 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
   <file src="src/Cli/Documentor/WriteCommand.php">
-    <DeprecatedClass occurrences="2">
-      <code>$refAttribute-&gt;newInstance()</code>
+    <DeprecatedClass>
       <code>Format::class</code>
     </DeprecatedClass>
-    <DeprecatedMethod occurrences="1">
-      <code>getDeprecated</code>
-    </DeprecatedMethod>
   </file>
   <file src="src/Cli/Queue/ProcessCommandFactory.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$config['workers']</code>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$config['workers']]]></code>
     </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Container/Factory/ReflectionFactory.php">
-    <MixedMethodCall occurrences="1">
-      <code>new $name(...$this-&gt;getParameters($container, $constructor))</code>
+    <MixedMethodCall>
+      <code><![CDATA[new $name(...$this->getParameters($container, $constructor))]]></code>
     </MixedMethodCall>
   </file>
   <file src="src/Event/Listener/HookPushListener.php">
-    <NoInterfaceProperties occurrences="1">
-      <code>$event-&gt;id</code>
+    <NoInterfaceProperties>
+      <code><![CDATA[$event->id]]></code>
     </NoInterfaceProperties>
   </file>
   <file src="src/Http/Resource/Handler/Command/CreateEventRouteHandler.php">
-    <NoInterfaceProperties occurrences="1">
-      <code>$event-&gt;id</code>
+    <NoInterfaceProperties>
+      <code><![CDATA[$event->id]]></code>
     </NoInterfaceProperties>
   </file>
   <file src="src/Http/Resource/Handler/Query/AbstractQueryRouteHandler.php">
-    <DeprecatedClass occurrences="2">
-      <code>$attribute-&gt;newInstance()</code>
-      <code>DefaultValue::class</code>
-    </DeprecatedClass>
-    <MixedMethodCall occurrences="1">
-      <code>$route['proxy']['method']</code>
+    <MixedMethodCall>
+      <code><![CDATA[$route['proxy']['method']]]></code>
     </MixedMethodCall>
   </file>
+  <file src="src/Http/Service/Hook/Handler/Command/PushHandler.php">
+    <RedundantCondition>
+      <code><![CDATA[$parameters->type === Type::Event]]></code>
+    </RedundantCondition>
+  </file>
   <file src="src/Http/Service/Hook/Handler/Command/PushHandlerFactory.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$config[PushHandler::class]['eventQueueJobMap']</code>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$config[PushHandler::class]['eventQueueJobMap']]]></code>
     </MixedArgumentTypeCoercion>
   </file>
-  <file src="src/Mezzio/ConfigProvider.php">
-    <DeprecatedClass occurrences="2">
-      <code>MezzioRouteDocumentor::class</code>
-      <code>MezzioRouteDocumentor::class</code>
-    </DeprecatedClass>
-  </file>
   <file src="src/Router/Route/RpcRouteBuilder.php">
-    <MixedAssignment occurrences="1">
+    <MixedAssignment>
       <code>$route[$key]</code>
     </MixedAssignment>
   </file>
   <file src="src/Symfony/Translator/TranslatorFactory.php">
-    <MixedAssignment occurrences="1">
+    <MixedAssignment>
       <code>$file</code>
     </MixedAssignment>
   </file>
