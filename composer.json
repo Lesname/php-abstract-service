@@ -42,7 +42,7 @@
     "phpstan/phpstan": "^1.8.0",
     "vimeo/psalm": "^5.12.0",
 
-    "lessname/identity-client": "^0.4.1",
+    "lessname/identity-client": "^0.4.2",
     "lessname/hook-client": "^0.4.0",
 
     "lessname/token": "^0.2.0",

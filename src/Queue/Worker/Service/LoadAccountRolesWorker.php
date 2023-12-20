@@ -69,7 +69,7 @@ final class LoadAccountRolesWorker implements Worker
                 ),
             );
 
-        return new CollectionValueObjectResourceSet($response->results, (int)$response->meta->total);
+        return new CollectionValueObjectResourceSet($response->results, $response->meta->total->getValue());
     }
 
     /**
