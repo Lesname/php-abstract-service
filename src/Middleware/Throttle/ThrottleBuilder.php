@@ -69,7 +69,7 @@ final class ThrottleBuilder
     }
 
     /**
-     * @return iterable<array{action: string | null, by: By | null, duration: int, points: int}>
+     * @return iterable<int, array{action: string | null, by: By | null, duration: int, points: int}>
      */
     public function build(): iterable
     {
