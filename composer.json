@@ -20,7 +20,7 @@
     "lessname/domain": "^0.3.0",
     "lessname/validator": "^0.3.0",
     "lessname/queue": "^0.4.0",
-    "lessname/http": "^0.4.0",
+    "lessname/http": "^0.4.1",
     "lessname/value-object": "^0.3.0",
 
     "lessname/abstract-client": "^0.3.0",
