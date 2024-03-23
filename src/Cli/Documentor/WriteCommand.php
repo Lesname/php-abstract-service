@@ -308,7 +308,7 @@ final class WriteCommand extends Command
             }
         }
 
-        if ($typeDocument->getDescription()) {
+        if ($typeDocument->getDescription() !== null) {
             $document['description'] = $typeDocument->getDescription();
         }
 
@@ -468,7 +468,7 @@ final class WriteCommand extends Command
             $document['multipleOf'] = $typeDocument->multipleOf;
         }
 
-        if ($typeDocument->format) {
+        if ($typeDocument->format !== null) {
             $document['format'] = $typeDocument->format;
         }
 
@@ -493,11 +493,11 @@ final class WriteCommand extends Command
             $document['maxLength'] = $typeDocument->length->maximal;
         }
 
-        if ($typeDocument->format) {
+        if ($typeDocument->format !== null) {
             $document['format'] = $typeDocument->format;
         }
 
-        if ($reference) {
+        if ($reference !== null) {
             if (!class_exists($reference)) {
                 throw new RuntimeException("Reference '{$reference}' unknown");
             }
