@@ -17,6 +17,7 @@ use LessAbstractService\Symfony\Translator\TranslatorFactory;
 use LessAbstractService\Http\Queue\Handler\Command\DeleteHandler;
 use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
+use LessHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandlerFactory;
@@ -43,7 +44,6 @@ use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
 use LessDocumentor\Route\LessRouteDocumentor;
-use LessDocumentor\Route\MezzioRouteDocumentor;
 use LessDocumentor\Route\RouteDocumentor;
 use LessDomain\Event\Publisher\FifoPublisher;
 use LessDomain\Event\Publisher\FifoPublisherFactory;
@@ -139,6 +139,7 @@ final class ConfigProvider
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
+                    NoOneAuthorizationConstraint::class => NoOneAuthorizationConstraint::class,
 
                     PingWorker::class => PingWorker::class,
 
@@ -179,8 +180,7 @@ final class ConfigProvider
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    ResourceExistsPrerequisite::class =>
-                        ResourcePrerequisiteFactory::class,
+                    ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
