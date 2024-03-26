@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace LessAbstractService\Mezzio;
 
 use RuntimeException;
+use Mezzio\Application;
 use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessValidator\TranslationHelper;
 use Symfony\Component\Translation\Translator;
 use LessHttp\Middleware\Locale\LocaleMiddleware;
+use Laminas\Stratigility\Middleware\ErrorHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
+use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Symfony\Translator\TranslatorFactory;
@@ -124,8 +127,14 @@ final class ConfigProvider
                     HubInterface::class => Hub::class,
                 ],
                 'delegators' => [
+                    ErrorHandler::class => [
+                        Listener\SentryErrorListenerDelegatorFactory::class,
+                    ],
                     Logger::class => [
                         SentryMonologDelegatorFactory::class,
+                    ],
+                    Application::class => [
+                        ApplicationConfigInjectionDelegator::class,
                     ],
                 ],
                 'invokables' => [
