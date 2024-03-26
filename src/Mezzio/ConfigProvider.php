@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LessAbstractService\Mezzio;
 
 use RuntimeException;
-use Mezzio\Application;
 use Doctrine\DBAL\Connection;
 use LessAbstractService\Cli;
 use LessValidator\TranslationHelper;
@@ -12,8 +11,8 @@ use Symfony\Component\Translation\Translator;
 use LessHttp\Middleware\Locale\LocaleMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use LessHttp\Middleware\Condition\ConditionMiddleware;
 use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
-use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Symfony\Translator\TranslatorFactory;
@@ -84,6 +83,7 @@ use Psr\Log\LoggerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
+use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 final class ConfigProvider
 {
@@ -174,6 +174,7 @@ final class ConfigProvider
                     ValidationMiddleware::class => ValidationMiddlewareFactory::class,
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
+                    ConditionMiddleware::class => ReflectionFactory::class,
 
                     DeleteHandler::class => ReflectionFactory::class,
                     ReanimateHandler::class => ReflectionFactory::class,
@@ -187,6 +188,7 @@ final class ConfigProvider
                     RpcRouter::class => RpcRouterFactory::class,
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
+                    ExistsResourceConditionConstraint::class => ReflectionFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
