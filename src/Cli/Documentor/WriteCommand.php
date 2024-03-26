@@ -137,7 +137,7 @@ final class WriteCommand extends Command
                 'title' => $this->name,
                 'contact' => [
                     'name' => 'Development',
-                    'email' => 'development@boekscout.nl',
+                    'email' => 'development@lessname.nl',
                 ],
             ],
             'servers' => [

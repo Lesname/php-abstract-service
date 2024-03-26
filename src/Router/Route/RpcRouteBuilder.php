@@ -86,6 +86,14 @@ final class RpcRouteBuilder
     }
 
     /**
+     * @param class-string<AuthorizationConstraint> $authorization
+     */
+    public function withAuthorization(string $authorization): self
+    {
+        return $this->withAuthorizations([$authorization]);
+    }
+
+    /**
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
      */
     public function withAuthorizations(array $authorizations): self
@@ -115,6 +123,14 @@ final class RpcRouteBuilder
         $clone->authorizations[] = $authorization;
 
         return $clone;
+    }
+
+    /**
+     * @param class-string<PrerequisiteConstraint> $prerequisite
+     */
+    public function withPrerequisite(string $prerequisite): self
+    {
+        return $this->withPrerequisites([$prerequisite]);
     }
 
     /**
