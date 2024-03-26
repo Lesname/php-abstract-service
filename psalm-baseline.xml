@@ -43,6 +43,7 @@
   <file src="src/Mezzio/ConfigProvider.php">
     <DeprecatedClass>
       <code><![CDATA[PrerequisiteMiddleware::class]]></code>
+      <code><![CDATA[PrerequisiteMiddlewareFactory::class]]></code>
     </DeprecatedClass>
   </file>
   <file src="src/Mezzio/PipelineRegister.php">

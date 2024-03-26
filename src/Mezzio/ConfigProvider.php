@@ -16,6 +16,7 @@ use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LessAbstractService\Container\Factory\ReflectionFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
 use LessAbstractService\Symfony\Translator\TranslatorFactory;
+use LessHttp\Middleware\Condition\ConditionMiddlewareFactory;
 use LessAbstractService\Http\Queue\Handler\Command\DeleteHandler;
 use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
@@ -174,7 +175,7 @@ final class ConfigProvider
                     ValidationMiddleware::class => ValidationMiddlewareFactory::class,
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
-                    ConditionMiddleware::class => ReflectionFactory::class,
+                    ConditionMiddleware::class => ConditionMiddlewareFactory::class,
 
                     DeleteHandler::class => ReflectionFactory::class,
                     ReanimateHandler::class => ReflectionFactory::class,
