@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19">
+<files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
   <file src="src/Cli/Documentor/WriteCommand.php">
     <DeprecatedClass>
-      <code>Format::class</code>
+      <code><![CDATA[Format::class]]></code>
     </DeprecatedClass>
   </file>
   <file src="src/Cli/Queue/ProcessCommandFactory.php">
@@ -40,14 +40,32 @@
       <code><![CDATA[$config[PushHandler::class]['eventQueueJobMap']]]></code>
     </MixedArgumentTypeCoercion>
   </file>
+  <file src="src/Mezzio/ConfigProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[PrerequisiteMiddleware::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/PipelineRegister.php">
+    <DeprecatedClass>
+      <code><![CDATA[PrerequisiteMiddleware::class]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Router/Route/RpcRouteBuilder.php">
+    <DeprecatedInterface>
+      <code><![CDATA[array]]></code>
+      <code><![CDATA[array<class-string<PrerequisiteConstraint>>]]></code>
+      <code><![CDATA[array<class-string<PrerequisiteConstraint>>]]></code>
+      <code><![CDATA[class-string<PrerequisiteConstraint>]]></code>
+      <code><![CDATA[class-string<PrerequisiteConstraint>]]></code>
+      <code><![CDATA[public array $prerequisites = [];]]></code>
+    </DeprecatedInterface>
     <MixedAssignment>
-      <code>$route[$key]</code>
+      <code><![CDATA[$route[$key]]]></code>
     </MixedAssignment>
   </file>
   <file src="src/Symfony/Translator/TranslatorFactory.php">
     <MixedAssignment>
-      <code>$file</code>
+      <code><![CDATA[$file]]></code>
     </MixedAssignment>
   </file>
 </files>

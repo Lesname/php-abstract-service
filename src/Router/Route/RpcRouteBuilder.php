@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Router\Route;
 
+use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
@@ -17,6 +18,7 @@ use LessResource\Repository\ResourceRepository;
 use LessValidator\Validator;
 use LessValueObject\ValueObject;
 use Psr\Http\Server\RequestHandlerInterface;
+use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**
  * @psalm-immutable
@@ -53,6 +55,13 @@ final class RpcRouteBuilder
      *
      */
     public array $prerequisites = [];
+
+    /**
+     * @var array<class-string<ConditionConstraint>>
+     * @readonly
+     *
+     */
+    public array $conditions = [];
 
     /**
      * @var array<string, mixed>
@@ -166,6 +175,36 @@ final class RpcRouteBuilder
     }
 
     /**
+     * @param class-string<ConditionConstraint> $condition
+     */
+    public function withCondition(string $condition): self
+    {
+        return $this->withConditions([$condition]);
+    }
+
+    /**
+     * @param array<class-string<ConditionConstraint>> $conditions
+     */
+    public function withConditions(array $conditions): self
+    {
+        $clone = clone $this;
+        $clone->conditions = $conditions;
+
+        return $clone;
+    }
+
+    /**
+     * @param class-string<ConditionConstraint> $condition
+     */
+    public function withAddedCondition(string $condition): self
+    {
+        $clone = clone $this;
+        $clone->conditions[] = $condition;
+
+        return $clone;
+    }
+
+    /**
      * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
      */
     public function withResourceRepository(string $resourceRepository): self
@@ -232,7 +271,7 @@ final class RpcRouteBuilder
     public function buildUpdateEventRoute(string $method, string $event, string $handler = UpdateEventRouteHandler::class): iterable
     {
         yield from $this
-            ->withPrerequisites([ResourceExistsPrerequisite::class, ...$this->prerequisites])
+            ->withAddedCondition(ExistsResourceConditionConstraint::class)
             ->buildEventRoute($method, $event, $handler);
     }
 
@@ -318,7 +357,7 @@ final class RpcRouteBuilder
             ],
         );
 
-        foreach (['resourceRepository', 'validator', 'prerequisites', 'input'] as $key) {
+        foreach (['resourceRepository', 'validator', 'prerequisites', 'input', 'conditions'] as $key) {
             if ($this->{$key}) {
                 $route[$key] = $this->{$key};
             }

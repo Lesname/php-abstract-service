@@ -11,6 +11,9 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @psalm-suppress DeprecatedInterface
+ */
 final class ResourceExistsPrerequisite extends AbstractResourcePrerequisite
 {
     /**
