@@ -133,9 +133,6 @@ final class ConfigProvider
                     Logger::class => [
                         SentryMonologDelegatorFactory::class,
                     ],
-                    Application::class => [
-                        ApplicationConfigInjectionDelegator::class,
-                    ],
                 ],
                 'invokables' => [
                     ReflectionHydrator::class => ReflectionHydrator::class,
