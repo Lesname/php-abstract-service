@@ -262,7 +262,14 @@ final class ConfigProvider
     {
         $translator = [
             'defaultLocale' => 'nl_NL',
-            'translation' => [],
+            'translation' => [
+                'nl_NL' => [
+                    __DIR__ . '/../../docs/translations/nl_NL.php',
+                ],
+                'en_US' => [
+                    __DIR__ . '/../../docs/translations/en_US.php',
+                ],
+            ],
         ];
 
         $libFiles = glob(TranslationHelper::getTranslationDirectory() . '/[a-z][a-z]_[A-Z][A-Z].php');
