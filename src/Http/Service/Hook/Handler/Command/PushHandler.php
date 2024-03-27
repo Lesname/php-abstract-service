@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Service\Hook\Handler\Command;
 
 use LessAbstractClient\Requester\Requester;
-use LessAbstractService\Http\Resource\Handler\AbstractParametersHandler;
+use Psr\Http\Server\RequestHandlerInterface;
+use LessAbstractService\Http\Resource\Handler\Helper\HydrateParametersHelper;
 use LessAbstractService\Http\Service\Hook\Handler\Command\Parameters\Push\Type;
 use LessAbstractService\Http\Service\Hook\Handler\Command\Parameters\PushParameters;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInput;
-use LessHydrator\Hydrator;
 use LessQueue\Job\Property\Name;
 use LessQueue\Queue;
 use LessValueObject\String\Exception\TooLong;
@@ -21,8 +21,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 #[DocInput(PushParameters::class)]
 #[DocHttpResponse(code: 204)]
-final class PushHandler extends AbstractParametersHandler
+final class PushHandler implements RequestHandlerInterface
 {
+    use HydrateParametersHelper;
+
     /**
      * @param array<string, string> $eventQueueJobMap
      */
@@ -31,10 +33,7 @@ final class PushHandler extends AbstractParametersHandler
         private readonly Requester $requester,
         private readonly Queue $queue,
         private readonly array $eventQueueJobMap,
-        Hydrator $hydrator,
-    ) {
-        parent::__construct($hydrator);
-    }
+    ) {}
 
     /**
      * @throws TooLong
@@ -43,7 +42,7 @@ final class PushHandler extends AbstractParametersHandler
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $parameters = $this->getParameters($request, PushParameters::class);
+        $parameters = $this->hydrateParameters($request, PushParameters::class);
 
         if ($parameters->type === Type::Verification) {
             $this->handleVerification($parameters);
@@ -53,13 +52,7 @@ final class PushHandler extends AbstractParametersHandler
             assert(is_string($body['action']));
 
             $name = new Name($this->eventQueueJobMap["{$body['target']}:{$body['action']}"] ?? 'hook:process');
-
-            $this
-                ->queue
-                ->publish(
-                    $name,
-                    $body,
-                );
+            $this->queue->publish($name, $body);
         }
 
         return $this->responseFactory->createResponse(204);

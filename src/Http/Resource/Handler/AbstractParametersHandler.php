@@ -8,6 +8,9 @@ use LessValueObject\ValueObject;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+/**
+ * @deprecated use HydrateParametersHelper
+ */
 abstract class AbstractParametersHandler implements RequestHandlerInterface
 {
     public function __construct(protected readonly Hydrator $hydrator)
