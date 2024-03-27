@@ -42,6 +42,8 @@
   </file>
   <file src="src/Mezzio/ConfigProvider.php">
     <DeprecatedClass>
+      <code><![CDATA[AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]]></code>
       <code><![CDATA[PrerequisiteMiddleware::class]]></code>
       <code><![CDATA[PrerequisiteMiddlewareFactory::class]]></code>
     </DeprecatedClass>
