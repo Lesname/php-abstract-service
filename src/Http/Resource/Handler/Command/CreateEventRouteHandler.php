@@ -14,7 +14,6 @@ use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHydrator\Hydrator;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
 use LessValueObject\String\Format\Exception\NotFormat;

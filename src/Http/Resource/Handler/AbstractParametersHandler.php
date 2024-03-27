@@ -22,7 +22,7 @@ abstract class AbstractParametersHandler implements RequestHandlerInterface
      *
      * @return T
      *
-     * @template T of \LessValueObject\ValueObject
+     * @template T of ValueObject
      */
     protected function getParameters(ServerRequestInterface $request, string $classParameters): ValueObject
     {

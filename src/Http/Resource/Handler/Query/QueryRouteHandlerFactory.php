@@ -13,7 +13,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 final class QueryRouteHandlerFactory
 {
     /**
-     * @param ContainerInterface $container
      * @param class-string<AbstractQueryRouteHandler> $name
      *
      * @throws ContainerExceptionInterface

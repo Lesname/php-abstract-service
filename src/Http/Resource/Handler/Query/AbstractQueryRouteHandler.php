@@ -5,7 +5,6 @@ namespace LessAbstractService\Http\Resource\Handler\Query;
 
 use JsonException;
 use LessHttp\Response\ErrorResponse;
-use LessHydrator\Attribute\DefaultValue;
 use LessHydrator\Hydrator;
 use LessResource\Repository\Exception\NoResource;
 use LessValueObject\ValueObject;
@@ -28,9 +27,6 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
     abstract protected function makeResponse(mixed $output): ResponseInterface;
 
     /**
-     * @param ResponseFactoryInterface $responseFactory
-     * @param StreamFactoryInterface $streamFactory
-     * @param ContainerInterface $container
      * @param array<mixed> $routes
      */
     final public function __construct(
