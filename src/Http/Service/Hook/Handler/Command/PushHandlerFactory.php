@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Service\Hook\Handler\Command;
 
 use LessAbstractClient\Requester\CurlRequester;
-use LessHydrator\Hydrator;
 use LessQueue\Queue;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

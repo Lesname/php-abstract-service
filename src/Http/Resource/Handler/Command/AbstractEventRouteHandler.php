@@ -35,6 +35,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws NotFormat
+     * @throws NotMultipleOf
      * @throws TooLong
      * @throws TooShort
      */
@@ -50,6 +51,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws NotFormat
+     * @throws NotMultipleOf
      * @throws TooLong
      * @throws TooShort
      */

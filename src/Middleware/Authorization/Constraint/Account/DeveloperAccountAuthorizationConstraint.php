@@ -8,6 +8,9 @@ use Doctrine\DBAL\Exception;
 use LessValueObject\Composite\ForeignReference;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @deprecated account roles will be dropped
+ */
 final class DeveloperAccountAuthorizationConstraint extends AbstractAccountAuthorizationConstraint
 {
     public function __construct(private readonly Connection $connection)

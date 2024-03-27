@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessAbstractService\Http\Resource\Handler\Helper;
 
 use LessHydrator\Hydrator;
+use LessValueObject\ValueObject;
 use LessHydrator\ReflectionHydrator;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,7 +15,7 @@ trait HydrateParametersHelper
      *
      * @return T
      *
-     * @template T of \LessValueObject\ValueObject
+     * @template T of ValueObject
      */
     protected function hydrateParameters(ServerRequestInterface $request, string $parametersClass)
     {
