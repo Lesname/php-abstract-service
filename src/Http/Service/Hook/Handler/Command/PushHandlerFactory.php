@@ -33,15 +33,11 @@ final class PushHandlerFactory
         $queue = $container->get(Queue::class);
         assert($queue instanceof Queue);
 
-        $hydrator = $container->get(Hydrator::class);
-        assert($hydrator instanceof Hydrator);
-
         return new PushHandler(
             $responseFactory,
             $requester,
             $queue,
             $config[PushHandler::class]['eventQueueJobMap'],
-            $hydrator,
         );
     }
 }
