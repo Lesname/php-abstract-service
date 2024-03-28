@@ -22,6 +22,9 @@ use LessValueObject\Number\Exception\NotMultipleOf;
 use LessResource\Set\CollectionValueObjectResourceSet;
 use LessIdentity\Account\Service\Parameters\SortableOptions;
 
+/**
+ * @deprecated
+ */
 final class LoadAccountRolesWorker implements Worker
 {
     private const PER_PAGE = 20;

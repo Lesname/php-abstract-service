@@ -14,6 +14,9 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @deprecated
+ */
 final class PushWorkerFactory
 {
     /**

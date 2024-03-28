@@ -15,6 +15,9 @@ use LessValueObject\String\Format\Exception\NotFormat;
 use LessValueObject\String\Format\Resource\Identifier;
 use RuntimeException;
 
+/**
+ * @deprecated
+ */
 final class LoadAccountRoleWorker implements Worker
 {
     public function __construct(
