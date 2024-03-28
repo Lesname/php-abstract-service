@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @psalm-suppress DeprecatedInterface
+ *
+ * @deprecated
  */
 final class ResourceExistsPrerequisite extends AbstractResourcePrerequisite
 {

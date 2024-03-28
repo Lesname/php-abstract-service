@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Logger;
+namespace LessAbstractService\Factory\Logger;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -10,9 +10,6 @@ use Sentry\ClientBuilder;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
 
-/**
- * @deprecated
- */
 final class HubFactory
 {
     /**

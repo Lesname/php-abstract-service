@@ -1,18 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Queue;
+namespace LessAbstractService\Factory\Queue;
 
-use Doctrine\DBAL\Connection;
 use LessQueue\RabbitMqQueue;
-use PhpAmqpLib\Connection\AMQPStreamConnection;
-use Psr\Container\ContainerExceptionInterface;
+use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
 
-/**
- * @deprecated
- */
 final class RabbitMqQueueFactory
 {
     /**

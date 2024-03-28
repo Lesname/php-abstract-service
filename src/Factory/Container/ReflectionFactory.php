@@ -1,20 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Container\Factory;
+namespace LessAbstractService\Factory\Container;
 
-use Psr\Container\ContainerExceptionInterface;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionParameter;
+use ReflectionNamedType;
+use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionNamedType;
-use ReflectionParameter;
+use Psr\Container\ContainerExceptionInterface;
 
-/**
- * @deprecated
- */
 final class ReflectionFactory
 {
     /**

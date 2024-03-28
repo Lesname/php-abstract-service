@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Logger;
+namespace LessAbstractService\Factory\Logger;
 
 use Monolog\Logger;
 use Psr\Container\ContainerExceptionInterface;
@@ -10,9 +10,6 @@ use Psr\Container\NotFoundExceptionInterface;
 use Sentry\Monolog\Handler;
 use Sentry\State\HubInterface;
 
-/**
- * @deprecated
- */
 final class SentryMonologDelegatorFactory
 {
     /**

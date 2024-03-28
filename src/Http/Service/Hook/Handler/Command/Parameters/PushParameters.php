@@ -7,6 +7,8 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated
  */
 final class PushParameters extends AbstractCompositeValueObject
 {

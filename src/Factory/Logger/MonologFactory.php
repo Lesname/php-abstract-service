@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Logger;
+namespace LessAbstractService\Factory\Logger;
 
 use Monolog\Logger;
 use Psr\Container\ContainerExceptionInterface;
@@ -9,9 +9,6 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
-/**
- * @deprecated
- */
 final class MonologFactory
 {
     /**
