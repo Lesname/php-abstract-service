@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Router;
+namespace LessAbstractService\Mezzio\Router;
 
 use Laminas\Stratigility\Middleware\RequestHandlerMiddleware;
 use Mezzio\Router\Route;
@@ -14,9 +14,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 
-/**
- * @deprecated
- */
 final class RpcRouter implements RouterInterface
 {
     /**

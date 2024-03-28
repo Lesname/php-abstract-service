@@ -1,17 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Router;
+namespace LessAbstractService\Mezzio\Router;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
-/**
- * @deprecated
- *
- * @psalm-suppress DeprecatedClass
- */
 final class RpcRouterFactory
 {
     /**

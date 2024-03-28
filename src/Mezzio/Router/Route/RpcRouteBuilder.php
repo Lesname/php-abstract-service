@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Router\Route;
+namespace LessAbstractService\Mezzio\Router\Route;
 
 use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
@@ -11,7 +11,6 @@ use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDomain\Event\Event;
 use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
-use LessHttp\Middleware\Prerequisite\Constraint\PrerequisiteConstraint;
 use LessResource\Model\ResourceModel;
 use LessResource\Repository\ResourceRepository;
 use LessValidator\Validator;
@@ -21,8 +20,6 @@ use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditio
 
 /**
  * @psalm-immutable
- *
- * @deprecated
  */
 final class RpcRouteBuilder
 {
@@ -51,16 +48,8 @@ final class RpcRouteBuilder
     public ?string $input = null;
 
     /**
-     * @var array<class-string<PrerequisiteConstraint>>
-     * @readonly
-     *
-     */
-    public array $prerequisites = [];
-
-    /**
      * @var array<class-string<ConditionConstraint>>
      * @readonly
-     *
      */
     public array $conditions = [];
 
@@ -131,46 +120,6 @@ final class RpcRouteBuilder
     {
         $clone = clone $this;
         $clone->authorizations[] = $authorization;
-
-        return $clone;
-    }
-
-    /**
-     * @param class-string<PrerequisiteConstraint> $prerequisite
-     */
-    public function withPrerequisite(string $prerequisite): self
-    {
-        return $this->withPrerequisites([$prerequisite]);
-    }
-
-    /**
-     * @param array<class-string<PrerequisiteConstraint>> $prerequisites
-     */
-    public function withPrerequisites(array $prerequisites): self
-    {
-        $clone = clone $this;
-        $clone->prerequisites = $prerequisites;
-
-        return $clone;
-    }
-
-    /**
-     * @param array<class-string<PrerequisiteConstraint>> $prerequisites
-     *
-     * @deprecated use withAddedPrerequisite
-     */
-    public function withAddedPrerequisites(array $prerequisites): self
-    {
-        return $this->withPrerequisites([...$this->prerequisites, ...$prerequisites]);
-    }
-
-    /**
-     * @param class-string<PrerequisiteConstraint> $prerequisite
-     */
-    public function withAddedPrerequisite(string $prerequisite): self
-    {
-        $clone = clone $this;
-        $clone->prerequisites[] = $prerequisite;
 
         return $clone;
     }
@@ -358,7 +307,7 @@ final class RpcRouteBuilder
             ],
         );
 
-        foreach (['resourceRepository', 'validator', 'prerequisites', 'input', 'conditions'] as $key) {
+        foreach (['resourceRepository', 'validator', 'input', 'conditions'] as $key) {
             if ($this->{$key}) {
                 $route[$key] = $this->{$key};
             }
