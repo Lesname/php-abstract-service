@@ -23,7 +23,8 @@ final class PermissionApplier extends AbstractResourceApplier
                 'flags' => [
                     'grant' => 'p.flags_grant',
                     'read' => 'p.flags_read',
-                    'write' => 'p.flags_write',
+                    'create' => 'p.flags_create',
+                    'update' => 'p.flags_update',
                 ],
             ],
         ];

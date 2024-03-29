@@ -33,8 +33,9 @@ final class DbalListener implements Listener
                     'identity_type' => $event->identity->type,
                     'identity_id' => $event->identity->id,
                     'flags_grant' => $event->flags->grant,
-                    'flags_read' => $event->flags->write || $event->flags->read,
-                    'flags_write' => $event->flags->write,
+                    'flags_read' => $event->flags->read,
+                    'flags_create' => $event->flags->create,
+                    'flags_update' => $event->flags->update,
                     'activity_last' => $event->getOccuredOn(),
                 ],
             )
@@ -52,8 +53,9 @@ final class DbalListener implements Listener
             ::forValues(
                 [
                     'flags_grant' => $event->flags->grant,
-                    'flags_read' => $event->flags->write || $event->flags->read,
-                    'flags_write' => $event->flags->write,
+                    'flags_read' => $event->flags->read,
+                    'flags_create' => $event->flags->create,
+                    'flags_update' => $event->flags->update,
                 ],
             )
             ->apply($this->createUpdateBuilder($event))

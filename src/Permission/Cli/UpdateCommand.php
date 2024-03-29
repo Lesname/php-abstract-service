@@ -30,7 +30,8 @@ final class UpdateCommand extends Command
             ->addArgument('identity', InputArgument::REQUIRED)
             ->addOption('grant')
             ->addOption('read')
-            ->addOption('write');
+            ->addOption('create')
+            ->addOption('update');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -52,7 +53,8 @@ final class UpdateCommand extends Command
                     new Flags(
                         (bool)$input->getOption('grant'),
                         (bool)$input->getOption('read'),
-                        (bool)$input->getOption('write'),
+                        (bool)$input->getOption('create'),
+                        (bool)$input->getOption('update'),
                     ),
                     MilliTimestamp::now(),
                     Headers::forCli(),

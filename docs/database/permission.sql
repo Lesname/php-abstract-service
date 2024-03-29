@@ -10,9 +10,10 @@ create table if not exists permission (
 
     flags_grant bool not null,
     flags_read bool not null,
-    flags_write bool not null,
+    flags_create bool not null,
+    flags_update bool not null,
 
-    index flags (flags_grant, flags_read, flags_write),
+    index flags (flags_grant, flags_read, flags_create, flags_update),
 
     activity_last BIGINT UNSIGNED NOT NULL,
     INDEX activity_last (activity_last)
