@@ -155,7 +155,9 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string<ResourceRepository<ResourceModel>> $resourceRepository
+     * @template T of ResourceModel
+     *
+     * @param class-string<ResourceRepository<T>> $resourceRepository
      */
     public function withResourceRepository(string $resourceRepository): self
     {
