@@ -85,6 +85,7 @@ use Psr\SimpleCache\CacheInterface;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
 use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
+use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory;
 
 final class ConfigProvider
 {
@@ -189,7 +190,7 @@ final class ConfigProvider
                     RpcRouter::class => RpcRouterFactory::class,
 
                     ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
-                    ExistsResourceConditionConstraint::class => ReflectionFactory::class,
+                    ExistsResourceConditionConstraint::class => ExistsResourceConditionConstraintFactory::class,
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 

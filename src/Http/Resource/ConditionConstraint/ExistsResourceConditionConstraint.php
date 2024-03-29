@@ -7,9 +7,12 @@ use Psr\Container\ContainerInterface;
 use LessResource\Model\ResourceModel;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use LessValueObject\String\Exception\TooLong;
 use Psr\Container\ContainerExceptionInterface;
+use LessValueObject\String\Exception\TooShort;
 use LessResource\Repository\ResourceRepository;
 use LessValueObject\String\Format\Resource\Identifier;
+use LessValueObject\String\Format\Exception\NotFormat;
 use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LessHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
 use LessHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
@@ -17,12 +20,18 @@ use LessHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstrai
 
 final class ExistsResourceConditionConstraint implements ConditionConstraint
 {
-    public const ROUTE_OPTION_RESOURCE_REPOSITORY_KEY = 'resourceRepository';
+    public function __construct(
+        private readonly ContainerInterface $container,
+        private readonly array $resourceRepositories,
+    ) {}
 
-    public function __construct(protected readonly ContainerInterface $container)
-    {
-    }
-
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws TooLong
+     * @throws TooShort
+     * @throws NotFormat
+     */
     public function satisfies(ServerRequestInterface $request): ConditionConstraintResult
     {
         $body = $request->getParsedBody();
@@ -42,23 +51,15 @@ final class ExistsResourceConditionConstraint implements ConditionConstraint
      */
     protected function getResourceRepository(ServerRequestInterface $request): ResourceRepository
     {
-        $options = $request->getAttribute('routeOptions');
-        assert(is_array($options));
+        $method = $request->getMethod();
+        $path = $request->getUri()->getPath();
+        $key = "{$method}:{$path}";
 
-        if (
-            isset($options['resourceService'])
-            && !isset($options[self::ROUTE_OPTION_RESOURCE_REPOSITORY_KEY])
-            && is_string($options['resourceService'])
-        ) {
-            $options[self::ROUTE_OPTION_RESOURCE_REPOSITORY_KEY] = $options['resourceService'];
-        }
+        assert(array_key_exists($key, $this->resourceRepositories));
 
-        $resourceRepositoryKey = $options[self::ROUTE_OPTION_RESOURCE_REPOSITORY_KEY];
-        assert(is_string($resourceRepositoryKey));
+        $resourceRepository = $this->container->get($this->resourceRepositories[$key]);
+        assert($resourceRepository instanceof ResourceRepository);
 
-        $resourceService = $this->container->get($resourceRepositoryKey);
-        assert($resourceService instanceof ResourceRepository);
-
-        return $resourceService;
+        return $resourceRepository;
     }
 }
