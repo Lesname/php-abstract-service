@@ -21,6 +21,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 #[DocInput(PushParameters::class)]
 #[DocHttpResponse(code: 204)]
+/**
+ * @deprecated
+ */
 final class PushHandler implements RequestHandlerInterface
 {
     use HydrateParametersHelper;

@@ -7,6 +7,9 @@ use Interop\Container\ContainerInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @deprecated
+ */
 final class ResourcePrerequisiteFactory
 {
     /**

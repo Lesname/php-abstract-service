@@ -7,6 +7,9 @@ use Psr\Container\ContainerInterface;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\PhpFileLoader;
 
+/**
+ * @deprecated
+ */
 final class TranslatorFactory
 {
     public function __invoke(ContainerInterface $container): Translator

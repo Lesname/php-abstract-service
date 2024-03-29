@@ -12,6 +12,9 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+/**
+ * @deprecated
+ */
 final class ReflectionFactory
 {
     /**

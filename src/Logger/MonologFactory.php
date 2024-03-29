@@ -9,6 +9,9 @@ use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated
+ */
 final class MonologFactory
 {
     /**

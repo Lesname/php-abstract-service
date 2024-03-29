@@ -14,6 +14,9 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 
+/**
+ * @deprecated
+ */
 final class RpcRouter implements RouterInterface
 {
     /**

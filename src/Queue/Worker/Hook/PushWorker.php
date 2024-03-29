@@ -11,6 +11,9 @@ use LessQueue\Worker\Worker;
 use LessValueObject\Composite\ForeignReference;
 use LessValueObject\String\Format\Resource\Identifier;
 
+/**
+ * @deprecated
+ */
 final class PushWorker implements Worker
 {
     public function __construct(

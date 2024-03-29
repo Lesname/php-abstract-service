@@ -8,6 +8,9 @@ use LessDomain\Event\Listener\Listener;
 use LessQueue\Job\Property\Name;
 use LessQueue\Queue;
 
+/**
+ * @deprecated will be dropped
+ */
 final class HookPushListener implements Listener
 {
     public function __construct(private readonly Queue $queue)

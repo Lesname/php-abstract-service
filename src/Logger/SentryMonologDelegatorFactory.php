@@ -10,6 +10,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Sentry\Monolog\Handler;
 use Sentry\State\HubInterface;
 
+/**
+ * @deprecated
+ */
 final class SentryMonologDelegatorFactory
 {
     /**

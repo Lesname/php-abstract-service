@@ -7,6 +7,11 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @deprecated
+ *
+ * @psalm-suppress DeprecatedClass
+ */
 final class RpcRouterFactory
 {
     /**

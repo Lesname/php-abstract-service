@@ -8,6 +8,8 @@ use LessValueObject\Enum\Helper\EnumValueHelper;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated
  */
 enum Type: string implements EnumValueObject
 {

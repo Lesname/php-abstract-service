@@ -14,6 +14,11 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
+/**
+ * @deprecated
+ *
+ * @psalm-suppress DeprecatedClass
+ */
 final class PushWorkerFactory
 {
     /**
@@ -22,6 +27,8 @@ final class PushWorkerFactory
      * @throws NotFormat
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(ContainerInterface $container): PushWorker
     {

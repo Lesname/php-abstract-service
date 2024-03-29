@@ -10,6 +10,9 @@ use Sentry\ClientBuilder;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
 
+/**
+ * @deprecated
+ */
 final class HubFactory
 {
     /**

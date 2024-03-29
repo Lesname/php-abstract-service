@@ -20,6 +20,16 @@
       <code><![CDATA[$event->id]]></code>
     </NoInterfaceProperties>
   </file>
+  <file src="src/Factory/Container/ReflectionFactory.php">
+    <MixedMethodCall>
+      <code><![CDATA[new $name(...$this->getParameters($container, $constructor))]]></code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Factory/Symfony/Translator/TranslatorFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$file]]></code>
+    </MixedAssignment>
+  </file>
   <file src="src/Http/Resource/Handler/Command/CreateEventRouteHandler.php">
     <NoInterfaceProperties>
       <code><![CDATA[$event->id]]></code>
@@ -30,7 +40,30 @@
       <code><![CDATA[$route['proxy']['method']]]></code>
     </MixedMethodCall>
   </file>
+  <file src="src/Http/Resource/Prerequisite/ResourceExistsPrerequisite.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractResourcePrerequisite]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Resource/Prerequisite/ResourcePrerequisiteFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractResourcePrerequisite]]></code>
+      <code><![CDATA[AbstractResourcePrerequisite::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Http/Service/Hook/Handler/Command/Parameters/PushParameters.php">
+    <DeprecatedClass>
+      <code><![CDATA[public]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Http/Service/Hook/Handler/Command/PushHandler.php">
+    <DeprecatedClass>
+      <code><![CDATA[PushParameters]]></code>
+      <code><![CDATA[PushParameters::class]]></code>
+      <code><![CDATA[PushParameters::class]]></code>
+      <code><![CDATA[Type::Event]]></code>
+      <code><![CDATA[Type::Verification]]></code>
+    </DeprecatedClass>
     <RedundantCondition>
       <code><![CDATA[$parameters->type === Type::Event]]></code>
     </RedundantCondition>
@@ -44,14 +77,32 @@
     <DeprecatedClass>
       <code><![CDATA[AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]]></code>
       <code><![CDATA[AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]]></code>
+      <code><![CDATA[Cli\Service\LoadAccountRolesCommand::class]]></code>
+      <code><![CDATA[Cli\Service\LoadAccountRolesCommand::class]]></code>
+      <code><![CDATA[HookPushListener::class]]></code>
       <code><![CDATA[PrerequisiteMiddleware::class]]></code>
       <code><![CDATA[PrerequisiteMiddlewareFactory::class]]></code>
+      <code><![CDATA[PushHandlerFactory::class]]></code>
+      <code><![CDATA[ResourceExistsPrerequisite::class]]></code>
+      <code><![CDATA[ResourcePrerequisiteFactory::class]]></code>
+      <code><![CDATA[Worker\Hook\PushWorker::class]]></code>
+      <code><![CDATA[Worker\Hook\PushWorker::class]]></code>
+      <code><![CDATA[Worker\Hook\PushWorkerFactory::class]]></code>
+      <code><![CDATA[Worker\Service\LoadAccountRoleWorker::class]]></code>
+      <code><![CDATA[Worker\Service\LoadAccountRoleWorker::class]]></code>
+      <code><![CDATA[Worker\Service\LoadAccountRolesWorker::class]]></code>
+      <code><![CDATA[Worker\Service\LoadAccountRolesWorker::class]]></code>
     </DeprecatedClass>
   </file>
   <file src="src/Mezzio/PipelineRegister.php">
     <DeprecatedClass>
       <code><![CDATA[PrerequisiteMiddleware::class]]></code>
     </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/Router/Route/RpcRouteBuilder.php">
+    <MixedAssignment>
+      <code><![CDATA[$route[$key]]]></code>
+    </MixedAssignment>
   </file>
   <file src="src/Router/Route/RpcRouteBuilder.php">
     <DeprecatedInterface>

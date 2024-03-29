@@ -8,7 +8,6 @@ use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
-use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDomain\Event\Event;
 use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
@@ -22,6 +21,8 @@ use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditio
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated
  */
 final class RpcRouteBuilder
 {
