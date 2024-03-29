@@ -31,7 +31,8 @@ final class UpdateCommand extends Command
             ->addOption('grant')
             ->addOption('read')
             ->addOption('create')
-            ->addOption('update');
+            ->addOption('update')
+            ->addOption('all');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
