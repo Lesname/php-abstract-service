@@ -59,7 +59,7 @@ final class ConfigProvider
                     ->buildUpdateEventRoute('update', Event\UpdatedEvent::class),
 
                 ...$developerRouteBuilder->buildResultQueryRoute('getWithId'),
-                ...$developerRouteBuilder->buildResultsQueryRoute('getWithIdentity'),
+                ...$developerRouteBuilder->buildResultQueryRoute('getWithIdentity'),
                 ...$developerRouteBuilder->buildResultsQueryRoute('getWithFlags'),
                 ...$developerRouteBuilder->buildResultsQueryRoute('getByLastActivity'),
             ],
