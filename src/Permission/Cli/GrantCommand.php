@@ -33,7 +33,8 @@ final class GrantCommand extends Command
             ->addOption('grant')
             ->addOption('read')
             ->addOption('create')
-            ->addOption('update');
+            ->addOption('update')
+            ->addOption('all');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -54,10 +55,10 @@ final class GrantCommand extends Command
                     $id,
                     $identity,
                     new Flags(
-                        (bool)$input->getOption('grant'),
-                        (bool)$input->getOption('read'),
-                        (bool)$input->getOption('create'),
-                        (bool)$input->getOption('update'),
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
                     ),
                     MilliTimestamp::now(),
                     Headers::forCli(),

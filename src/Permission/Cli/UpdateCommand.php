@@ -51,10 +51,10 @@ final class UpdateCommand extends Command
                 new UpdatedEvent(
                     $permissions->id,
                     new Flags(
-                        (bool)$input->getOption('grant'),
-                        (bool)$input->getOption('read'),
-                        (bool)$input->getOption('create'),
-                        (bool)$input->getOption('update'),
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
                     ),
                     MilliTimestamp::now(),
                     Headers::forCli(),
