@@ -19,7 +19,7 @@ final class ExistsResourceConditionConstraintFactory
     /**
      * @param array<mixed> $routes
      *
-     * @return array<mixed>
+     * @return array<string, string>
      */
     private function parseResourceRepositories(array $routes): array
     {
@@ -33,6 +33,8 @@ final class ExistsResourceConditionConstraintFactory
             }
 
             assert(is_string($route['resourceRepository']));
+            assert(is_string($key));
+
             $resourceRepositories[$key] = $route['resourceRepository'];
         }
 

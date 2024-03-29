@@ -20,6 +20,9 @@ use LessHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstrai
 
 final class ExistsResourceConditionConstraint implements ConditionConstraint
 {
+    /**
+     * @param array<string, string> $resourceRepositories
+     */
     public function __construct(
         private readonly ContainerInterface $container,
         private readonly array $resourceRepositories,
