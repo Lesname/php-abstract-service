@@ -5,10 +5,10 @@ namespace LessAbstractService\Permission\Http\AuthorizationConstraint;
 
 use LessAbstractService\Permission\Model\Permission;
 
-final class HasWritePermissionAuthorization extends AbstractPermissionAuthorization
+final class HasCreatePermissionAuthorization extends AbstractPermissionAuthorization
 {
     protected function hasPermissionFlag(Permission $permission): bool
     {
-        return $permission->attributes->flags->write;
+        return $permission->attributes->flags->create;
     }
 }

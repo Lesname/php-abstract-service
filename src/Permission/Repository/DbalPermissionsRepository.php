@@ -80,7 +80,7 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
         $builder = $this->createResourceBuilder();
         (new PaginateApplier($paginate))->apply($builder);
 
-        foreach (['grant', 'read', 'write'] as $key) {
+        foreach (['grant', 'read', 'create', 'update'] as $key) {
             if ($flags->{$key} !== null) {
                 $builder->andWhere("p.flags_{$key} = :flags_{$key}");
                 $builder->setParameter("flags_{$key}", $flags->{$key} ? 1 : 0);

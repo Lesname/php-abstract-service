@@ -13,6 +13,7 @@ final class Flags extends AbstractCompositeValueObject
     public function __construct(
         public readonly bool $grant,
         public readonly bool $read,
-        public readonly bool $write,
+        public readonly bool $create,
+        public readonly bool $update,
     ) {}
 }

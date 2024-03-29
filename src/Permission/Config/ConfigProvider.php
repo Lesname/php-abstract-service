@@ -40,7 +40,8 @@ final class ConfigProvider
 
                     AuthorizationConstraint\HasGrantPermissionAuthorization::class => ReflectionFactory::class,
                     AuthorizationConstraint\HasReadPermissionAuthorization::class => ReflectionFactory::class,
-                    AuthorizationConstraint\HasWritePermissionAuthorization::class => ReflectionFactory::class,
+                    AuthorizationConstraint\HasCreatePermissionAuthorization::class => ReflectionFactory::class,
+                    AuthorizationConstraint\HasUpdatePermissionAuthorization::class => ReflectionFactory::class,
                 ],
             ],
             FifoPublisherFactory::CONFIG_KEY => [
