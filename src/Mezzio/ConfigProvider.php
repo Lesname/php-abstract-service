@@ -87,6 +87,7 @@ use Psr\SimpleCache\CacheInterface;
 use Sentry\State\Hub;
 use Sentry\State\HubInterface;
 use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
+use LessAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
 use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory;
 
 final class ConfigProvider
@@ -316,7 +317,7 @@ final class ConfigProvider
      */
     private function composeQueueRoutes(): iterable
     {
-        $builder = (new RpcRouteBuilder('queue', [AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]))
+        $builder = (new RpcRouteBuilder('queue', [HasGrantPermissionAuthorization::class]))
             ->withProxyClass(Queue\Queue::class)
             ->withExtraOption('document', false);
 
