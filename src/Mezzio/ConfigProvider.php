@@ -28,6 +28,8 @@ use LessAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LessAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
+use LessHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
+use LessHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandlerFactory;
@@ -146,7 +148,9 @@ final class ConfigProvider
                     LessRouteDocumentor::class => LessRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
+                    AnyIdentityAuthorizationConstraint::class => AnyIdentityAuthorizationConstraint::class,
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
+                    GuestAuthorizationConstraint::class => GuestAuthorizationConstraint::class,
                     NoOneAuthorizationConstraint::class => NoOneAuthorizationConstraint::class,
 
                     PingWorker::class => PingWorker::class,
