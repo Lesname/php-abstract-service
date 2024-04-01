@@ -12,12 +12,14 @@ use LessHttp\Middleware\Locale\LocaleMiddleware;
 use LessAbstractService\Mezzio\Router\RpcRouter;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LessAbstractService\Factory\Logger\HubFactory;
+use LessAbstractService\Container\SenderContainer;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use LessHttp\Middleware\Condition\ConditionMiddleware;
 use LessAbstractService\Factory\Logger\MonologFactory;
 use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LessAbstractService\Mezzio\Router\RpcRouterFactory;
 use LessAbstractService\Event\Listener\HookPushListener;
+use LessAbstractService\Container\SenderContainerFactory;
 use LessAbstractService\Factory\Queue\RabbitMqQueueFactory;
 use LessAbstractService\Factory\Container\ReflectionFactory;
 use LessAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
@@ -161,6 +163,8 @@ final class ConfigProvider
                     AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
                 ],
                 'factories' => [
+                    SenderContainer::class => SenderContainerFactory::class,
+
                     RedisCache::class => RedisCacheFactory::class,
 
                     Connection::class => ConnectionFactory::class,
