@@ -49,7 +49,6 @@ use LessAbstractService\Container\Mail;
 use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LessAbstractService\Mezzio\Router\RpcRouterFactory;
 use LessValidator\Builder\TypeDocumentValidatorBuilder;
-use LessAbstractService\Event\Listener\HookPushListener;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHttp\Middleware\Validation\ValidationMiddleware;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
@@ -70,12 +69,10 @@ use LessAbstractService\Http\Queue\Handler\Command\ReanimateHandler;
 use LessAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LessAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LessHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
-use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandler;
 use LessHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
 use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
 use LessAbstractService\Http\Resource\Handler\Query\QueryRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
-use LessAbstractService\Http\Service\Hook\Handler\Command\PushHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
 use LessHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LessHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
@@ -101,12 +98,6 @@ final class ConfigProvider
         return [
             'translator' => $this->getTranslator(),
             'shared_by_default' => php_sapi_name() !== 'cli',
-            PushHandler::class => [
-                'eventQueueJobMap' => [
-                    'account:registered' => 'service:loadAccountRole',
-                    'account:roleChanged' => 'service:loadAccountRole',
-                ],
-            ],
             'dependencies' => [
                 'aliases' => [
                     CacheInterface::class => RedisCache::class,
@@ -176,8 +167,6 @@ final class ConfigProvider
 
                     FifoPublisher::class => FifoPublisherFactory::class,
 
-                    HookPushListener::class => ReflectionFactory::class,
-
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
                     ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
@@ -203,8 +192,6 @@ final class ConfigProvider
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
-                    PushHandler::class => PushHandlerFactory::class,
-
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
 
                     Cli\Queue\CountProcessableCommand::class => ReflectionFactory::class,
@@ -214,11 +201,6 @@ final class ConfigProvider
 
                     Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
-
-                    Worker\Service\LoadAccountRolesWorker::class => ReflectionFactory::class,
-                    Worker\Service\LoadAccountRoleWorker::class => ReflectionFactory::class,
-
-                    Worker\Hook\PushWorker::class => Worker\Hook\PushWorkerFactory::class,
 
                     Logger::class => MonologFactory::class,
                     Hub::class => HubFactory::class,
@@ -244,15 +226,9 @@ final class ConfigProvider
                 ],
             ],
             'routes' => [
-                ...$this->composeServiceHookRoutes(),
                 ...$this->composeQueueRoutes(),
             ],
             'workers' => [
-                'service:loadAccountRoles' => Worker\Service\LoadAccountRolesWorker::class,
-                'service:loadAccountRole' => Worker\Service\LoadAccountRoleWorker::class,
-
-                'hook:push' => Worker\Hook\PushWorker::class,
-
                 'queue:ping' => PingWorker::class,
             ],
             LocaleMiddleware::class => [
@@ -303,17 +279,6 @@ final class ConfigProvider
         }
 
         return $translator;
-    }
-
-    /**
-     * @return iterable<string, array<mixed>>
-     */
-    private function composeServiceHookRoutes(): iterable
-    {
-        $builder = (new RpcRouteBuilder('service.hook', [AnyOneAuthorizationConstraint::class]))
-            ->withExtraOption('document', false);
-
-        yield from $builder->buildRoute('push', Category::Command, PushHandler::class);
     }
 
     /**
