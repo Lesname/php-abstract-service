@@ -8,6 +8,7 @@ use LessQueue\Queue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use LessValueObject\Composite\DynamicCompositeValueObject;
 
 /**
  * @deprecated
@@ -21,7 +22,7 @@ final class LoadAccountRolesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->queue->publish(new Name('service:loadAccountRoles'), []);
+        $this->queue->publish(new Name('service:loadAccountRoles'), new DynamicCompositeValueObject([]));
 
         return self::SUCCESS;
     }
