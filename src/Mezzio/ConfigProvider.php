@@ -200,6 +200,7 @@ final class ConfigProvider
                     Cli\Queue\QuitCommand::class => ReflectionFactory::class,
 
                     Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
+                    Cli\Service\CleanUpCommand::class => ReflectionFactory::class,
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
                     Logger::class => MonologFactory::class,
@@ -223,6 +224,7 @@ final class ConfigProvider
 
                     'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'service.update' => Cli\Service\UpdateCommand::class,
+                    'service.cleanUp' => Cli\Service\CleanUpCommand::class,
                 ],
             ],
             'routes' => [
