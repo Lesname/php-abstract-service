@@ -36,7 +36,7 @@ final class CleanUpCommand extends Command
         $builder
             ->update('event_store')
             ->set('headers', "json_set(headers, '$.ip', null)")
-            ->andWhere('.v_header_ip IS NOT NULL')
+            ->andWhere('v_header_ip IS NOT NULL')
             ->andWhere('occurred_on <= UNIX_TIMESTAMP(DATE_SUB(now(), INTERVAL 1 year)) * 1000')
             ->executeStatement();
     }
