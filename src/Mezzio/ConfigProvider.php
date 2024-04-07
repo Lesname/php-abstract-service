@@ -192,6 +192,8 @@ final class ConfigProvider
 
                     AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
+                    Cli\Cache\ClearCommand::class => ReflectionFactory::class,
+
                     Cli\Documentor\WriteCommand::class => Cli\Documentor\WriteCommandFactory::class,
 
                     Cli\Queue\CountProcessableCommand::class => ReflectionFactory::class,
@@ -215,6 +217,8 @@ final class ConfigProvider
             ],
             'laminas-cli' => [
                 'commands' => [
+                    'cache.clear' => Cli\Cache\ClearCommand::class,
+
                     'documentor.write' => Cli\Documentor\WriteCommand::class,
 
                     'queue.countProcessable' => Cli\Queue\CountProcessableCommand::class,
