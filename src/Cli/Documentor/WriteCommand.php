@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Cli\Documentor;
 
+use Throwable;
 use JsonException;
 use LessValueObject\String\UserAgent;
 use LessValueObject\String\Format\Ip;
@@ -166,19 +167,28 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
-     *
-     * @throws ReflectionException
      */
     private function composePaths(): array
     {
         $paths = [];
 
         foreach ($this->routes as $route) {
-            $routeDocument = $this->routeDocumentor->document($route);
+            try {
+                $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[(string)$routeDocument->path] = [
-                $routeDocument->method->value => $this->composePathDocument($routeDocument),
-            ];
+                $paths[(string)$routeDocument->path] = [
+                    $routeDocument->method->value => $this->composePathDocument($routeDocument),
+                ];
+            } catch (Throwable $e) {
+                $path = isset($route['path']) && is_string($route['path'])
+                    ? $route['path']
+                    : '??';
+
+                throw new RuntimeException(
+                    "Failed on path '{$path}'",
+                    previous: $e,
+                );
+            }
         }
 
         return $paths;
