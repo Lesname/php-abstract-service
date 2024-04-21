@@ -14,15 +14,36 @@ final class ThrottleBuilder
     /**
      * @param array<int, int> $multiples
      */
-    public function __construct(
+    private function __construct(
         private int $basePoints,
         private int $baseDuration,
-        private array $multiples = [
-            15 => 10,
-            60 => 30,
-            60 * 24 => 10 * 3 * 8,
-        ],
-    ) {
+        private array $multiples,
+    ) {}
+
+    public static function normal(): self
+    {
+        return new self(
+            60,
+            60,
+            [
+                15 => 10,
+                60 => 30,
+                60 * 24 => 10 * 3 * 8,
+            ],
+        );
+    }
+
+    public static function strict(): self
+    {
+        return new self(
+            45,
+            60,
+            [
+                15 => 10,
+                60 => 30,
+                60 * 24 => 10 * 3 * 8,
+            ],
+        );
     }
 
     public function withAction(?string $action): self
