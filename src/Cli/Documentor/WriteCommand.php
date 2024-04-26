@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Cli\Documentor;
 
+use Throwable;
 use JsonException;
 use LessValueObject\String\UserAgent;
 use LessValueObject\String\Format\Ip;
@@ -174,11 +175,22 @@ final class WriteCommand extends Command
         $paths = [];
 
         foreach ($this->routes as $route) {
-            $routeDocument = $this->routeDocumentor->document($route);
+            try {
+                $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[(string)$routeDocument->path] = [
-                $routeDocument->method->value => $this->composePathDocument($routeDocument),
-            ];
+                $paths[(string)$routeDocument->path] = [
+                    $routeDocument->method->value => $this->composePathDocument($routeDocument),
+                ];
+            } catch (Throwable $e) {
+                $path = isset($route['path']) && is_string($route['path'])
+                    ? $route['path']
+                    : '??';
+
+                throw new RuntimeException(
+                    "Failed on path '{$path}'",
+                    previous: $e,
+                );
+            }
         }
 
         return $paths;
@@ -423,15 +435,38 @@ final class WriteCommand extends Command
         $properties = $required = [];
 
         foreach ($typeDocument->properties as $key => $property) {
-            $properties[$key] = $this->composeTypeDocument($property->type, true);
-
-            if ($property->required === false) {
-                $properties[$key]['default'] = $property->default;
+            try {
+                $propDocument = $this->composeTypeDocument($property->type, true);
+            } catch (Throwable $e) {
+                throw new RuntimeException("Failed on '{$key}'", previous: $e);
             }
 
             if ($property->required) {
                 $required[] = $key;
             }
+
+            $append = [];
+
+            if ($property->deprecated) {
+                $append['deprecated'] = true;
+            }
+
+            if ($property->required === false) {
+                $append['default'] = $property->default;
+            }
+
+            if (count($append)) {
+                if (isset($propDocument['$ref'])) {
+                    $propDocument = array_replace(
+                        ['allOf' => [$propDocument]],
+                        $append,
+                    );
+                } else {
+                    $propDocument = array_replace($propDocument, $append);
+                }
+            }
+
+            $properties[$key] = $propDocument;
         }
 
         return [
