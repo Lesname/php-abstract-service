@@ -167,6 +167,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @throws ReflectionException
      */
     private function composePaths(): array
     {
@@ -433,15 +435,38 @@ final class WriteCommand extends Command
         $properties = $required = [];
 
         foreach ($typeDocument->properties as $key => $property) {
-            $properties[$key] = $this->composeTypeDocument($property->type, true);
-
-            if ($property->required === false) {
-                $properties[$key]['default'] = $property->default;
+            try {
+                $propDocument = $this->composeTypeDocument($property->type, true);
+            } catch (Throwable $e) {
+                throw new RuntimeException("Failed on '{$key}'", previous: $e);
             }
 
             if ($property->required) {
                 $required[] = $key;
             }
+
+            $append = [];
+
+            if ($property->deprecated) {
+                $append['deprecated'] = true;
+            }
+
+            if ($property->required === false) {
+                $append['default'] = $property->default;
+            }
+
+            if (count($append)) {
+                if (isset($propDocument['$ref'])) {
+                    $propDocument = array_replace(
+                        ['allOf' => [$propDocument]],
+                        $append,
+                    );
+                } else {
+                    $propDocument = array_replace($propDocument, $append);
+                }
+            }
+
+            $properties[$key] = $propDocument;
         }
 
         return [
