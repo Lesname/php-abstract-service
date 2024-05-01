@@ -3,19 +3,19 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Mezzio\Router\Route;
 
-use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
-use LessAbstractService\Http\Resource\Handler\Command\CreateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\Command\UpdateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\Query\ResultQueryRouteHandler;
-use LessAbstractService\Http\Resource\Handler\Query\ResultsQueryRouteHandler;
-use LessDocumentor\Route\Document\Property\Category;
 use LessDomain\Event\Event;
-use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
-use LessResource\Model\ResourceModel;
-use LessResource\Repository\ResourceRepository;
 use LessValidator\Validator;
 use LessValueObject\ValueObject;
+use LessResource\Model\ResourceModel;
 use Psr\Http\Server\RequestHandlerInterface;
+use LessResource\Repository\ResourceRepository;
+use LessDocumentor\Route\Document\Property\Category;
+use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
+use LessAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
+use LessAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
+use LessAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
+use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
 use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**

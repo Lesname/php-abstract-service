@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command;
+namespace LessAbstractService\Http\Resource\Handler;
 
-use LessDomain\Event\Store\Store;
 use LessHydrator\Hydrator;
-use Psr\Container\ContainerExceptionInterface;
+use LessDomain\Event\Store\Store;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 final class UpdateEventRouteHandlerFactory

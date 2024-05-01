@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command;
+namespace LessAbstractService\Http\Resource\Handler;
 
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInputProvided;
+use LessHydrator\Hydrator;
 use LessDomain\Event\Event;
 use LessDomain\Event\Store\Store;
-use LessHydrator\Hydrator;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use LessDocumentor\Route\Attribute\DocHttpResponse;
+use LessDocumentor\Route\Attribute\DocInputProvided;
 
 #[DocInputProvided(['occurredOn', 'headers'])]
 #[DocHttpResponse(code: 204)]

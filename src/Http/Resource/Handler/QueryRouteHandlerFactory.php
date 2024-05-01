@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use LessHydrator\Hydrator;
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
 
 final class QueryRouteHandlerFactory
 {

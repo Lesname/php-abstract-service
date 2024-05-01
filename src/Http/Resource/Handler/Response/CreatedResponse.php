@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command\Response;
+namespace LessAbstractService\Http\Resource\Handler\Response;
 
 use LessValueObject\String\Format\Resource\Type;
-use LessValueObject\Composite\AbstractCompositeValueObject;
 use LessValueObject\String\Format\Resource\Identifier;
+use LessValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable

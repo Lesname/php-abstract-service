@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use RuntimeException;
-use LessDomain\Event\Store\Store;
-use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHydrator\Hydrator;
-use Psr\Container\ContainerExceptionInterface;
+use LessDomain\Event\Store\Store;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Http\Message\StreamFactoryInterface;
+use Psr\Container\ContainerExceptionInterface;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
 
 final class CreateEventRouteHandlerFactory
 {

@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Queue\Handler\Command;
+namespace LessAbstractService\Http\Queue\Handler;
 
-use Psr\Http\Server\RequestHandlerInterface;
-use LessAbstractService\Http\Resource\Handler\Helper\HydrateParametersHelper;
-use LessAbstractService\Http\Queue\Handler\Command\Parameters\DeleteParameters;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInput;
 use LessQueue\Queue;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use LessDocumentor\Route\Attribute\DocInput;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use LessDocumentor\Route\Attribute\DocHttpResponse;
+use LessAbstractService\Http\Queue\Handler\Parameters\DeleteParameters;
+use LessAbstractService\Http\Resource\Handler\Helper\HydrateParametersHelper;
 
 #[DocInput(DeleteParameters::class)]
 #[DocHttpResponse(code: 204)]

@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use JsonException;
-use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
-use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
+use ReflectionException;
 use LessHttp\Response\ErrorResponse;
 use LessResource\Model\ResourceModel;
-use LessResource\Repository\Exception\NoResource;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use ReflectionException;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
+use LessResource\Repository\Exception\NoResource;
+use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
+use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 
 #[DocTypeWrapper(ResultTypeDocumentWrapper::class)]
 final class ResultQueryRouteHandler extends AbstractQueryRouteHandler

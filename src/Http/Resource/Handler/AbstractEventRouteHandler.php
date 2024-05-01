@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command;
+namespace LessAbstractService\Http\Resource\Handler;
 
-use LessDomain\Event\Event;
-use LessDomain\Event\Property\Headers;
-use LessDomain\Event\Store\Store;
 use LessHydrator\Hydrator;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessValueObject\Number\Exception\NotMultipleOf;
-use LessValueObject\String\Format\Exception\NotFormat;
+use LessDomain\Event\Event;
+use LessDomain\Event\Store\Store;
+use LessDomain\Event\Property\Headers;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessValueObject\Number\Exception\MaxOutBounds;
+use LessValueObject\Number\Exception\MinOutBounds;
+use LessValueObject\Number\Int\Date\MilliTimestamp;
+use LessValueObject\Number\Exception\NotMultipleOf;
+use LessValueObject\String\Format\Exception\NotFormat;
 
 abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {

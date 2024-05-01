@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use JsonException;
+use Psr\Http\Message\ResponseInterface;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
-use Psr\Http\Message\ResponseInterface;
 
 #[DocTypeWrapper(ResultsTypeDocumentWrapper::class)]
 final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
