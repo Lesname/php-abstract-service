@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Query;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use JsonException;
-use LessHttp\Response\ErrorResponse;
+use ReflectionMethod;
+use RuntimeException;
+use ReflectionException;
+use ReflectionNamedType;
+use ReflectionParameter;
 use LessHydrator\Hydrator;
-use LessResource\Repository\Exception\NoResource;
 use LessValueObject\ValueObject;
-use Psr\Container\ContainerExceptionInterface;
+use LessHttp\Response\ErrorResponse;
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use ReflectionException;
-use ReflectionMethod;
-use ReflectionNamedType;
-use ReflectionParameter;
-use RuntimeException;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use LessResource\Repository\Exception\NoResource;
 
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {

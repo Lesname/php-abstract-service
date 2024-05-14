@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Command;
+namespace LessAbstractService\Http\Resource\Handler;
 
 use JsonException;
-use LessValueObject\Number\Exception\NotMultipleOf;
-use LessAbstractService\Http\Resource\Handler\Command\Response\CreatedResponse;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInputProvided;
+use LessHydrator\Hydrator;
 use LessDomain\Event\Event;
 use LessDomain\Event\Store\Store;
-use LessDomain\Identifier\Generator\IdentifierGenerator;
-use LessHydrator\Hydrator;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessValueObject\String\Format\Exception\NotFormat;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use Psr\Http\Message\ResponseFactoryInterface;
+use LessValueObject\Number\Exception\MaxOutBounds;
+use LessValueObject\Number\Exception\MinOutBounds;
+use LessValueObject\Number\Exception\NotMultipleOf;
+use LessDocumentor\Route\Attribute\DocHttpResponse;
+use LessDocumentor\Route\Attribute\DocInputProvided;
+use LessValueObject\String\Format\Exception\NotFormat;
+use LessDomain\Identifier\Generator\IdentifierGenerator;
+use LessAbstractService\Http\Resource\Handler\Response\CreatedResponse;
 
 #[DocInputProvided(['id', 'occurredOn', 'headers'])]
 #[DocHttpResponse(CreatedResponse::class, 201)]
