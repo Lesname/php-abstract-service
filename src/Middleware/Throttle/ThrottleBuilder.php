@@ -23,7 +23,7 @@ final class ThrottleBuilder
     public static function normal(): self
     {
         return new self(
-            60,
+            120,
             60,
             [
                 15 => 10,
