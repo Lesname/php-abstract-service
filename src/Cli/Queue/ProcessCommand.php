@@ -46,6 +46,10 @@ final class ProcessCommand extends Command
 
                     $this->queue->delete($job);
                 } else {
+                    if ($output->isVerbose()) {
+                        $output->writeln("process: {$job->name}");
+                    }
+
                     try {
                         $this
                             ->getWorkerForJob($job->name)
