@@ -38,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class WriteCommand extends Command
 {
-    private const RESPONSE_MESSAGE = [
+    private const array RESPONSE_MESSAGE = [
         200 => 'Ok, see content',
         201 => 'Resource created',
         202 => 'Accepted, action will be done in due time',
@@ -54,7 +54,7 @@ final class WriteCommand extends Command
         500 => 'Internal error, try later or seek contact',
     ];
 
-    private const SHARED_REFERENCES = [
+    private const array SHARED_REFERENCES = [
         // Composite
         Composite\Occurred::class,
         Composite\Activity::class,
