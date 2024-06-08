@@ -540,13 +540,6 @@ final class WriteCommand extends Command
             if (is_subclass_of($reference, AbstractRegexStringFormatValueObject::class)) {
                 $document['pattern'] = $reference::getRegularExpression();
             }
-
-            $reflection = new ReflectionClass($reference);
-
-            foreach ($reflection->getAttributes(Format::class) as $refAttribute) {
-                $attribute = $refAttribute->newInstance();
-                $document['format'] = $attribute->name;
-            }
         }
 
         return $document;

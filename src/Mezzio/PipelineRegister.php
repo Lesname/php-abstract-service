@@ -10,7 +10,6 @@ use LessHttp\Middleware\Condition\ConditionMiddleware;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
 use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
 use LessHttp\Middleware\Cors\CorsMiddleware;
-use LessHttp\Middleware\Prerequisite\PrerequisiteMiddleware;
 use LessHttp\Middleware\Throttle\ThrottleMiddleware;
 use LessHttp\Middleware\TrimMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddleware;
@@ -52,7 +51,6 @@ final class PipelineRegister
 
         $app->pipe(AuthorizationMiddleware::class);
         $app->pipe(ConditionMiddleware::class);
-        $app->pipe(PrerequisiteMiddleware::class);
 
         $app->pipe(DispatchMiddleware::class);
         $app->pipe(NotFoundHandler::class);

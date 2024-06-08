@@ -20,7 +20,6 @@ use Mezzio\Router\RouterInterface;
 use Psr\SimpleCache\CacheInterface;
 use LessValidator\TranslationHelper;
 use LessHydrator\ReflectionHydrator;
-use LessAbstractService\Queue\Worker;
 use LessDomain\Event\Store\DbalStore;
 use LessCache\Redis\RedisCacheFactory;
 use LessToken\Codec\TokenCodecFactory;
@@ -36,7 +35,6 @@ use LessHttp\Middleware\Locale\LocaleMiddleware;
 use LessAbstractService\Mezzio\Router\RpcRouter;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LessAbstractService\Factory\Logger\HubFactory;
-use LessValidator\Builder\GenericValidatorBuilder;
 use LessHttp\Middleware\Cors\CorsMiddlewareFactory;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
@@ -48,7 +46,6 @@ use LessAbstractService\Factory\Logger\MonologFactory;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LessAbstractService\Mezzio\Router\RpcRouterFactory;
-use LessValidator\Builder\TypeDocumentValidatorBuilder;
 use LessDomain\Identifier\Generator\IdentifierGenerator;
 use LessHttp\Middleware\Validation\ValidationMiddleware;
 use LessAbstractService\Http\Queue\Handler\DeleteHandler;
@@ -57,7 +54,6 @@ use LessAbstractService\Factory\Queue\RabbitMqQueueFactory;
 use LessHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
 use LessAbstractService\Factory\Container\ReflectionFactory;
 use LessAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
-use LessHttp\Middleware\Prerequisite\PrerequisiteMiddleware;
 use LessAbstractService\Http\Queue\Handler\ReanimateHandler;
 use LessHttp\Middleware\Condition\ConditionMiddlewareFactory;
 use LessDomain\Identifier\Generator\Uuid6IdentifierGenerator;
@@ -65,7 +61,6 @@ use LessHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddlewareFactory;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
-use LessHttp\Middleware\Prerequisite\PrerequisiteMiddlewareFactory;
 use LessAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LessAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LessHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
@@ -79,8 +74,6 @@ use LessAbstractService\Http\Resource\Handler\CreateEventRouteHandlerFactory;
 use LessAbstractService\Http\Resource\Handler\UpdateEventRouteHandlerFactory;
 use LessHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LessHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
-use LessAbstractService\Http\Resource\Prerequisite\ResourceExistsPrerequisite;
-use LessAbstractService\Http\Resource\Prerequisite\ResourcePrerequisiteFactory;
 use LessHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
 use LessHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
 use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
@@ -112,7 +105,6 @@ final class ConfigProvider
 
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
-                    TypeDocumentValidatorBuilder::class => GenericValidatorBuilder::class,
                     RouteDocumentor::class => LessRouteDocumentor::class,
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
@@ -135,8 +127,6 @@ final class ConfigProvider
                     ReflectionHydrator::class => ReflectionHydrator::class,
 
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
-
-                    GenericValidatorBuilder::class => GenericValidatorBuilder::class,
 
                     LessRouteDocumentor::class => LessRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
@@ -173,7 +163,6 @@ final class ConfigProvider
                     CorsMiddleware::class => CorsMiddlewareFactory::class,
                     ValidationMiddleware::class => ValidationMiddlewareFactory::class,
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
-                    PrerequisiteMiddleware::class => PrerequisiteMiddlewareFactory::class,
                     ConditionMiddleware::class => ConditionMiddlewareFactory::class,
 
                     DeleteHandler::class => ReflectionFactory::class,
@@ -187,10 +176,7 @@ final class ConfigProvider
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    ResourceExistsPrerequisite::class => ResourcePrerequisiteFactory::class,
                     ExistsResourceConditionConstraint::class => ExistsResourceConditionConstraintFactory::class,
-
-                    AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class => ReflectionFactory::class,
 
                     Cli\Cache\ClearCommand::class => ReflectionFactory::class,
 
@@ -201,7 +187,6 @@ final class ConfigProvider
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
                     Cli\Queue\QuitCommand::class => ReflectionFactory::class,
 
-                    Cli\Service\LoadAccountRolesCommand::class => ReflectionFactory::class,
                     Cli\Service\CleanUpCommand::class => ReflectionFactory::class,
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
@@ -226,7 +211,6 @@ final class ConfigProvider
                     'queue.process' => Cli\Queue\ProcessCommand::class,
                     'queue.quit' => Cli\Queue\QuitCommand::class,
 
-                    'service.loadAccountRoles' => Cli\Service\LoadAccountRolesCommand::class,
                     'service.update' => Cli\Service\UpdateCommand::class,
                     'service.cleanUp' => Cli\Service\CleanUpCommand::class,
                 ],
