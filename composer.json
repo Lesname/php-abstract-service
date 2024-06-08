@@ -9,7 +9,7 @@
     }
   ],
   "require": {
-    "php": "^8.2.0",
+    "php": "^8.3.0",
 
     "ext-openssl": "*",
 
@@ -17,10 +17,10 @@
 
     "lessname/documentor": "^0.3.1",
     "lessname/resource": "^0.4.1",
-    "lessname/domain": "^0.3.0",
-    "lessname/validator": "^0.3.0",
-    "lessname/queue": "^0.5.0",
-    "lessname/http": "^0.4.1",
+    "lessname/domain": "^0.4.0",
+    "lessname/validator": "^0.4.0",
+    "lessname/queue": "^0.6.0",
+    "lessname/http": "^0.5.0",
     "lessname/value-object": "^0.3.0",
 
     "lessname/abstract-client": "^0.3.0",
@@ -38,7 +38,7 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7.0",
-    "phpunit/phpunit": "^10.1.0",
+    "phpunit/phpunit": "^10.0.0",
     "phpstan/phpstan": "^1.8.0",
     "vimeo/psalm": "^5.12.0",
 

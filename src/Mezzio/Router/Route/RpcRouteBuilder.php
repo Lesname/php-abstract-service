@@ -104,16 +104,6 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
-     *
-     * @deprecated use withAddedAuthorization
-     */
-    public function withAddedAuthorizations(array $authorizations): self
-    {
-        return $this->withAuthorizations([...$this->authorizations, ...$authorizations]);
-    }
-
-    /**
      * @param class-string<AuthorizationConstraint> $authorization
      */
     public function withAddedAuthorization(string $authorization): self
