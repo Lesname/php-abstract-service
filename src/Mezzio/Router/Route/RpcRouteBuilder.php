@@ -284,7 +284,7 @@ final class RpcRouteBuilder
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildRoute(string $method, Category | string $type, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(string $method, Category $type, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,
