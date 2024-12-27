@@ -1,58 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.27.0@faf106e717c37b8c81721845dba9de3d8deed8ff">
+<files psalm-version="5.23.1@8471a896ccea3526b26d082f4461eeea467f10a4">
   <file src="src/Cli/Documentor/WriteCommand.php">
-    <DeprecatedClass occurrences="2">
-      <code>$refAttribute-&gt;newInstance()</code>
-      <code>Format::class</code>
+    <DeprecatedClass>
+      <code><![CDATA[Format::class]]></code>
     </DeprecatedClass>
-    <DeprecatedMethod occurrences="1">
-      <code>getDeprecated</code>
-    </DeprecatedMethod>
-  </file>
-  <file src="src/Cli/Documentor/WriteCommandFactory.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$config['routes']</code>
-    </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Cli/Queue/ProcessCommandFactory.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$config['workers']</code>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$config['workers']]]></code>
     </MixedArgumentTypeCoercion>
   </file>
   <file src="src/Container/Factory/ReflectionFactory.php">
-    <MixedMethodCall occurrences="1">
-      <code>new $name(...$this-&gt;getParameters($container, $constructor))</code>
+    <MixedMethodCall>
+      <code><![CDATA[new $name(...$this->getParameters($container, $constructor))]]></code>
     </MixedMethodCall>
   </file>
-  <file src="src/Event/Listener/HookPushListener.php">
-    <NoInterfaceProperties occurrences="1">
-      <code>$event-&gt;id</code>
-    </NoInterfaceProperties>
+  <file src="src/Container/Mail/TemplateContainerFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$reference]]></code>
+    </MixedAssignment>
   </file>
-  <file src="src/Http/Resource/Handler/Command/CreateEventRouteHandler.php">
-    <NoInterfaceProperties occurrences="1">
-      <code>$event-&gt;id</code>
-    </NoInterfaceProperties>
-  </file>
-  <file src="src/Http/Resource/Handler/Query/AbstractQueryRouteHandler.php">
-    <MixedMethodCall occurrences="1">
-      <code>$route['proxy']['method']</code>
+  <file src="src/Factory/Container/ReflectionFactory.php">
+    <MixedMethodCall>
+      <code><![CDATA[new $name(...$this->getParameters($container, $constructor))]]></code>
     </MixedMethodCall>
   </file>
-  <file src="src/Http/Service/Hook/Handler/Command/PushHandlerFactory.php">
-    <MixedArgumentTypeCoercion occurrences="1">
-      <code>$config[PushHandler::class]['eventQueueJobMap']</code>
-    </MixedArgumentTypeCoercion>
+  <file src="src/Factory/Symfony/Translator/TranslatorFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$file]]></code>
+    </MixedAssignment>
   </file>
-  <file src="src/Mezzio/ConfigProvider.php">
-    <DeprecatedClass occurrences="2">
-      <code>MezzioRouteDocumentor::class</code>
-      <code>MezzioRouteDocumentor::class</code>
+  <file src="src/Http/Resource/Handler/AbstractQueryRouteHandler.php">
+    <MixedMethodCall>
+      <code><![CDATA[$route['proxy']['method']]]></code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Http/Resource/Handler/CreateEventRouteHandler.php">
+    <NoInterfaceProperties>
+      <code><![CDATA[$event->id]]></code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="src/Http/Resource/Prerequisite/ResourceExistsPrerequisite.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractResourcePrerequisite]]></code>
     </DeprecatedClass>
   </file>
+  <file src="src/Http/Resource/Prerequisite/ResourcePrerequisiteFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractResourcePrerequisite]]></code>
+      <code><![CDATA[AbstractResourcePrerequisite::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/ConfigProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[AuthorizationConstraint\Account\DeveloperAccountAuthorizationConstraint::class]]></code>
+      <code><![CDATA[Cli\Service\LoadAccountRolesCommand::class]]></code>
+      <code><![CDATA[Cli\Service\LoadAccountRolesCommand::class]]></code>
+      <code><![CDATA[PrerequisiteMiddleware::class]]></code>
+      <code><![CDATA[PrerequisiteMiddlewareFactory::class]]></code>
+      <code><![CDATA[ResourceExistsPrerequisite::class]]></code>
+      <code><![CDATA[ResourcePrerequisiteFactory::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/PipelineRegister.php">
+    <DeprecatedClass>
+      <code><![CDATA[PrerequisiteMiddleware::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/Router/Route/RpcRouteBuilder.php">
+    <MixedAssignment>
+      <code><![CDATA[$route[$key]]]></code>
+    </MixedAssignment>
+  </file>
   <file src="src/Router/Route/RpcRouteBuilder.php">
-    <MixedAssignment occurrences="1">
-      <code>$route[$key]</code>
+    <DeprecatedInterface>
+      <code><![CDATA[array]]></code>
+      <code><![CDATA[array<class-string<PrerequisiteConstraint>>]]></code>
+      <code><![CDATA[array<class-string<PrerequisiteConstraint>>]]></code>
+      <code><![CDATA[class-string<PrerequisiteConstraint>]]></code>
+      <code><![CDATA[class-string<PrerequisiteConstraint>]]></code>
+      <code><![CDATA[public array $prerequisites = [];]]></code>
+    </DeprecatedInterface>
+    <MixedAssignment>
+      <code><![CDATA[$route[$key]]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Symfony/Translator/TranslatorFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$file]]></code>
     </MixedAssignment>
   </file>
 </files>

@@ -3,10 +3,20 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Cli\Documentor;
 
+use Throwable;
 use JsonException;
+use LessValueObject\String\UserAgent;
+use LessValueObject\String\Format\Ip;
+use LessValueObject\String\PhoneNumber;
+use LessValueObject\String\Format\Date;
+use LessValueObject\String\Format\Uri\Https;
+use LessValueObject\String\Format\SearchTerm;
+use LessValueObject\String\Format\EmailAddress;
 use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\RouteDocumentor;
+use LessValueObject\String\Format\Resource\Type;
 use LessDocumentor\Type\Document\BoolTypeDocument;
+use LessValueObject\String\Format\Resource\Identifier;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
@@ -15,17 +25,10 @@ use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessAbstractService\Cli\Documentor\Attribute\Format;
 use LessResource\Model\ResourceModel;
-use LessValueObject\Composite\Activity;
-use LessValueObject\Composite\Content;
-use LessValueObject\Composite\ForeignReference;
-use LessValueObject\Composite\Occurred;
-use LessValueObject\Composite\Paginate;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\Number\Int\Date\Timestamp;
-use LessValueObject\String\Format\AbstractRegexpFormattedStringValueObject;
-use LessValueObject\String\Format\EmailAddress;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Uri;
+use LessValueObject\Composite;
+use LessValueObject\Enum;
+use LessValueObject\Number;
+use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
 use ReflectionClass;
 use ReflectionException;
 use RuntimeException;
@@ -35,11 +38,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class WriteCommand extends Command
 {
-    private const RESPONSE_MESSAGE = [
+    private const array RESPONSE_MESSAGE = [
         200 => 'Ok, see content',
         201 => 'Resource created',
         202 => 'Accepted, action will be done in due time',
-        204 => 'Call successfull, nothing to output',
+        204 => 'Call successful, nothing to output',
         400 => 'Bad request, see body for more info',
         401 => 'Authentication failed',
         403 => 'Forbidden to do this request',
@@ -51,54 +54,69 @@ final class WriteCommand extends Command
         500 => 'Internal error, try later or seek contact',
     ];
 
-    private const SHARED_REFERENCES = [
+    private const array SHARED_REFERENCES = [
+        // Composite
+        Composite\Occurred::class,
+        Composite\Activity::class,
+        Composite\Content::class,
+        Composite\ForeignReference::class,
+        Composite\Paginate::class,
+        // Enum
+        Enum\OrderDirection::class,
+        // Number
+        Number\Int\Date\Day::class,
+        Number\Int\Date\MilliTimestamp::class,
+        Number\Int\Date\Month::class,
+        Number\Int\Date\Timestamp::class,
+        Number\Int\Date\Week::class,
+        Number\Int\Date\Year::class,
+        Number\Int\Time\Hour::class,
+        Number\Int\Time\Minute::class,
+        Number\Int\Time\Second::class,
+        Number\Int\Negative::class,
+        Number\Int\Positive::class,
+        Number\Int\Unsigned::class,
+        // String
         Identifier::class,
-
+        Type::class,
+        Https::class,
+        Date::class,
         EmailAddress::class,
-
-        Uri\Https::class,
-
-        Paginate::class,
-
-        Occurred::class,
-        Activity::class,
-
-        Content::class,
-
-        ForeignReference::class,
-
-        Timestamp::class,
-        MilliTimestamp::class,
+        Ip::class,
+        SearchTerm::class,
+        PhoneNumber::class,
+        UserAgent::class,
     ];
 
     /**
      * @param array<array<mixed>> $routes
-     * @param string $fileLocation
-     * @param string $baseUri
-     * @param string $name
      */
     public function __construct(
         private readonly RouteDocumentor $routeDocumentor,
         private readonly array $routes,
         private readonly string $fileLocation,
         private readonly string $baseUri,
-        private readonly string $name,
+        private readonly ?string $name,
     ) {
-        parent::__construct();
+        parent::__construct($name);
     }
 
     /**
      * @throws JsonException
      * @throws ReflectionException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $document = $this->getBaseDocument();
         assert(is_array($document['paths']));
 
-        $document['paths'] = $this->compasePaths();
+        $document['paths'] = $this->composePaths();
+
+        $schemaComponents = $this->composeSchemaComponents();
+        ksort($schemaComponents);
+
         $document['components'] = [
-            'schemas' => $this->composeSchemaComponents(),
+            'schemas' => $schemaComponents,
         ];
 
         assert(is_array($document['info']));
@@ -120,7 +138,7 @@ final class WriteCommand extends Command
                 'title' => $this->name,
                 'contact' => [
                     'name' => 'Development',
-                    'email' => 'development@boekscout.nl',
+                    'email' => 'development@lessname.nl',
                 ],
             ],
             'servers' => [
@@ -152,16 +170,27 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function compasePaths(): array
+    private function composePaths(): array
     {
         $paths = [];
 
         foreach ($this->routes as $route) {
-            $routeDocument = $this->routeDocumentor->document($route);
+            try {
+                $routeDocument = $this->routeDocumentor->document($route);
 
-            $paths[(string)$routeDocument->getPath()] = [
-                $routeDocument->getMethod()->value => $this->composePathDocument($routeDocument),
-            ];
+                $paths[(string)$routeDocument->path] = [
+                    $routeDocument->method->value => $this->composePathDocument($routeDocument),
+                ];
+            } catch (Throwable $e) {
+                $path = isset($route['path']) && is_string($route['path'])
+                    ? $route['path']
+                    : '??';
+
+                throw new RuntimeException(
+                    "Failed on path '{$path}'",
+                    previous: $e,
+                );
+            }
         }
 
         return $paths;
@@ -180,6 +209,10 @@ final class WriteCommand extends Command
             $reference = $schema->getReference();
             assert(is_string($reference));
 
+            if (isset($document[$this->getReferenceName($reference)])) {
+                continue;
+            }
+
             $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
         }
 
@@ -194,11 +227,11 @@ final class WriteCommand extends Command
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
 
-            yield from $this->getSchemasFromTypeDocument($routeDocument->getInput());
+            yield from $this->getSchemasFromTypeDocument($routeDocument->input);
 
-            foreach ($routeDocument->getRespones() as $respone) {
-                if ($respone->output) {
-                    yield from $this->getSchemasFromTypeDocument($respone->output);
+            foreach ($routeDocument->responses as $response) {
+                if ($response->output) {
+                    yield from $this->getSchemasFromTypeDocument($response->output);
                 }
             }
         }
@@ -221,7 +254,7 @@ final class WriteCommand extends Command
             $reference = $typeDocument->getReference();
             assert(is_string($reference));
 
-            yield $typeDocument;
+            yield $typeDocument->withNullable(false);
         }
     }
 
@@ -234,15 +267,15 @@ final class WriteCommand extends Command
     {
         return [
             'tags' => [
-                $routeDocument->getResource(),
-                $routeDocument->getCategory()->value,
+                $routeDocument->resource,
+                $routeDocument->category,
             ],
-            'deprecated' => $routeDocument->getDeprecated() !== null,
+            'deprecated' => $routeDocument->deprecated !== null,
             'requestBody' => [
                 'required' => true,
                 'content' => [
                     'application/json' => [
-                        'schema' => $this->composeTypeDocument($routeDocument->getInput(), true),
+                        'schema' => $this->composeTypeDocument($routeDocument->input, true),
                     ],
                 ],
             ],
@@ -287,12 +320,8 @@ final class WriteCommand extends Command
             }
         }
 
-        if ($typeDocument->getDescription()) {
+        if ($typeDocument->getDescription() !== null) {
             $document['description'] = $typeDocument->getDescription();
-        }
-
-        if ($typeDocument->getDeprecated()) {
-            $document['deprecated'] = true;
         }
 
         return $document;
@@ -302,17 +331,70 @@ final class WriteCommand extends Command
     {
         $class = $typeDocument->getReference();
 
-        return $class !== null && (
+        return $class !== null
+            &&
+            (
                 in_array($class, self::SHARED_REFERENCES, true)
-                || is_subclass_of($class, ResourceModel::class)
+                ||
+                str_contains($class, '\\Model\\')
+                ||
+                str_contains($class, '\\Repository\\')
             );
     }
 
     private function getReferenceName(string $class): string
     {
+        if (
+            str_contains($class, '\\Model\\')
+            &&
+            !is_subclass_of($class, ResourceModel::class)
+            &&
+            preg_match(
+                '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                $class,
+                $matches,
+            )
+        ) {
+            $model = str_replace('\\', '', $matches['model']);
+            $part = preg_replace_callback(
+                '/\\\\(.)/',
+                static function (array $input) {
+                    return '.' . strtolower($input[1]);
+                },
+                $matches['part'],
+            );
+
+            assert(is_string($part));
+
+            return lcfirst($model) . '.' . lcfirst($part);
+        }
+
+        if (
+            str_contains($class, '\\Repository\\')
+            &&
+            preg_match(
+                '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Repository\\\\[a-zA-Z]+\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                $class,
+                $matches,
+            )
+        ) {
+            $model = str_replace('\\', '', $matches['model']);
+            $part = preg_replace_callback(
+                '/\\\\(.)/',
+                static function (array $input) {
+                    return '.' . strtolower($input[1]);
+                },
+                $matches['part'],
+            );
+
+            assert(is_string($part));
+
+            return lcfirst($model) . '.repository.' . lcfirst($part);
+        }
+
         $parts = explode('\\', $class);
 
-        return array_pop($parts);
+        return lcfirst(array_pop($parts));
     }
 
     /**
@@ -330,12 +412,17 @@ final class WriteCommand extends Command
      */
     private function composeCollectionDocument(CollectionTypeDocument $typeDocument): array
     {
-        return [
+        $document = [
             'type' => 'array',
             'items' => $this->composeTypeDocument($typeDocument->item, true),
-            'minItems' => $typeDocument->size->minimal,
-            'maxItems' => $typeDocument->size->maximal,
         ];
+
+        if ($typeDocument->size) {
+            $document['minItems'] = $typeDocument->size->minimal;
+            $document['maxItems'] = $typeDocument->size->maximal;
+        }
+
+        return $document;
     }
 
     /**
@@ -348,15 +435,38 @@ final class WriteCommand extends Command
         $properties = $required = [];
 
         foreach ($typeDocument->properties as $key => $property) {
-            $properties[$key] = $this->composeTypeDocument($property->type, true);
-
-            if ($property->required === false) {
-                $properties[$key]['default'] = $property->default;
+            try {
+                $propDocument = $this->composeTypeDocument($property->type, true);
+            } catch (Throwable $e) {
+                throw new RuntimeException("Failed on '{$key}'", previous: $e);
             }
 
             if ($property->required) {
                 $required[] = $key;
             }
+
+            $append = [];
+
+            if ($property->deprecated) {
+                $append['deprecated'] = true;
+            }
+
+            if ($property->required === false) {
+                $append['default'] = $property->default;
+            }
+
+            if (count($append)) {
+                if (isset($propDocument['$ref'])) {
+                    $propDocument = array_replace(
+                        ['allOf' => [$propDocument]],
+                        $append,
+                    );
+                } else {
+                    $propDocument = array_replace($propDocument, $append);
+                }
+            }
+
+            $properties[$key] = $propDocument;
         }
 
         return [
@@ -384,24 +494,21 @@ final class WriteCommand extends Command
     private function composeNumberDocument(NumberTypeDocument $typeDocument): array
     {
         $document = [
-            'type' => $typeDocument->precision === 0
+            'type' => is_int($typeDocument->multipleOf)
                 ? 'integer'
                 : 'number',
         ];
 
-        if ($typeDocument->precision !== null) {
-            $document['multipleOf'] = 1 / pow(10, $typeDocument->precision);
+        if ($typeDocument->multipleOf !== null) {
+            $document['multipleOf'] = $typeDocument->multipleOf;
         }
 
-        if ($typeDocument->format) {
+        if ($typeDocument->format !== null) {
             $document['format'] = $typeDocument->format;
         }
 
-        if ($typeDocument->range->minimal) {
+        if ($typeDocument->range) {
             $document['minimum'] = $typeDocument->range->minimal;
-        }
-
-        if ($typeDocument->range->maximal) {
             $document['maximum'] = $typeDocument->range->maximal;
         }
 
@@ -414,30 +521,24 @@ final class WriteCommand extends Command
     private function composeStringDocument(StringTypeDocument $typeDocument): array
     {
         $reference = $typeDocument->getReference();
-        $document = [
-            'type' => 'string',
-            'minLength' => $typeDocument->length->minimal,
-            'maxLength' => $typeDocument->length->maximal,
-        ];
+        $document = ['type' => 'string'];
 
-        if ($typeDocument->format) {
+        if ($typeDocument->length) {
+            $document['minLength'] = $typeDocument->length->minimal;
+            $document['maxLength'] = $typeDocument->length->maximal;
+        }
+
+        if ($typeDocument->format !== null) {
             $document['format'] = $typeDocument->format;
         }
 
-        if ($reference) {
+        if ($reference !== null) {
             if (!class_exists($reference)) {
                 throw new RuntimeException("Reference '{$reference}' unknown");
             }
 
-            if (is_subclass_of($reference, AbstractRegexpFormattedStringValueObject::class)) {
-                $document['pattern'] = $reference::getRegexPattern();
-            }
-
-            $reflection = new ReflectionClass($reference);
-
-            foreach ($reflection->getAttributes(Format::class) as $refAttribute) {
-                $attribute = $refAttribute->newInstance();
-                $document['format'] = $attribute->name;
+            if (is_subclass_of($reference, AbstractRegexStringFormatValueObject::class)) {
+                $document['pattern'] = $reference::getRegularExpression();
             }
         }
 
@@ -454,11 +555,11 @@ final class WriteCommand extends Command
         /** @var array<int, array<mixed>> $responses */
         $responses = [];
 
-        foreach ($routeDocument->getRespones() as $response) {
+        foreach ($routeDocument->responses as $response) {
             $key = $response->code->value;
 
             if ($response->output) {
-                $responses[$key]  = [
+                $responses[$key] = [
                     'description' => self::RESPONSE_MESSAGE[$key],
                     'content' => [
                         'application/json' => [
@@ -467,7 +568,7 @@ final class WriteCommand extends Command
                     ],
                 ];
             } else {
-                $responses[$key]  = [
+                $responses[$key] = [
                     'description' => self::RESPONSE_MESSAGE[$key],
                 ];
             }

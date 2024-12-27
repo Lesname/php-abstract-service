@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Mezzio;
 
+use LessHttp\Middleware\Locale\LocaleMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
+use LessHttp\Middleware\Condition\ConditionMiddleware;
 use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
 use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
 use LessHttp\Middleware\Cors\CorsMiddleware;
-use LessHttp\Middleware\Prerequisite\PrerequisiteMiddleware;
 use LessHttp\Middleware\Throttle\ThrottleMiddleware;
 use LessHttp\Middleware\TrimMiddleware;
 use LessHttp\Middleware\Validation\ValidationMiddleware;
@@ -45,10 +46,11 @@ final class PipelineRegister
         $app->pipe(new BodyParamsMiddleware());
 
         $app->pipe(TrimMiddleware::class);
+        $app->pipe(LocaleMiddleware::class);
         $app->pipe(ValidationMiddleware::class);
 
         $app->pipe(AuthorizationMiddleware::class);
-        $app->pipe(PrerequisiteMiddleware::class);
+        $app->pipe(ConditionMiddleware::class);
 
         $app->pipe(DispatchMiddleware::class);
         $app->pipe(NotFoundHandler::class);

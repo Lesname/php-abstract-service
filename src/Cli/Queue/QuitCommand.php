@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace LessAbstractService\Cli\Queue;
 
 use LessQueue\Job\Property\Name;
+use LessQueue\Parameter\Priority;
 use LessQueue\Queue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use LessValueObject\Composite\DynamicCompositeValueObject;
 
 final class QuitCommand extends Command
 {
@@ -26,7 +28,8 @@ final class QuitCommand extends Command
             for ($i = 1; $i <= $count; $i++) {
                 $this->queue->publish(
                     new Name('queue:quit'),
-                    [],
+                    new DynamicCompositeValueObject([]),
+                    priority: new Priority(5),
                 );
             }
 
