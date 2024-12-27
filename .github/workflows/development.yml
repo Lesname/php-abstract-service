@@ -23,7 +23,7 @@ jobs:
           path: vendor
           key: ${{ github.sha }}-composer84
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --ignore-platform-reqs
   phpstan84:
     runs-on: ubuntu-latest
     needs: [ composer84 ]
