@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessAbstractService\Cli\Documentor;
 
+use RuntimeException;
 use LessDocumentor\Route\RouteDocumentor;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -32,12 +33,23 @@ final class WriteCommandFactory
         $routeDocumentor = $container->get(RouteDocumentor::class);
         assert($routeDocumentor instanceof RouteDocumentor);
 
+        $routes = [];
+
+        foreach ($config['routes'] as $key => $route) {
+            if (!is_array($route)) {
+                throw new RuntimeException();
+            }
+
+            if (isset($route['document']) && $route['document'] === false) {
+                continue;
+            }
+
+            $routes[$key] = $route;
+        }
+
         return new WriteCommand(
             $routeDocumentor,
-            array_filter(
-                $config['routes'],
-                static fn (array $route): bool => !(isset($route['document']) && $route['document'] === false),
-            ),
+            $routes,
             $self['workDirectory'] . 'public/openapi.json',
             $self['baseUri'],
             $self['name'],
