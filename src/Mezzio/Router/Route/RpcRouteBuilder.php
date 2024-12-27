@@ -23,47 +23,23 @@ use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditio
  */
 final class RpcRouteBuilder
 {
-    /**
-     * @var class-string<ResourceRepository<ResourceModel>>|null
-     * @readonly
-     */
-    public ?string $resourceRepository = null;
+    /** @var class-string<ResourceRepository<ResourceModel>>|null */
+    private ?string $resourceRepository;
 
-    /**
-     * @var class-string|null
-     * @readonly
-     */
-    public ?string $proxyClass = null;
+    /** @var class-string|null */
+    private ?string $proxyClass;
 
-    /**
-     * @var class-string<Validator>|null
-     * @readonly
-     */
-    public ?string $validator = null;
+    /** @var class-string<Validator>|null */
+    private ?string $validator;
 
-    /**
-     * @var class-string<ValueObject>|null
-     * @readonly
-     */
-    public ?string $input = null;
+    /** @var class-string<ValueObject>|null */
+    private ?string $input;
 
-    /**
-     * @var array<class-string<ConditionConstraint>>
-     * @readonly
-     */
-    public array $conditions = [];
+    /** @var array<class-string<ConditionConstraint>> */
+    private array $conditions;
 
-    /**
-     * @var array<string, mixed>
-     * @readonly
-     */
-    public array $extraOptions = [];
-
-    /**
-     * @var non-empty-array<class-string<AuthorizationConstraint>>
-     * @readonly
-     */
-    public array $authorizations;
+    /** @var array<string, mixed> */
+    private array $extraOptions;
 
     /**
      * @param non-empty-string $resourceName
@@ -71,14 +47,20 @@ final class RpcRouteBuilder
      */
     public function __construct(
         public readonly string $resourceName,
-        array $authorizations,
+        private array $authorizations,
     ) {
-        $this->authorizations = $authorizations;
+        $this->resourceRepository = null;
+        $this->proxyClass = null;
+        $this->validator = null;
+        $this->input = null;
+        $this->conditions = [];
+        $this->extraOptions = [];
     }
 
     public function withExtraOption(string $key, mixed $value): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->extraOptions[$key] = $value;
 
         return $clone;
@@ -98,6 +80,7 @@ final class RpcRouteBuilder
     public function withAuthorizations(array $authorizations): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->authorizations = $authorizations;
 
         return $clone;
@@ -108,10 +91,12 @@ final class RpcRouteBuilder
      */
     public function withAddedAuthorization(string $authorization): self
     {
-        $clone = clone $this;
-        $clone->authorizations[] = $authorization;
-
-        return $clone;
+        return $this->withAuthorizations(
+            [
+                ...$this->authorizations,
+                $authorization,
+            ],
+        );
     }
 
     /**
@@ -128,6 +113,7 @@ final class RpcRouteBuilder
     public function withConditions(array $conditions): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->conditions = $conditions;
 
         return $clone;
@@ -138,10 +124,12 @@ final class RpcRouteBuilder
      */
     public function withAddedCondition(string $condition): self
     {
-        $clone = clone $this;
-        $clone->conditions[] = $condition;
-
-        return $clone;
+        return $this->withConditions(
+            [
+                ...$this->conditions,
+                $condition,
+            ],
+        );
     }
 
     /**
@@ -152,7 +140,9 @@ final class RpcRouteBuilder
     public function withResourceRepository(string $resourceRepository): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->resourceRepository = $resourceRepository;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->proxyClass = $resourceRepository;
 
         return $clone;
@@ -164,6 +154,7 @@ final class RpcRouteBuilder
     public function withProxyClass(string $proxyClass): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->proxyClass = $proxyClass;
 
         return $clone;
@@ -175,6 +166,7 @@ final class RpcRouteBuilder
     public function withValidator(string $validator): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->validator = $validator;
 
         return $clone;
@@ -186,6 +178,7 @@ final class RpcRouteBuilder
     public function withInput(string $input): self
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->input = $input;
 
         return $clone;
@@ -229,14 +222,12 @@ final class RpcRouteBuilder
         assert($this->resourceRepository !== null);
 
         yield from $this
+            ->withExtraOption('event', $event)
+            ->withExtraOption('input', $event)
             ->buildRoute(
                 $method,
                 Category::Command,
                 $handler,
-                [
-                    'event' => $event,
-                    'input' => $event,
-                ],
             );
     }
 
@@ -265,16 +256,17 @@ final class RpcRouteBuilder
     public function buildQueryRoute(string $method, string $handler): iterable
     {
         yield from $this
+            ->withExtraOption(
+                'proxy',
+                [
+                    'class' => $this->proxyClass,
+                    'method' => $method,
+                ],
+            )
             ->buildRoute(
                 $method,
                 Category::Query,
                 $handler,
-                [
-                    'proxy' => [
-                        'class' => $this->proxyClass,
-                        'method' => $method,
-                    ],
-                ],
             );
     }
 
