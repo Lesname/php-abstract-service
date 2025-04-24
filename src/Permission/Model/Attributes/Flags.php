@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Model\Attributes;
+namespace LesAbstractService\Permission\Model\Attributes;
 
-use LessValueObject\Composite\AbstractCompositeValueObject;
+use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable

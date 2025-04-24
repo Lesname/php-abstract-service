@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository;
+namespace LesAbstractService\Permission\Repository;
 
 use RuntimeException;
-use LessHydrator\Hydrator;
+use LesHydrator\Hydrator;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 

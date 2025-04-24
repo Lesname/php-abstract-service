@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Queue;
+namespace LesAbstractService\Cli\Queue;
 
-use LessQueue\Job\Property\Name;
-use LessQueue\Parameter\Priority;
-use LessQueue\Queue;
+use Override;
+use LesQueue\Job\Property\Name;
+use LesQueue\Parameter\Priority;
+use LesQueue\Queue;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use LessValueObject\Composite\DynamicCompositeValueObject;
+use LesValueObject\Composite\DynamicCompositeValueObject;
 
 final class QuitCommand extends Command
 {
@@ -18,6 +19,7 @@ final class QuitCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $count = $this->queue->countProcessing();

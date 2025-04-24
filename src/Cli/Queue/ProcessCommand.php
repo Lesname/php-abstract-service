@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Queue;
+namespace LesAbstractService\Cli\Queue;
 
-use LessQueue\Job\Job;
-use LessQueue\Job\Property\Name;
-use LessQueue\Queue;
-use LessQueue\Worker\Worker;
+use Override;
+use LesQueue\Job\Job;
+use LesQueue\Job\Property\Name;
+use LesQueue\Queue;
+use LesQueue\Worker\Worker;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -36,11 +37,12 @@ final class ProcessCommand extends Command
         $this->workerMap = $workerMap;
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->queue->process(
             function (Job $job) use ($output) {
-                if ($job->name->getValue() === 'queue:quit') {
+                if ($job->name->value === 'queue:quit') {
                     $output->writeln('Queue quit');
                     $this->queue->stopProcessing();
 
@@ -81,17 +83,17 @@ final class ProcessCommand extends Command
      */
     private function getWorkerForJob(Name $name): Worker
     {
-        if (!array_key_exists($name->getValue(), $this->workerMap)) {
+        if (!array_key_exists($name->value, $this->workerMap)) {
             throw new RuntimeException();
         }
 
-        $mapped = $this->workerMap[$name->getValue()];
+        $mapped = $this->workerMap[$name->value];
 
         if (is_string($mapped)) {
             $worker = $this->container->get($mapped);
             assert($worker instanceof Worker);
 
-            return $this->workerMap[$name->getValue()] = $worker;
+            return $this->workerMap[$name->value] = $worker;
         }
 
         return $mapped;

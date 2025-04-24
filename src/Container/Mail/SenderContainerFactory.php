@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Container\Mail;
+namespace LesAbstractService\Container\Mail;
 
 use Psr\Container\ContainerInterface;
 

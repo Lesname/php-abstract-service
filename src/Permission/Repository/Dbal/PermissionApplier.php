@@ -1,15 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository\Dbal;
+namespace LesAbstractService\Permission\Repository\Dbal;
 
-use LessResource\Repository\Dbal\Applier\AbstractResourceApplier;
+use Override;
+use LesResource\Repository\Dbal\Applier\AbstractResourceApplier;
 
 final class PermissionApplier extends AbstractResourceApplier
 {
     public function __construct(private readonly string $serviceName)
     {}
 
+    #[Override]
     protected function getFields(): array
     {
         return [
@@ -30,11 +32,13 @@ final class PermissionApplier extends AbstractResourceApplier
         ];
     }
 
+    #[Override]
     public function getTableName(): string
     {
         return 'permission';
     }
 
+    #[Override]
     public function getTableAlias(): string
     {
         return 'p';

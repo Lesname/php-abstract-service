@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
-use LessHydrator\Hydrator;
-use LessDomain\Event\Store\Store;
+use LesHydrator\Hydrator;
+use LesDomain\Event\Store\Store;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;

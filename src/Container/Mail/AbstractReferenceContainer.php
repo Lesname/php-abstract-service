@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Container\Mail;
+namespace LesAbstractService\Container\Mail;
 
+use Override;
 use Psr\Container\ContainerInterface;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessValueObject\Composite\ForeignReference;
-use LessValueObject\String\Format\Exception\NotFormat;
-use LessAbstractService\Container\Mail\Exception\UnknownReference;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
+use LesValueObject\Composite\ForeignReference;
+use LesValueObject\String\Format\Exception\NotFormat;
+use LesAbstractService\Container\Mail\Exception\UnknownReference;
 
 /**
  * @psalm-immutable
@@ -27,6 +28,7 @@ abstract class AbstractReferenceContainer implements ContainerInterface
      * @throws TooShort
      * @throws NotFormat
      */
+    #[Override]
     public function get(string $id): ForeignReference
     {
         if (!$this->has($id)) {
@@ -41,6 +43,7 @@ abstract class AbstractReferenceContainer implements ContainerInterface
         );
     }
 
+    #[Override]
     public function has(string $id): bool
     {
         return array_key_exists($id, $this->references);

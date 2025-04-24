@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Factory\Logger;
+namespace LesAbstractService\Factory\Logger;
 
 use Monolog\Logger;
 use Psr\Container\ContainerExceptionInterface;

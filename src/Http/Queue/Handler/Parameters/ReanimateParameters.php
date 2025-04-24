@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Queue\Handler\Parameters;
+namespace LesAbstractService\Http\Queue\Handler\Parameters;
 
-use LessQueue\Job\Property\Identifier;
-use LessValueObject\Number\Int\Date\Timestamp;
-use LessValueObject\Composite\AbstractCompositeValueObject;
+use LesQueue\Job\Property\Identifier;
+use LesValueObject\Number\Int\Date\Timestamp;
+use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable

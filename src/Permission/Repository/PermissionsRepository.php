@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository;
+namespace LesAbstractService\Permission\Repository;
 
-use LessResource\Set\ResourceSet;
-use LessValueObject\Composite\Paginate;
-use LessResource\Repository\ResourceRepository;
-use LessValueObject\Composite\ForeignReference;
-use LessDocumentor\Route\Attribute\DocResource;
-use LessAbstractService\Permission\Model\Permission;
-use LessAbstractService\Permission\Repository\Parameter\Flags;
-use LessAbstractService\Permission\Repository\Exception\NoPermission;
+use LesResource\Set\ResourceSet;
+use LesValueObject\Composite\Paginate;
+use LesResource\Repository\ResourceRepository;
+use LesValueObject\Composite\ForeignReference;
+use LesDocumentor\Route\Attribute\DocResource;
+use LesAbstractService\Permission\Model\Permission;
+use LesAbstractService\Permission\Repository\Parameter\Flags;
+use LesAbstractService\Permission\Repository\Exception\NoPermission;
 
 /**
  * @extends ResourceRepository<Permission>

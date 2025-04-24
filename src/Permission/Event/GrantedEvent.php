@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Event;
+namespace LesAbstractService\Permission\Event;
 
-use LessDomain\Event\Property\Headers;
-use LessDomain\Event\AbstractAggregateEvent;
-use LessDomain\Event\Helper\EventActionHelper;
-use LessValueObject\Composite\ForeignReference;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessAbstractService\Permission\Model\Attributes\Flags;
+use LesDomain\Event\Property\Headers;
+use LesDomain\Event\AbstractAggregateEvent;
+use LesDomain\Event\Helper\EventActionHelper;
+use LesValueObject\Composite\ForeignReference;
+use LesValueObject\Number\Int\Date\MilliTimestamp;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesAbstractService\Permission\Model\Attributes\Flags;
 
 /**
  * @psalm-immutable

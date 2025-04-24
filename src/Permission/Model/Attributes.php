@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Model;
+namespace LesAbstractService\Permission\Model;
 
-use LessValueObject\Composite\ForeignReference;
-use LessAbstractService\Permission\Model\Attributes\Flags;
-use LessValueObject\Composite\AbstractCompositeValueObject;
+use LesValueObject\Composite\ForeignReference;
+use LesAbstractService\Permission\Model\Attributes\Flags;
+use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable

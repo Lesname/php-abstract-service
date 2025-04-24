@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio\Router;
+namespace LesAbstractService\Mezzio\Router;
 
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;

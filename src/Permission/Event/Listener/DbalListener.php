@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Event\Listener;
+namespace LesAbstractService\Permission\Event\Listener;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use LessDomain\Event\Listener\Listener;
-use LessAbstractService\Permission\Event;
-use LessDomain\Event\AbstractAggregateEvent;
-use LessDomain\Event\Listener\Helper\DelegateActionListenerHelper;
-use LessDatabase\Query\Builder\Applier\Values\InsertValuesApplier;
-use LessDatabase\Query\Builder\Applier\Values\UpdateValuesApplier;
-use LessDatabase\Query\Builder\Applier\Resource\UpdateResourceApplier;
+use LesDomain\Event\Listener\Listener;
+use LesAbstractService\Permission\Event;
+use LesDomain\Event\AbstractAggregateEvent;
+use LesDomain\Event\Listener\Helper\DelegateActionListenerHelper;
+use LesDatabase\Query\Builder\Applier\Values\InsertValuesApplier;
+use LesDatabase\Query\Builder\Applier\Values\UpdateValuesApplier;
+use LesDatabase\Query\Builder\Applier\Resource\UpdateResourceApplier;
 
 final class DbalListener implements Listener
 {
@@ -36,7 +36,7 @@ final class DbalListener implements Listener
                     'flags_read' => $event->flags->read,
                     'flags_create' => $event->flags->create,
                     'flags_update' => $event->flags->update,
-                    'activity_last' => $event->getOccuredOn(),
+                    'activity_last' => $event->occurredOn,
                 ],
             )
             ->apply($this->connection->createQueryBuilder())

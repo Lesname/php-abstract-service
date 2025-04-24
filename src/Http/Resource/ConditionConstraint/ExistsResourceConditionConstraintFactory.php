@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\ConditionConstraint;
+namespace LesAbstractService\Http\Resource\ConditionConstraint;
 
-use Interop\Container\Containerinterface;
+use Override;
+use Psr\Container\ContainerInterface;
 
 final class ExistsResourceConditionConstraintFactory
 {

@@ -1,85 +1,85 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio;
+namespace LesAbstractService\Mezzio;
 
 use Monolog\Logger;
 use RuntimeException;
 use Sentry\State\Hub;
-use LessQueue as Queue;
-use LessHydrator\Hydrator;
-use LessAbstractService\Cli;
+use LesQueue as Queue;
+use LesHydrator\Hydrator;
+use LesAbstractService\Cli;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
 use Sentry\State\HubInterface;
-use LessCache\Redis\RedisCache;
-use LessToken\Codec\TokenCodec;
-use LessQueue\Worker\PingWorker;
-use LessDomain\Event\Store\Store;
+use LesCache\Redis\RedisCache;
+use LesToken\Codec\TokenCodec;
+use LesQueue\Worker\PingWorker;
+use LesDomain\Event\Store\Store;
 use Mezzio\Router\RouterInterface;
 use Psr\SimpleCache\CacheInterface;
-use LessValidator\TranslationHelper;
-use LessHydrator\ReflectionHydrator;
-use LessDomain\Event\Store\DbalStore;
-use LessCache\Redis\RedisCacheFactory;
-use LessToken\Codec\TokenCodecFactory;
-use LessAbstractService\Container\Mail;
-use LessDocumentor\Route\RouteDocumentor;
-use LessDomain\Event\Publisher\Publisher;
-use LessDatabase\Factory\ConnectionFactory;
-use LessHttp\Middleware\Cors\CorsMiddleware;
+use LesValidator\TranslationHelper;
+use LesHydrator\ReflectionHydrator;
+use LesDomain\Event\Store\DbalStore;
+use LesCache\Redis\RedisCacheFactory;
+use LesToken\Codec\TokenCodecFactory;
+use LesAbstractService\Container\Mail;
+use LesDocumentor\Route\RouteDocumentor;
+use LesDomain\Event\Publisher\Publisher;
+use LesDatabase\Factory\ConnectionFactory;
+use LesHttp\Middleware\Cors\CorsMiddleware;
 use Symfony\Component\Translation\Translator;
-use LessDocumentor\Route\LessRouteDocumentor;
-use LessDomain\Event\Publisher\FifoPublisher;
-use LessHttp\Middleware\Locale\LocaleMiddleware;
-use LessAbstractService\Mezzio\Router\RpcRouter;
+use LesDocumentor\Route\LesRouteDocumentor;
+use LesDomain\Event\Publisher\FifoPublisher;
+use LesHttp\Middleware\Locale\LocaleMiddleware;
+use LesAbstractService\Mezzio\Router\RpcRouter;
 use Laminas\Stratigility\Middleware\ErrorHandler;
-use LessAbstractService\Factory\Logger\HubFactory;
-use LessHttp\Middleware\Cors\CorsMiddlewareFactory;
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Input\RouteInputDocumentor;
-use LessDomain\Event\Publisher\FifoPublisherFactory;
-use LessHttp\Middleware\Throttle\ThrottleMiddleware;
+use LesAbstractService\Factory\Logger\HubFactory;
+use LesHttp\Middleware\Cors\CorsMiddlewareFactory;
+use LesDocumentor\Route\Document\Property\Category;
+use LesDocumentor\Route\Input\RouteInputDocumentor;
+use LesDomain\Event\Publisher\FifoPublisherFactory;
+use LesHttp\Middleware\Throttle\ThrottleMiddleware;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use LessHttp\Middleware\Condition\ConditionMiddleware;
-use LessAbstractService\Factory\Logger\MonologFactory;
-use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
-use LessHttp\Middleware\Locale\LocaleMiddlewareFactory;
-use LessAbstractService\Mezzio\Router\RpcRouterFactory;
-use LessDomain\Identifier\Generator\IdentifierGenerator;
-use LessHttp\Middleware\Validation\ValidationMiddleware;
-use LessAbstractService\Http\Queue\Handler\DeleteHandler;
-use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
-use LessAbstractService\Factory\Queue\RabbitMqQueueFactory;
-use LessHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
-use LessAbstractService\Factory\Container\ReflectionFactory;
-use LessAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
-use LessAbstractService\Http\Queue\Handler\ReanimateHandler;
-use LessHttp\Middleware\Condition\ConditionMiddlewareFactory;
-use LessDomain\Identifier\Generator\Uuid6IdentifierGenerator;
-use LessHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
-use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
-use LessHttp\Middleware\Validation\ValidationMiddlewareFactory;
-use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
-use LessAbstractService\Factory\Symfony\Translator\TranslatorFactory;
-use LessAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
-use LessHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
-use LessAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
-use LessHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
-use LessAbstractService\Http\Resource\Handler\QueryRouteHandlerFactory;
-use LessAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
-use LessAbstractService\Http\Resource\Handler\CreateEventRouteHandlerFactory;
-use LessAbstractService\Http\Resource\Handler\UpdateEventRouteHandlerFactory;
-use LessHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
-use LessHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
-use LessHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
-use LessHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
-use LessAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
-use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
-use LessAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
-use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory;
+use LesHttp\Middleware\Condition\ConditionMiddleware;
+use LesAbstractService\Factory\Logger\MonologFactory;
+use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
+use LesHttp\Middleware\Locale\LocaleMiddlewareFactory;
+use LesAbstractService\Mezzio\Router\RpcRouterFactory;
+use LesDomain\Identifier\Generator\IdentifierGenerator;
+use LesHttp\Middleware\Validation\ValidationMiddleware;
+use LesAbstractService\Http\Queue\Handler\DeleteHandler;
+use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
+use LesHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
+use LesAbstractService\Factory\Container\ReflectionFactory;
+use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
+use LesAbstractService\Http\Queue\Handler\ReanimateHandler;
+use LesHttp\Middleware\Condition\ConditionMiddlewareFactory;
+use LesDomain\Identifier\Generator\Uuid6IdentifierGenerator;
+use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
+use LesHttp\Middleware\Authorization\AuthorizationMiddleware;
+use LesHttp\Middleware\Validation\ValidationMiddlewareFactory;
+use LesHttp\Middleware\Authentication\AuthenticationMiddleware;
+use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
+use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
+use LesHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
+use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
+use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
+use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
+use LesHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
+use LesAbstractService\Http\Resource\Handler\QueryRouteHandlerFactory;
+use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
+use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandlerFactory;
+use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandlerFactory;
+use LesHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
+use LesHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
+use LesHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
+use LesHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
+use LesAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
+use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
+use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
+use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory;
 
 final class ConfigProvider
 {
@@ -105,7 +105,7 @@ final class ConfigProvider
 
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
-                    RouteDocumentor::class => LessRouteDocumentor::class,
+                    RouteDocumentor::class => LesRouteDocumentor::class,
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     RouterInterface::class => RpcRouter::class,
@@ -128,7 +128,7 @@ final class ConfigProvider
 
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
-                    LessRouteDocumentor::class => LessRouteDocumentor::class,
+                    LesRouteDocumentor::class => LesRouteDocumentor::class,
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
                     AnyIdentityAuthorizationConstraint::class => AnyIdentityAuthorizationConstraint::class,

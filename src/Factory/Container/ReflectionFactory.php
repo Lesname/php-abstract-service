@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Factory\Container;
+namespace LesAbstractService\Factory\Container;
 
 use ReflectionClass;
 use ReflectionMethod;

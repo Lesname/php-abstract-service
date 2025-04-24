@@ -1,9 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Service;
+namespace LesAbstractService\Cli\Service;
 
-use LessQueue\Queue;
+use Override;
+use LesQueue\Queue;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ final class UpdateCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($this->queue->countProcessing() > 0) {

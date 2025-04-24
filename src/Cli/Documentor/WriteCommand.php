@@ -1,35 +1,34 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Documentor;
+namespace LesAbstractService\Cli\Documentor;
 
+use Override;
 use Throwable;
 use JsonException;
-use LessValueObject\String\UserAgent;
-use LessValueObject\String\Format\Ip;
-use LessValueObject\String\PhoneNumber;
-use LessValueObject\String\Format\Date;
-use LessValueObject\String\Format\Uri\Https;
-use LessValueObject\String\Format\SearchTerm;
-use LessValueObject\String\Format\EmailAddress;
-use LessDocumentor\Route\Document\RouteDocument;
-use LessDocumentor\Route\RouteDocumentor;
-use LessValueObject\String\Format\Resource\Type;
-use LessDocumentor\Type\Document\BoolTypeDocument;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessAbstractService\Cli\Documentor\Attribute\Format;
-use LessResource\Model\ResourceModel;
-use LessValueObject\Composite;
-use LessValueObject\Enum;
-use LessValueObject\Number;
-use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
-use ReflectionClass;
+use LesValueObject\String\UserAgent;
+use LesValueObject\String\Format\Ip;
+use LesValueObject\String\PhoneNumber;
+use LesValueObject\String\Format\Date;
+use LesValueObject\String\Format\Uri\Https;
+use LesValueObject\String\Format\SearchTerm;
+use LesValueObject\String\Format\EmailAddress;
+use LesDocumentor\Route\Document\RouteDocument;
+use LesDocumentor\Route\RouteDocumentor;
+use LesValueObject\String\Format\Resource\Type;
+use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesResource\Model\ResourceModel;
+use LesValueObject\Composite;
+use LesValueObject\Enum;
+use LesValueObject\Number;
+use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
 use ReflectionException;
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -105,6 +104,7 @@ final class WriteCommand extends Command
      * @throws JsonException
      * @throws ReflectionException
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $document = $this->getBaseDocument();
@@ -136,10 +136,6 @@ final class WriteCommand extends Command
             'openapi' => '3.1.0',
             'info' => [
                 'title' => $this->name,
-                'contact' => [
-                    'name' => 'Development',
-                    'email' => 'development@lessname.nl',
-                ],
             ],
             'servers' => [
                 ['url' => $this->baseUri],

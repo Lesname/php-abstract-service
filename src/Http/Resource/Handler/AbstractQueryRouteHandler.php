@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
+use Override;
 use JsonException;
 use ReflectionMethod;
 use RuntimeException;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionParameter;
-use LessHydrator\Hydrator;
-use LessValueObject\ValueObject;
-use LessHttp\Response\ErrorResponse;
+use LesHydrator\Hydrator;
+use LesValueObject\ValueObject;
+use LesHttp\Response\ErrorResponse;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -20,7 +21,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use LessResource\Repository\Exception\NoResource;
+use LesResource\Repository\Exception\NoResource;
 
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
@@ -43,6 +44,7 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
      * @throws ReflectionException
      * @throws JsonException
      */
+    #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {

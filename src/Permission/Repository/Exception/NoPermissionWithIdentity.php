@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository\Exception;
+namespace LesAbstractService\Permission\Repository\Exception;
 
-use LessResource\Exception\AbstractException;
-use LessValueObject\Composite\ForeignReference;
+use LesResource\Exception\AbstractException;
+use LesValueObject\Composite\ForeignReference;
 
 /**
  * @psalm-immutable

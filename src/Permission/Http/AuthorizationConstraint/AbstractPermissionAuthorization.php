@@ -1,21 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Http\AuthorizationConstraint;
+namespace LesAbstractService\Permission\Http\AuthorizationConstraint;
 
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
-use LessValueObject\Composite\ForeignReference;
-use LessAbstractService\Permission\Model\Permission;
-use LessAbstractService\Permission\Repository\PermissionsRepository;
-use LessAbstractService\Permission\Repository\Exception\NoPermission;
-use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
-use LessHttp\Middleware\Authorization\Constraint\AbstractIdentityAuthorizationConstraint;
+use LesValueObject\Composite\ForeignReference;
+use LesAbstractService\Permission\Model\Permission;
+use LesAbstractService\Permission\Repository\PermissionsRepository;
+use LesAbstractService\Permission\Repository\Exception\NoPermission;
+use LesHttp\Middleware\Authorization\Constraint\AbstractIdentityAuthorizationConstraint;
 
 abstract class AbstractPermissionAuthorization extends AbstractIdentityAuthorizationConstraint
 {
     public function __construct(private readonly PermissionsRepository $permissionsRepository)
     {}
 
+    #[Override]
     protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool
     {
         try {

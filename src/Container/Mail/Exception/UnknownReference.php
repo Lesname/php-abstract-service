@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Container\Mail\Exception;
+namespace LesAbstractService\Container\Mail\Exception;
 
 use Exception;
 use Psr\Container\NotFoundExceptionInterface;

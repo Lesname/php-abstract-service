@@ -1,22 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\ConditionConstraint;
+namespace LesAbstractService\Http\Resource\ConditionConstraint;
 
+use Override;
 use Psr\Container\ContainerInterface;
-use LessResource\Model\ResourceModel;
+use LesResource\Model\ResourceModel;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use LessValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooLong;
 use Psr\Container\ContainerExceptionInterface;
-use LessValueObject\String\Exception\TooShort;
-use LessResource\Repository\ResourceRepository;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Exception\NotFormat;
-use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
-use LessHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
-use LessHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
-use LessHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
+use LesValueObject\String\Exception\TooShort;
+use LesResource\Repository\ResourceRepository;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesValueObject\String\Format\Exception\NotFormat;
+use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
+use LesHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
+use LesHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
+use LesHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
 final class ExistsResourceConditionConstraint implements ConditionConstraint
 {
@@ -35,6 +36,7 @@ final class ExistsResourceConditionConstraint implements ConditionConstraint
      * @throws TooShort
      * @throws NotFormat
      */
+    #[Override]
     public function satisfies(ServerRequestInterface $request): ConditionConstraintResult
     {
         $body = $request->getParsedBody();

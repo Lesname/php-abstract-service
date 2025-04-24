@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Cache;
+namespace LesAbstractService\Cli\Cache;
 
+use Override;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,6 +16,7 @@ final class ClearCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cache->clear();

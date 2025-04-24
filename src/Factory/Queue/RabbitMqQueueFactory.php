@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Factory\Queue;
+namespace LesAbstractService\Factory\Queue;
 
-use LessQueue\RabbitMqQueue;
+use LesQueue\RabbitMqQueue;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

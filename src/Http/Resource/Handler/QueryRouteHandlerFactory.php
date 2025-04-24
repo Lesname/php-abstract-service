@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
-use LessHydrator\Hydrator;
+use LesHydrator\Hydrator;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Container\NotFoundExceptionInterface;

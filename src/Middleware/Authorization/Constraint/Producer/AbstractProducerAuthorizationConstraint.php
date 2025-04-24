@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Middleware\Authorization\Constraint\Producer;
+namespace LesAbstractService\Middleware\Authorization\Constraint\Producer;
 
-use LessAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthorizationConstraint;
+use Override;
+use LesAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthorizationConstraint;
 
 abstract class AbstractProducerAuthorizationConstraint extends AbstractTypeAuthorizationConstraint
 {
+    #[Override]
     protected function getAllowedType(): string
     {
         return 'identity.producer';

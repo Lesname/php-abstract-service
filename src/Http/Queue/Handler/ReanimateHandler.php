@@ -1,17 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Queue\Handler;
+namespace LesAbstractService\Http\Queue\Handler;
 
-use LessQueue\Queue;
+use Override;
+use LesQueue\Queue;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use LessDocumentor\Route\Attribute\DocInput;
+use LesDocumentor\Route\Attribute\DocInput;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessAbstractService\Http\Queue\Handler\Parameters\ReanimateParameters;
-use LessAbstractService\Http\Resource\Handler\Helper\HydrateParametersHelper;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesAbstractService\Http\Queue\Handler\Parameters\ReanimateParameters;
+use LesAbstractService\Http\Resource\Handler\Helper\HydrateParametersHelper;
 
 #[DocInput(ReanimateParameters::class)]
 #[DocHttpResponse(code: 204)]
@@ -24,6 +25,7 @@ final class ReanimateHandler implements RequestHandlerInterface
         private readonly Queue $queue,
     ) {}
 
+    #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $parameters = $this->hydrateParameters($request, ReanimateParameters::class);

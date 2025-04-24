@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository\Exception;
+namespace LesAbstractService\Permission\Repository\Exception;
 
-use LessResource\Repository\Exception\AbstractNoResourceWithId;
+use LesResource\Repository\Exception\AbstractNoResourceWithId;
 
 /**
  * @psalm-immutable

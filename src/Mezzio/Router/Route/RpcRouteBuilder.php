@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio\Router\Route;
+namespace LesAbstractService\Mezzio\Router\Route;
 
-use LessDomain\Event\Event;
-use LessValidator\Validator;
-use LessValueObject\ValueObject;
-use LessResource\Model\ResourceModel;
+use LesDomain\Event\Event;
+use LesValidator\Validator;
+use LesValueObject\ValueObject;
+use LesResource\Model\ResourceModel;
 use Psr\Http\Server\RequestHandlerInterface;
-use LessResource\Repository\ResourceRepository;
-use LessDocumentor\Route\Document\Property\Category;
-use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
-use LessAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
-use LessAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
-use LessAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
-use LessHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
-use LessAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
+use LesResource\Repository\ResourceRepository;
+use LesDocumentor\Route\Document\Property\Category;
+use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
+use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
+use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
+use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
+use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
+use LesHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
+use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**
  * @psalm-immutable

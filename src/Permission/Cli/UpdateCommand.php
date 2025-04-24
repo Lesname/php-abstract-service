@@ -1,19 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Cli;
+namespace LesAbstractService\Permission\Cli;
 
-use LessDomain\Event\Store\Store;
-use LessDomain\Event\Property\Headers;
+use Override;
+use LesDomain\Event\Store\Store;
+use LesDomain\Event\Property\Headers;
 use Symfony\Component\Console\Command\Command;
-use LessValueObject\Composite\ForeignReference;
+use LesValueObject\Composite\ForeignReference;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
+use LesValueObject\Number\Int\Date\MilliTimestamp;
 use Symfony\Component\Console\Output\OutputInterface;
-use LessAbstractService\Permission\Event\UpdatedEvent;
-use LessAbstractService\Permission\Model\Attributes\Flags;
-use LessAbstractService\Permission\Repository\PermissionsRepository;
+use LesAbstractService\Permission\Event\UpdatedEvent;
+use LesAbstractService\Permission\Model\Attributes\Flags;
+use LesAbstractService\Permission\Repository\PermissionsRepository;
 
 final class UpdateCommand extends Command
 {
@@ -24,6 +25,7 @@ final class UpdateCommand extends Command
         parent::__construct();
     }
 
+    #[Override]
     protected function configure(): void
     {
         $this
@@ -35,6 +37,7 @@ final class UpdateCommand extends Command
             ->addOption('all');
     }
 
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $identity = $this->getIdentity($input);

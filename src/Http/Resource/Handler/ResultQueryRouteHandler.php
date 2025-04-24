@@ -1,19 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
+use Override;
 use JsonException;
 use ReflectionException;
-use LessHttp\Response\ErrorResponse;
-use LessResource\Model\ResourceModel;
+use LesHttp\Response\ErrorResponse;
+use LesResource\Model\ResourceModel;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
-use LessResource\Repository\Exception\NoResource;
-use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
-use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
+use LesResource\Repository\Exception\NoResource;
+use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
+use LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 
 #[DocTypeWrapper(ResultTypeDocumentWrapper::class)]
 final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
@@ -24,6 +25,7 @@ final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
      * @throws ReflectionException
      * @throws JsonException
      */
+    #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         try {
@@ -49,6 +51,7 @@ final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
     /**
      * @throws JsonException
      */
+    #[Override]
     protected function makeResponse(mixed $output): ResponseInterface
     {
         assert($output instanceof ResourceModel);
