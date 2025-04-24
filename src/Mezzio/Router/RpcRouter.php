@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio\Router;
+namespace LesAbstractService\Mezzio\Router;
 
+use Override;
 use Laminas\Stratigility\Middleware\RequestHandlerMiddleware;
 use Mezzio\Router\Route;
 use Mezzio\Router\RouteResult;
@@ -25,6 +26,7 @@ final class RpcRouter implements RouterInterface
         private readonly array $routes,
     ) {}
 
+    #[Override]
     public function addRoute(Route $route): void
     {
         throw new RuntimeException();
@@ -34,6 +36,7 @@ final class RpcRouter implements RouterInterface
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
+    #[Override]
     public function match(Request $request): RouteResult
     {
         $method = $request->getMethod();
@@ -62,6 +65,7 @@ final class RpcRouter implements RouterInterface
      * @param array<mixed> $substitutions
      * @param array<mixed> $options
      */
+    #[Override]
     public function generateUri(string $name, array $substitutions = [], array $options = []): string
     {
         throw new RuntimeException();

@@ -1,21 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Http\Condition;
+namespace LesAbstractService\Permission\Http\Condition;
 
+use Override;
 use Psr\Http\Message\ServerRequestInterface;
-use LessValueObject\Composite\ForeignReference;
-use LessHttp\Middleware\Condition\Constraint\ConditionConstraint;
-use LessAbstractService\Permission\Repository\PermissionsRepository;
-use LessHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
-use LessHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
-use LessHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
+use LesValueObject\Composite\ForeignReference;
+use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
+use LesAbstractService\Permission\Repository\PermissionsRepository;
+use LesHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
+use LesHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
+use LesHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
 final class HasNoPermissionsCondition implements ConditionConstraint
 {
     public function __construct(private readonly PermissionsRepository $permissionsRepository)
     {}
 
+    #[Override]
     public function satisfies(ServerRequestInterface $request): ConditionConstraintResult
     {
         $body = $request->getParsedBody();

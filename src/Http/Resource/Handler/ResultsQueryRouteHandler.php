@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
+use Override;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
-use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
-use LessDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
+use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
+use LesDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
 
 #[DocTypeWrapper(ResultsTypeDocumentWrapper::class)]
 final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
@@ -14,6 +15,7 @@ final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
     /**
      * @throws JsonException
      */
+    #[Override]
     protected function makeResponse(mixed $output): ResponseInterface
     {
         assert(is_iterable($output));

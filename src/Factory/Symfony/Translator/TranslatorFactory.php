@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Factory\Symfony\Translator;
+namespace LesAbstractService\Factory\Symfony\Translator;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Translation\Translator;

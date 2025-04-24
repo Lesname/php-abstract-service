@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio;
+namespace LesAbstractService\Mezzio;
 
-use LessHttp\Middleware\Locale\LocaleMiddleware;
+use LesHttp\Middleware\Locale\LocaleMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
-use LessHttp\Middleware\Analytics\AnalyticsMiddleware;
-use LessHttp\Middleware\Condition\ConditionMiddleware;
-use LessHttp\Middleware\Authentication\AuthenticationMiddleware;
-use LessHttp\Middleware\Authorization\AuthorizationMiddleware;
-use LessHttp\Middleware\Cors\CorsMiddleware;
-use LessHttp\Middleware\Throttle\ThrottleMiddleware;
-use LessHttp\Middleware\TrimMiddleware;
-use LessHttp\Middleware\Validation\ValidationMiddleware;
+use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
+use LesHttp\Middleware\Condition\ConditionMiddleware;
+use LesHttp\Middleware\Authentication\AuthenticationMiddleware;
+use LesHttp\Middleware\Authorization\AuthorizationMiddleware;
+use LesHttp\Middleware\Cors\CorsMiddleware;
+use LesHttp\Middleware\Throttle\ThrottleMiddleware;
+use LesHttp\Middleware\TrimMiddleware;
+use LesHttp\Middleware\Validation\ValidationMiddleware;
 use Mezzio\Application;
 use Mezzio\Handler\NotFoundHandler;
 use Mezzio\Helper\BodyParams\BodyParamsMiddleware;

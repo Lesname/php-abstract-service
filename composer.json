@@ -1,5 +1,5 @@
 {
-  "name": "lessname/abstract-service",
+  "name": "lesname/abstract-service",
   "license": "MIT",
   "require": {
     "php": "^8.4.0",
@@ -8,27 +8,25 @@
 
     "psr/http-server-handler": "^1.0.0",
 
-    "lessname/documentor": "^0.4.0",
-    "lessname/resource": "^0.5.0",
-    "lessname/domain": "^0.5.0",
-    "lessname/validator": "^0.5.0",
-    "lessname/queue": "^0.7.0",
-    "lessname/http": "^0.6.0",
-    "lessname/value-object": "^0.4.0",
+    "lesname/documentor": "^0.5.0",
+    "lesname/resource": "^0.6.0",
+    "lesname/domain": "^0.6.0",
+    "lesname/validator": "^0.6.0",
+    "lesname/queue": "^0.8.0",
+    "lesname/http": "^0.7.0",
+    "lesname/value-object": "^0.5.0",
 
-    "lessname/abstract-client": "^0.4.0",
-
-    "laminas/laminas-stratigility": "^3.0.0",
-    "laminas/laminas-router": "^3.0.0",
-    "laminas/laminas-cli": "^1.0.0",
+    "lesname/abstract-client": "^0.5.0",
 
     "mezzio/mezzio": "^3.20.0",
-    "mezzio/mezzio-router": "^3.0.0",
     "mezzio/mezzio-helpers": "^5.0.0",
-    "mezzio/mezzio-laminasrouter": "^3.0.0",
+
+    "laminas/laminas-cli": "^1.0.0",
 
     "monolog/monolog": "^3.0.0",
     "sentry/sdk": "^4.0.0",
+
+    "symfony/console": "^7.0.0",
 
     "psr/http-message": "^1.0.0 || ^2.0.0",
     "psr/container": "^1.0.0 || ^2.0.0"
@@ -37,13 +35,13 @@
     "squizlabs/php_codesniffer": "^3.7.0",
     "phpstan/phpstan": "^2.0.0",
 
-    "lessname/token": "^0.3.0",
+    "lesname/token": "^0.4.0",
 
     "php-amqplib/php-amqplib": "^3.0.0"
   },
   "autoload": {
     "psr-4": {
-      "LessAbstractService\\": "src/"
+      "LesAbstractService\\": "src/"
     }
   }
 }

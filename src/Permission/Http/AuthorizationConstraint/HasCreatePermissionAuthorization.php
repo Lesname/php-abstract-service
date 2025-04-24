@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Http\AuthorizationConstraint;
+namespace LesAbstractService\Permission\Http\AuthorizationConstraint;
 
-use LessAbstractService\Permission\Model\Permission;
+use Override;
+use LesAbstractService\Permission\Model\Permission;
 
 final class HasCreatePermissionAuthorization extends AbstractPermissionAuthorization
 {
+    #[Override]
     protected function hasPermissionFlag(Permission $permission): bool
     {
         return $permission->attributes->flags->create;

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Middleware\Throttle;
+namespace LesAbstractService\Middleware\Throttle;
 
-use LessHttp\Middleware\Throttle\Parameter\By;
+use LesHttp\Middleware\Throttle\Parameter\By;
 
 final class ThrottleBuilder
 {

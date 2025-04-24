@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Config;
+namespace LesAbstractService\Permission\Config;
 
-use LessDomain\Event\Publisher\FifoPublisherFactory;
-use LessAbstractService\Permission\Event;
-use LessAbstractService\Permission\Cli;
-use LessAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
-use LessAbstractService\Permission\Repository;
-use LessAbstractService\Factory\Container\ReflectionFactory;
-use LessAbstractService\Permission\Http\Condition;
-use LessAbstractService\Permission\Http\AuthorizationConstraint;
+use LesDomain\Event\Publisher\FifoPublisherFactory;
+use LesAbstractService\Permission\Event;
+use LesAbstractService\Permission\Cli;
+use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
+use LesAbstractService\Permission\Repository;
+use LesAbstractService\Factory\Container\ReflectionFactory;
+use LesAbstractService\Permission\Http\Condition;
+use LesAbstractService\Permission\Http\AuthorizationConstraint;
 
 final class ConfigProvider
 {

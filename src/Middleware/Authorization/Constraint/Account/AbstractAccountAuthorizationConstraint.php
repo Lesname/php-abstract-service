@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Middleware\Authorization\Constraint\Account;
+namespace LesAbstractService\Middleware\Authorization\Constraint\Account;
 
-use LessAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthorizationConstraint;
+use Override;
+use LesAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthorizationConstraint;
 
 abstract class AbstractAccountAuthorizationConstraint extends AbstractTypeAuthorizationConstraint
 {
+    #[Override]
     protected function getAllowedType(): string
     {
         return 'identity.account';

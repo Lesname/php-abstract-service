@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Mezzio\Listener;
+namespace LesAbstractService\Mezzio\Listener;
 
 use Throwable;
 use Sentry\State\Scope;

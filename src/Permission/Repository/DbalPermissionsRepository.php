@@ -1,25 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Permission\Repository;
+namespace LesAbstractService\Permission\Repository;
 
+use Override;
 use JsonException;
-use LessHydrator\Hydrator;
+use LesHydrator\Hydrator;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Connection;
-use LessResource\Set\ResourceSet;
+use LesResource\Set\ResourceSet;
 use Doctrine\DBAL\Query\QueryBuilder;
-use LessValueObject\Composite\Paginate;
-use LessValueObject\Composite\ForeignReference;
-use LessResource\Repository\Exception\NoResource;
-use LessAbstractService\Permission\Model\Permission;
-use LessDatabase\Query\Builder\Applier\PaginateApplier;
-use LessResource\Repository\Dbal\Applier\ResourceApplier;
-use LessResource\Repository\AbstractDbalResourceRepository;
-use LessAbstractService\Permission\Repository\Parameter\Flags;
-use LessAbstractService\Permission\Repository\Dbal\PermissionApplier;
-use LessAbstractService\Permission\Repository\Exception\NoPermissionWithId;
-use LessAbstractService\Permission\Repository\Exception\NoPermissionWithIdentity;
+use LesValueObject\Composite\Paginate;
+use LesValueObject\Composite\ForeignReference;
+use LesResource\Repository\Exception\NoResource;
+use LesAbstractService\Permission\Model\Permission;
+use LesDatabase\Query\Builder\Applier\PaginateApplier;
+use LesResource\Repository\Dbal\Applier\ResourceApplier;
+use LesResource\Repository\AbstractDbalResourceRepository;
+use LesAbstractService\Permission\Repository\Parameter\Flags;
+use LesAbstractService\Permission\Repository\Dbal\PermissionApplier;
+use LesAbstractService\Permission\Repository\Exception\NoPermissionWithId;
+use LesAbstractService\Permission\Repository\Exception\NoPermissionWithIdentity;
 
 /**
  * @extends AbstractDbalResourceRepository<Permission>
@@ -39,6 +40,7 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
      * @throws Exception
      * @throws JsonException
      */
+    #[Override]
     public function getWithIdentity(ForeignReference $identity): Permission
     {
         $builder = $this->createResourceBuilder();
@@ -54,6 +56,7 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
     /**
      * @throws Exception
      */
+    #[Override]
     public function existsWithIdentity(ForeignReference $identity): bool
     {
         $builder = $this->createBaseBuilder();
@@ -75,6 +78,7 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
      * @throws Exception
      * @throws JsonException
      */
+    #[Override]
     public function getWithFlags(Flags $flags, Paginate $paginate): ResourceSet
     {
         $builder = $this->createResourceBuilder();
@@ -90,16 +94,19 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
         return $this->getResourceSetFromBuilder($builder);
     }
 
+    #[Override]
     protected function getResourceApplier(): ResourceApplier
     {
         return new PermissionApplier($this->serviceName);
     }
 
+    #[Override]
     protected function getResourceModelClass(): string
     {
         return Permission::class;
     }
 
+    #[Override]
     protected function getNoResourceWithIdClass(): string
     {
         return NoPermissionWithId::class;

@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
-use LessHydrator\Hydrator;
-use LessDomain\Event\Event;
-use LessDomain\Event\Store\Store;
+use Override;
+use LesHydrator\Hydrator;
+use LesDomain\Event\Event;
+use LesDomain\Event\Store\Store;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInputProvided;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesDocumentor\Route\Attribute\DocInputProvided;
 
 #[DocInputProvided(['occurredOn', 'headers'])]
 #[DocHttpResponse(code: 204)]
@@ -31,6 +32,7 @@ final class UpdateEventRouteHandler extends AbstractEventRouteHandler
         parent::__construct($hydrator, $store, $routes);
     }
 
+    #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface
     {
         return $this->responseFactory->createResponse(204);

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler\Helper;
+namespace LesAbstractService\Http\Resource\Handler\Helper;
 
-use LessHydrator\Hydrator;
-use LessValueObject\ValueObject;
-use LessHydrator\ReflectionHydrator;
+use LesHydrator\Hydrator;
+use LesValueObject\ValueObject;
+use LesHydrator\ReflectionHydrator;
 use Psr\Http\Message\ServerRequestInterface;
 
 trait HydrateParametersHelper

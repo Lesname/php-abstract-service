@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Documentor;
+namespace LesAbstractService\Cli\Documentor;
 
 use RuntimeException;
-use LessDocumentor\Route\RouteDocumentor;
+use LesDocumentor\Route\RouteDocumentor;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

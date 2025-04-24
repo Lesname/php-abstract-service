@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Queue;
+namespace LesAbstractService\Cli\Queue;
 
-use LessQueue\Queue;
+use LesQueue\Queue;
 use RuntimeException;
-use LessQueue\Worker\Worker;
+use LesQueue\Worker\Worker;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;

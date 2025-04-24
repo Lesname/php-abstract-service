@@ -1,26 +1,27 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Http\Resource\Handler;
+namespace LesAbstractService\Http\Resource\Handler;
 
+use Override;
 use JsonException;
-use LessHydrator\Hydrator;
-use LessDomain\Event\Event;
-use LessDomain\Event\Store\Store;
+use LesHydrator\Hydrator;
+use LesDomain\Event\Event;
+use LesDomain\Event\Store\Store;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
 use Psr\Http\Message\ResponseFactoryInterface;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\NotMultipleOf;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInputProvided;
-use LessValueObject\String\Format\Exception\NotFormat;
-use LessDomain\Identifier\Generator\IdentifierGenerator;
-use LessAbstractService\Http\Resource\Handler\Response\CreatedResponse;
+use LesValueObject\Number\Exception\MaxOutBounds;
+use LesValueObject\Number\Exception\MinOutBounds;
+use LesValueObject\Number\Exception\NotMultipleOf;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesDocumentor\Route\Attribute\DocInputProvided;
+use LesValueObject\String\Format\Exception\NotFormat;
+use LesDomain\Identifier\Generator\IdentifierGenerator;
+use LesAbstractService\Http\Resource\Handler\Response\CreatedResponse;
 
 #[DocInputProvided(['id', 'occurredOn', 'headers'])]
 #[DocHttpResponse(CreatedResponse::class, 201)]
@@ -44,6 +45,7 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
     /**
      * @throws JsonException
      */
+    #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface
     {
         assert(isset($event->id));
@@ -75,6 +77,7 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
      * @throws NotMultipleOf
      * @throws MaxOutBounds
      */
+    #[Override]
     protected function getEventData(ServerRequestInterface $request): array
     {
         $data = parent::getEventData($request);

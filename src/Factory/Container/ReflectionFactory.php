@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Factory\Container;
+namespace LesAbstractService\Factory\Container;
 
+use Closure;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -16,19 +17,17 @@ final class ReflectionFactory
 {
     /**
      * @param ContainerInterface $container
-     * @param ReflectionMethod|null $constructor
+     * @param ReflectionMethod $constructor
      *
-     * @return iterable<object|null>
+     * @return iterable<mixed>
      *
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
-    private function getParameters(ContainerInterface $container, ?ReflectionMethod $constructor): iterable
+    private function getParameters(ContainerInterface $container, ReflectionMethod $constructor): iterable
     {
-        if ($constructor instanceof ReflectionMethod) {
-            foreach ($constructor->getParameters() as $parameter) {
-                yield $this->getParameterDependency($container, $parameter);
-            }
+        foreach ($constructor->getParameters() as $parameter) {
+            yield $this->getParameterDependency($container, $parameter);
         }
     }
 
@@ -36,7 +35,7 @@ final class ReflectionFactory
      * @throws NotFoundExceptionInterface
      * @throws ContainerExceptionInterface
      */
-    private function getParameterDependency(ContainerInterface $container, ReflectionParameter $parameter): ?object
+    private function getParameterDependency(ContainerInterface $container, ReflectionParameter $parameter): mixed
     {
         $type = $parameter->getType();
         assert($type instanceof ReflectionNamedType);
@@ -47,7 +46,7 @@ final class ReflectionFactory
         }
 
         try {
-            $result = $container->get($type->getName());
+            return  $container->get($type->getName());
         } catch (NotFoundExceptionInterface $e) {
             if ($parameter->allowsNull()) {
                 return null;
@@ -55,10 +54,6 @@ final class ReflectionFactory
 
             throw $e;
         }
-
-        assert(is_object($result));
-
-        return $result;
     }
 
     /**
@@ -70,14 +65,27 @@ final class ReflectionFactory
      * @template T of object
      *
      * @throws ReflectionException
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
      */
     public function __invoke(ContainerInterface $container, string $name)
     {
         $reflection = new ReflectionClass($name);
-        $constructor = $reflection->getConstructor();
 
-        return new $name(...$this->getParameters($container, $constructor));
+        return $reflection->newLazyProxy($this->createFactory($reflection, $container));
+    }
+
+    /**
+     * @param ReflectionClass<object> $class
+     */
+    private function createFactory(ReflectionClass $class, ContainerInterface $container): Closure
+    {
+        return function () use ($class, $container) {
+            $constructor = $class->getConstructor();
+
+            $parameters = $constructor
+                ? $this->getParameters($container, $constructor)
+                : [];
+
+            return $class->newInstance(...$parameters);
+        };
     }
 }

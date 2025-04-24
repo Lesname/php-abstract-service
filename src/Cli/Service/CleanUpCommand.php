@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessAbstractService\Cli\Service;
+namespace LesAbstractService\Cli\Service;
 
+use Override;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Command\Command;
@@ -19,6 +20,7 @@ final class CleanUpCommand extends Command
     /**
      * @throws Exception
      */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->cleanUpEventStore();
