@@ -14,7 +14,6 @@ use Doctrine\DBAL\Connection;
 use Sentry\State\HubInterface;
 use LesCache\Redis\RedisCache;
 use LesToken\Codec\TokenCodec;
-use LesQueue\Worker\PingWorker;
 use LesDomain\Event\Store\Store;
 use Mezzio\Router\RouterInterface;
 use Psr\SimpleCache\CacheInterface;
@@ -30,7 +29,6 @@ use LesDatabase\Factory\ConnectionFactory;
 use LesHttp\Middleware\Cors\CorsMiddleware;
 use Symfony\Component\Translation\Translator;
 use LesDocumentor\Route\LesRouteDocumentor;
-use LesDomain\Event\Publisher\FifoPublisher;
 use LesHttp\Middleware\Locale\LocaleMiddleware;
 use LesAbstractService\Mezzio\Router\RpcRouter;
 use Laminas\Stratigility\Middleware\ErrorHandler;
@@ -38,7 +36,6 @@ use LesAbstractService\Factory\Logger\HubFactory;
 use LesHttp\Middleware\Cors\CorsMiddlewareFactory;
 use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
-use LesDomain\Event\Publisher\FifoPublisherFactory;
 use LesHttp\Middleware\Throttle\ThrottleMiddleware;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use LesHttp\Middleware\Condition\ConditionMiddleware;
@@ -52,6 +49,7 @@ use LesAbstractService\Http\Queue\Handler\DeleteHandler;
 use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
 use LesHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
+use LesDomain\Event\Publisher\FiberSubscriptionsPublisher;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
 use LesAbstractService\Http\Queue\Handler\ReanimateHandler;
@@ -64,6 +62,7 @@ use LesHttp\Middleware\Authentication\AuthenticationMiddleware;
 use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LesHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
+use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
 use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
@@ -101,7 +100,7 @@ final class ConfigProvider
 
                     Queue\Queue::class => Queue\DbalQueue::class,
 
-                    Publisher::class => FifoPublisher::class,
+                    Publisher::class => FiberSubscriptionsPublisher::class,
 
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
@@ -136,8 +135,6 @@ final class ConfigProvider
                     GuestAuthorizationConstraint::class => GuestAuthorizationConstraint::class,
                     NoOneAuthorizationConstraint::class => NoOneAuthorizationConstraint::class,
 
-                    PingWorker::class => PingWorker::class,
-
                     AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class => AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class,
                     AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class => AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class,
                     AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
@@ -155,7 +152,7 @@ final class ConfigProvider
                     Queue\RabbitMqQueue::class => RabbitMqQueueFactory::class,
                     Queue\DbalQueue::class => ReflectionFactory::class,
 
-                    FifoPublisher::class => FifoPublisherFactory::class,
+                    FiberSubscriptionsPublisher::class => AbstractSubscriptionsPublisherFactory::class,
 
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
@@ -217,9 +214,6 @@ final class ConfigProvider
             ],
             'routes' => [
                 ...$this->composeQueueRoutes(),
-            ],
-            'workers' => [
-                'queue:ping' => PingWorker::class,
             ],
             LocaleMiddleware::class => [
                 'defaultLocale' => 'nl_NL',
