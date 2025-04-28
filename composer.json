@@ -37,11 +37,18 @@
 
     "lesname/token": "^0.4.0",
 
-    "php-amqplib/php-amqplib": "^3.0.0"
+    "php-amqplib/php-amqplib": "^3.0.0",
+    "phpstan/extension-installer": "^1.4",
+    "phpstan/phpstan-deprecation-rules": "^2.0"
   },
   "autoload": {
     "psr-4": {
       "LesAbstractService\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "phpstan/extension-installer": true
     }
   }
 }

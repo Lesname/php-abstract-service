@@ -53,7 +53,7 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
         $body = $this->streamFactory->createStream(
             json_encode(
                 [
-                    'type' => "{$this->projectName}.{$event->getTarget()}",
+                    'type' => "{$this->projectName}.{$event->target}",
                     'id' => $event->id,
                 ],
                 JSON_THROW_ON_ERROR,

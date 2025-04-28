@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Permission\Config;
 
-use LesDomain\Event\Publisher\FifoPublisherFactory;
 use LesAbstractService\Permission\Event;
 use LesAbstractService\Permission\Cli;
 use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
@@ -11,6 +10,7 @@ use LesAbstractService\Permission\Repository;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Permission\Http\Condition;
 use LesAbstractService\Permission\Http\AuthorizationConstraint;
+use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
 
 final class ConfigProvider
 {
@@ -44,7 +44,7 @@ final class ConfigProvider
                     AuthorizationConstraint\HasUpdatePermissionAuthorization::class => ReflectionFactory::class,
                 ],
             ],
-            FifoPublisherFactory::CONFIG_KEY => [
+            AbstractSubscriptionsPublisherFactory::CONFIG_KEY => [
                 Event\Listener\DbalListener::class => [
                     Event\GrantedEvent::class,
                     Event\UpdatedEvent::class,
