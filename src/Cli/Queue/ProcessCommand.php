@@ -8,6 +8,7 @@ use LesQueue\Job\Job;
 use LesQueue\Job\Property\Name;
 use LesQueue\Queue;
 use LesQueue\Worker\Worker;
+use LesQueue\Exception\DecodeFailed;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -22,6 +23,8 @@ final class ProcessCommand extends Command
 {
     /** @var array<string, Worker|string> */
     private array $workerMap;
+
+    private bool $stopped = false;
 
     /**
      * @param array<string, Worker|string> $workerMap
@@ -40,41 +43,57 @@ final class ProcessCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->queue->process(
-            function (Job $job) use ($output) {
-                if ($job->name->value === 'queue:quit') {
-                    $output->writeln('Queue quit');
-                    $this->queue->stopProcessing();
+        do {
+            try {
+                $this->queue->process($this->getProcessor($output));
+            } catch (DecodeFailed $exception) {
+                $this->queue->delete($exception->id);
 
-                    $this->queue->delete($job);
-                } else {
-                    if ($output->isVerbose()) {
-                        $output->writeln("process: {$job->name}");
-                    }
-
-                    try {
-                        $this
-                            ->getWorkerForJob($job->name)
-                            ->process($job);
-
-                        $this->queue->delete($job);
-                    } catch (Throwable $e) {
-                        $this->queue->bury($job);
-
-                        if ($output->isVerbose()) {
-                            throw $e;
-                        }
-
-                        $this->logger->critical(
-                            'Failed processing job',
-                            ['exception' => $e],
-                        );
-                    }
-                }
+                $this->logger->critical(
+                    $exception->getMessage(),
+                    ['exception' => $exception],
+                );
             }
-        );
+        } while (!$this->stopped);
+
 
         return Command::SUCCESS;
+    }
+
+    private function getProcessor(OutputInterface $output): callable
+    {
+        return function (Job $job) use ($output) {
+            if ($job->name->value === 'queue:quit') {
+                $output->writeln('Queue quit');
+                $this->queue->stopProcessing();
+                $this->stopped = true;
+
+                $this->queue->delete($job);
+            } else {
+                if ($output->isVerbose()) {
+                    $output->writeln("process: {$job->name}");
+                }
+
+                try {
+                    $this
+                        ->getWorkerForJob($job->name)
+                        ->process($job);
+
+                    $this->queue->delete($job);
+                } catch (Throwable $e) {
+                    $this->queue->bury($job);
+
+                    if ($output->isVerbose()) {
+                        throw $e;
+                    }
+
+                    $this->logger->critical(
+                        'Failed processing job',
+                        ['exception' => $e],
+                    );
+                }
+            }
+        };
     }
 
     /**
