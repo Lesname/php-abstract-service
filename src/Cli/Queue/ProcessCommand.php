@@ -24,8 +24,6 @@ final class ProcessCommand extends Command
     /** @var array<string, Worker|string> */
     private array $workerMap;
 
-    private bool $stopped = false;
-
     /**
      * @param array<string, Worker|string> $workerMap
      */
@@ -43,19 +41,7 @@ final class ProcessCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        do {
-            try {
-                $this->queue->process($this->getProcessor($output));
-            } catch (DecodeFailed $exception) {
-                $this->queue->delete($exception->id);
-
-                $this->logger->critical(
-                    $exception->getMessage(),
-                    ['exception' => $exception],
-                );
-            }
-        } while (!$this->stopped);
-
+        $this->queue->process($this->getProcessor($output));
 
         return Command::SUCCESS;
     }
@@ -66,7 +52,6 @@ final class ProcessCommand extends Command
             if ($job->name->value === 'queue:quit') {
                 $output->writeln('Queue quit');
                 $this->queue->stopProcessing();
-                $this->stopped = true;
 
                 $this->queue->delete($job);
             } else {
