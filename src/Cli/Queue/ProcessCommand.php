@@ -38,10 +38,19 @@ final class ProcessCommand extends Command
         $this->workerMap = $workerMap;
     }
 
+    /**
+     * @throws DecodeFailed
+     */
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->queue->process($this->getProcessor($output));
+        try {
+            $this->queue->process($this->getProcessor($output));
+        } catch (DecodeFailed $exception) {
+            $this->queue->delete($exception->id);
+
+            throw $exception;
+        }
 
         return Command::SUCCESS;
     }
