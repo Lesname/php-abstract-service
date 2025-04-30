@@ -321,7 +321,7 @@ final class WriteCommand extends Command
                 NumberTypeDocument::class => $this->composeNumberDocument($typeDocument),
                 StringTypeDocument::class => $this->composeStringDocument($typeDocument),
                 ReferenceTypeDocument::class => $this->composeReferenceDocument($typeDocument),
-                UnionTypeDocument::class => $this->compaseUnionDocument($typeDocument, $useRef),
+                UnionTypeDocument::class => $this->compaseUnionDocument($typeDocument),
                 default => throw new RuntimeException($typeDocument::class),
             };
 
@@ -555,11 +555,25 @@ final class WriteCommand extends Command
         return $document;
     }
 
+    /**
+     * @return array<mixed>
+     */
     private function composeReferenceDocument(ReferenceTypeDocument $typeDocument): array
     {
-        return ['$ref' => '#/components/schemas/' . $this->getReferenceName($typeDocument->getReference())];
+        $reference = $typeDocument->getReference();
+
+        if (!is_string($reference)) {
+            throw new RuntimeException("No reference provided");
+        }
+
+        return ['$ref' => '#/components/schemas/' . $this->getReferenceName($reference)];
     }
 
+    /**
+     * @return array<mixed>
+     *
+     * @throws ReflectionException
+     */
     private function compaseUnionDocument(UnionTypeDocument $typeDocument): array
     {
         return [
