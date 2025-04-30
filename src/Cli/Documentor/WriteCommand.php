@@ -17,7 +17,9 @@ use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\RouteDocumentor;
 use LesValueObject\String\Format\Resource\Type;
 use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesValueObject\String\Format\Resource\Identifier;
+use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\EnumTypeDocument;
@@ -206,7 +208,13 @@ final class WriteCommand extends Command
             assert(is_string($reference));
 
             if (isset($document[$this->getReferenceName($reference)])) {
-                continue;
+                if (!isset($document[$this->getReferenceName($reference)]['$ref'])) {
+                    continue;
+                }
+
+                if ($schema instanceof ReferenceTypeDocument) {
+                    continue;
+                }
             }
 
             $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
@@ -244,6 +252,10 @@ final class WriteCommand extends Command
             }
         } elseif ($typeDocument instanceof CollectionTypeDocument) {
             yield from $this->getSchemasFromTypeDocument($typeDocument->item);
+        } elseif ($typeDocument instanceof UnionTypeDocument) {
+            foreach ($typeDocument->subTypes as $subType) {
+                yield from $this->getSchemasFromTypeDocument($subType);
+            }
         }
 
         if ($this->isReference($typeDocument)) {
@@ -308,6 +320,8 @@ final class WriteCommand extends Command
                 EnumTypeDocument::class => $this->composeEnumDocument($typeDocument),
                 NumberTypeDocument::class => $this->composeNumberDocument($typeDocument),
                 StringTypeDocument::class => $this->composeStringDocument($typeDocument),
+                ReferenceTypeDocument::class => $this->composeReferenceDocument($typeDocument),
+                UnionTypeDocument::class => $this->compaseUnionDocument($typeDocument, $useRef),
                 default => throw new RuntimeException($typeDocument::class),
             };
 
@@ -539,6 +553,21 @@ final class WriteCommand extends Command
         }
 
         return $document;
+    }
+
+    private function composeReferenceDocument(ReferenceTypeDocument $typeDocument): array
+    {
+        return ['$ref' => '#/components/schemas/' . $this->getReferenceName($typeDocument->getReference())];
+    }
+
+    private function compaseUnionDocument(UnionTypeDocument $typeDocument): array
+    {
+        return [
+            'anyOf' => array_map(
+                fn (TypeDocument $subType) => $this->composeTypeDocument($subType, true),
+                $typeDocument->subTypes,
+            ),
+        ];
     }
 
     /**
