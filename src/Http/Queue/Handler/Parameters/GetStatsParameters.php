@@ -10,4 +10,6 @@ use LesValueObject\Composite\AbstractCompositeValueObject;
  */
 final class GetStatsParameters extends AbstractCompositeValueObject
 {
+    public function __construct()
+    {}
 }
