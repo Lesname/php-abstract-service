@@ -269,7 +269,7 @@ final class ConfigProvider
         yield from $builder->buildResultQueryRoute('countProcessable');
         yield from $builder->buildResultQueryRoute('countBuried');
         yield from $builder->buildResultsQueryRoute('getBuried');
-        yield from $builder->buildRoute('getBuried', Category::Query, Http\Queue\Handler\GetStatsHandler::class);
+        yield from $builder->buildRoute('getStats', Category::Query, Http\Queue\Handler\GetStatsHandler::class);
 
         yield from $builder->buildRoute('reanimate', Category::Command, Http\Queue\Handler\ReanimateHandler::class);
         yield from $builder->buildRoute('delete', Category::Command, Http\Queue\Handler\DeleteHandler::class);
