@@ -45,14 +45,13 @@ use LesHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LesAbstractService\Mezzio\Router\RpcRouterFactory;
 use LesDomain\Identifier\Generator\IdentifierGenerator;
 use LesHttp\Middleware\Validation\ValidationMiddleware;
-use LesAbstractService\Http\Queue\Handler\DeleteHandler;
+use LesAbstractService\Http;
 use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
 use LesHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
 use LesDomain\Event\Publisher\FiberSubscriptionsPublisher;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
-use LesAbstractService\Http\Queue\Handler\ReanimateHandler;
 use LesHttp\Middleware\Condition\ConditionMiddlewareFactory;
 use LesDomain\Identifier\Generator\Uuid6IdentifierGenerator;
 use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
@@ -63,22 +62,13 @@ use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LesHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
-use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
-use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
-use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
 use LesHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
-use LesAbstractService\Http\Resource\Handler\QueryRouteHandlerFactory;
-use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
-use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandlerFactory;
-use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandlerFactory;
 use LesHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LesHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
 use LesHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
 use LesHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
 use LesAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
-use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
-use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory;
 
 final class ConfigProvider
 {
@@ -162,18 +152,19 @@ final class ConfigProvider
                     AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
                     ConditionMiddleware::class => ConditionMiddlewareFactory::class,
 
-                    DeleteHandler::class => ReflectionFactory::class,
-                    ReanimateHandler::class => ReflectionFactory::class,
+                    Http\Queue\Handler\DeleteHandler::class => ReflectionFactory::class,
+                    Http\Queue\Handler\ReanimateHandler::class => ReflectionFactory::class,
+                    Http\Queue\Handler\GetStatsHandler::class => ReflectionFactory::class,
 
-                    CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,
-                    UpdateEventRouteHandler::class => UpdateEventRouteHandlerFactory::class,
+                    Http\Resource\Handler\CreateEventRouteHandler::class => Http\Resource\Handler\CreateEventRouteHandlerFactory::class,
+                    Http\Resource\Handler\UpdateEventRouteHandler::class => Http\Resource\Handler\UpdateEventRouteHandlerFactory::class,
 
-                    ResultsQueryRouteHandler::class => QueryRouteHandlerFactory::class,
-                    ResultQueryRouteHandler::class => QueryRouteHandlerFactory::class,
+                    Http\Resource\Handler\ResultsQueryRouteHandler::class => Http\Resource\Handler\QueryRouteHandlerFactory::class,
+                    Http\Resource\Handler\ResultQueryRouteHandler::class => Http\Resource\Handler\QueryRouteHandlerFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    ExistsResourceConditionConstraint::class => ExistsResourceConditionConstraintFactory::class,
+                    Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class => Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory::class,
 
                     Cli\Cache\ClearCommand::class => ReflectionFactory::class,
 
@@ -278,8 +269,9 @@ final class ConfigProvider
         yield from $builder->buildResultQueryRoute('countProcessable');
         yield from $builder->buildResultQueryRoute('countBuried');
         yield from $builder->buildResultsQueryRoute('getBuried');
+        yield from $builder->buildRoute('getBuried', Category::Query, Http\Queue\Handler\GetStatsHandler::class);
 
-        yield from $builder->buildRoute('reanimate', Category::Command, ReanimateHandler::class);
-        yield from $builder->buildRoute('delete', Category::Command, DeleteHandler::class);
+        yield from $builder->buildRoute('reanimate', Category::Command, Http\Queue\Handler\ReanimateHandler::class);
+        yield from $builder->buildRoute('delete', Category::Command, Http\Queue\Handler\DeleteHandler::class);
     }
 }
