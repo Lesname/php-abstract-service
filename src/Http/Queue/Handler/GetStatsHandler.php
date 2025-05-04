@@ -48,7 +48,7 @@ final class GetStatsHandler implements RequestHandlerInterface
                 'buried' => $this
                     ->queue
                     ->getBuried(new Paginate(new PerPage(0), new Page(1)))
-                    ->count()
+                    ->count(),
             ],
         ];
 
