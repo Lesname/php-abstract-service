@@ -224,45 +224,51 @@ final class WriteCommand extends Command
     }
 
     /**
+     * Dont use nested calls, this prevents recursion within the routes
+     *
      * @return iterable<TypeDocument>
      */
     private function getSchemas(): iterable
     {
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
+            $routeSchemas = [];
 
-            yield from $this->getSchemasFromTypeDocument($routeDocument->input);
+            $docs = [$routeDocument->input];
 
             foreach ($routeDocument->responses as $response) {
                 if ($response->output) {
-                    yield from $this->getSchemasFromTypeDocument($response->output);
+                    $docs[] = $response->output;
                 }
             }
-        }
-    }
 
-    /**
-     * @return iterable<TypeDocument>
-     */
-    private function getSchemasFromTypeDocument(TypeDocument $typeDocument): iterable
-    {
-        if ($typeDocument instanceof CompositeTypeDocument) {
-            foreach ($typeDocument->properties as $property) {
-                yield from $this->getSchemasFromTypeDocument($property->type);
+            while (count($docs) > 0) {
+                $doc = array_shift($docs);
+
+                $reference = $doc->getReference();
+
+                if ($reference) {
+                    if (array_key_exists($reference, $routeSchemas)) {
+                        continue;
+                    }
+
+                    if ($this->isReference($doc)) {
+                        $routeSchemas[$reference] = $doc->withNullable(false);
+                    }
+                }
+
+                if ($doc instanceof CompositeTypeDocument) {
+                    foreach ($doc->properties as $property) {
+                        $docs[] = $property->type;
+                    }
+                } elseif ($doc instanceof CollectionTypeDocument) {
+                    $docs[] = $doc->item;
+                } elseif ($doc instanceof UnionTypeDocument) {
+                    $docs = array_merge($docs, $doc->subTypes);
+                }
             }
-        } elseif ($typeDocument instanceof CollectionTypeDocument) {
-            yield from $this->getSchemasFromTypeDocument($typeDocument->item);
-        } elseif ($typeDocument instanceof UnionTypeDocument) {
-            foreach ($typeDocument->subTypes as $subType) {
-                yield from $this->getSchemasFromTypeDocument($subType);
-            }
-        }
 
-        if ($this->isReference($typeDocument)) {
-            $reference = $typeDocument->getReference();
-            assert(is_string($reference));
-
-            yield $typeDocument->withNullable(false);
+            yield from $routeSchemas;
         }
     }
 
