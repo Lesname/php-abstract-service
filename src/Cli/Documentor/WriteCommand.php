@@ -176,9 +176,11 @@ final class WriteCommand extends Command
             try {
                 $routeDocument = $this->routeDocumentor->document($route);
 
-                $paths[(string)$routeDocument->path] = [
-                    $routeDocument->method->value => $this->composePathDocument($routeDocument),
-                ];
+                if (!isset($paths[(string)$routeDocument->path])) {
+                    $paths[(string)$routeDocument->path] = [];
+                }
+
+                $paths[(string)$routeDocument->path][$routeDocument->method->value] = $this->composePathDocument($routeDocument);
             } catch (Throwable $e) {
                 $path = isset($route['path']) && is_string($route['path'])
                     ? $route['path']
