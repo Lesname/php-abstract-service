@@ -354,9 +354,10 @@ final class WriteCommand extends Command
             (
                 in_array($class, self::SHARED_REFERENCES, true)
                 ||
-                str_contains($class, '\\Model\\')
-                ||
-                str_contains($class, '\\Repository\\')
+                preg_match(
+                    '#^([a-z]+\\\\){2,}(Model|Repository)\\\\#i',
+                    $class
+                ) === 1
             );
     }
 
