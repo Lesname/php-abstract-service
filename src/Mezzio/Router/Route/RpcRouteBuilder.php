@@ -193,7 +193,7 @@ final class RpcRouteBuilder
      */
     public function buildCreateEventRoute(string $action, string $event, string $handler = CreateEventRouteHandler::class): iterable
     {
-        yield from $this->buildEventRoute($action, $event, $handler);
+        yield from $this->buildEventRouteV2(Method::Put, $action, $event, $handler);
     }
 
     /**
@@ -206,7 +206,7 @@ final class RpcRouteBuilder
     {
         yield from $this
             ->withAddedCondition(ExistsResourceConditionConstraint::class)
-            ->buildEventRoute($action, $event, $handler);
+            ->buildEventRouteV2(Method::Patch, $action, $event, $handler);
     }
 
     /**
@@ -217,7 +217,7 @@ final class RpcRouteBuilder
      *
      * @deprecated
      */
-    public function buildEventRoute(string $method, string $event, string $handler): iterable
+    public function buildEventRoute(string $action, string $event, string $handler): iterable
     {
         assert($this->resourceRepository !== null);
 
@@ -225,7 +225,7 @@ final class RpcRouteBuilder
             ->withExtraOption('event', $event)
             ->withExtraOption('input', $event)
             ->buildRoute(
-                $method,
+                $action,
                 Category::Command,
                 $handler,
             );
@@ -237,26 +237,22 @@ final class RpcRouteBuilder
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildEventRouteV2(string $method, string $event, string $handler): iterable
+    public function buildEventRouteV2(Method $method, string $action, string $event, string $handler): iterable
     {
         assert($this->resourceRepository !== null);
 
         yield from $this
             ->withExtraOption('event', $event)
             ->withExtraOption('input', $event)
-            ->buildRoute(
-                $method,
-                Category::Command,
-                $handler,
-            );
+            ->buildRouteV2($method, $action, $handler);
     }
 
     /**
      * @return iterable<string, array<mixed>>
      */
-    public function buildResultQueryRoute(string $method): iterable
+    public function buildResultQueryRoute(string $action): iterable
     {
-        yield from $this->buildQueryRoute($method, ResultQueryRouteHandler::class);
+        yield from $this->buildQueryRoute($action, ResultQueryRouteHandler::class);
     }
 
     /**
@@ -272,19 +268,19 @@ final class RpcRouteBuilder
      *
      * @return iterable<string, array<mixed>>
      */
-    public function buildQueryRoute(string $method, string $handler): iterable
+    public function buildQueryRoute(string $action, string $handler): iterable
     {
         yield from $this
             ->withExtraOption(
                 'proxy',
                 [
                     'class' => $this->proxyClass,
-                    'method' => $method,
+                    'method' => $action,
                 ],
             )
-            ->buildRoute(
-                $method,
-                Category::Query,
+            ->buildRouteV2(
+                Method::Query,
+                $action,
                 $handler,
             );
     }
@@ -297,13 +293,13 @@ final class RpcRouteBuilder
      *
      * @deprecated
      */
-    public function buildRoute(string $method, Category $type, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(string $action, Category $type, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,
             $this->extraOptions,
             [
-                'path' => "/{$this->resourceName}.{$method}",
+                'path' => "/{$this->resourceName}.{$action}",
                 'authorizations' => $this->authorizations,
                 'resource' => $this->resourceName,
                 'middleware' => $handler,
@@ -318,7 +314,7 @@ final class RpcRouteBuilder
             }
         }
 
-        yield "POST:/{$this->resourceName}.{$method}" => $route;
+        yield "POST:/{$this->resourceName}.{$action}" => $route;
     }
 
     /**
@@ -334,18 +330,16 @@ final class RpcRouteBuilder
             $this->extraOptions,
             [
                 'path' => "/{$this->resourceName}.{$action}",
+                'resourceRepository' => $this->resourceRepository,
                 'authorizations' => $this->authorizations,
+                'conditions' => $this->conditions,
                 'resource' => $this->resourceName,
+                'validator' => $this->validator,
                 'middleware' => $handler,
                 'method' => $method->value,
+                'input' => $this->input,
             ],
         );
-
-        foreach (['resourceRepository', 'validator', 'input', 'conditions'] as $key) {
-            if ($this->{$key}) {
-                $route[$key] = $this->{$key};
-            }
-        }
 
         yield "{$method->value}:/{$this->resourceName}.{$action}" => $route;
     }
