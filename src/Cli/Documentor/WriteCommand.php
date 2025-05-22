@@ -282,10 +282,6 @@ final class WriteCommand extends Command
     private function composePathDocument(RouteDocument $routeDocument): array
     {
         return [
-            'tags' => [
-                $routeDocument->resource,
-                $routeDocument->category,
-            ],
             'deprecated' => $routeDocument->deprecated !== null,
             'requestBody' => [
                 'required' => true,
