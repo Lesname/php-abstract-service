@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LesAbstractService\Mezzio\Router;
 
 use Override;
+use LesDocumentor\Route\Document\Property\Method;
 use Laminas\Stratigility\Middleware\RequestHandlerMiddleware;
 use Mezzio\Router\Route;
 use Mezzio\Router\RouteResult;
@@ -18,8 +19,7 @@ use RuntimeException;
 final class RpcRouter implements RouterInterface
 {
     /**
-     * @param ContainerInterface $container
-     * @param array<mixed> $routes
+     * @param array<string, array<mixed>> $routes
      */
     public function __construct(
         private readonly ContainerInterface $container,
@@ -39,19 +39,15 @@ final class RpcRouter implements RouterInterface
     #[Override]
     public function match(Request $request): RouteResult
     {
-        $method = $request->getMethod();
-        $path = $request->getUri()->getPath();
+        $route = $this->findRoute($request);
 
-        if ($path === '') {
-            throw new RuntimeException();
-        }
-
-        if (!isset($this->routes["{$method}:{$path}"])) {
+        if ($route === null) {
             return RouteResult::fromRouteFailure(Route::HTTP_METHOD_ANY);
         }
 
-        $route = $this->routes["{$method}:{$path}"];
-        assert(is_array($route));
+        $path = $request->getUri()->getPath();
+        assert($path !== '');
+
         assert(is_string($route['middleware']));
 
         $handler = $this->container->get($route['middleware']);
@@ -61,7 +57,36 @@ final class RpcRouter implements RouterInterface
     }
 
     /**
-     * @param string $name
+     * @return array<mixed>|null
+     */
+    private function findRoute(Request $request): ?array
+    {
+        $method = $request->getMethod();
+        $path = $request->getUri()->getPath();
+
+        if (isset($this->routes["{$method}:{$path}"])) {
+            return $this->routes["{$method}:{$path}"];
+        }
+
+        if ($method === Method::Post->value) {
+            $tryMethods = [
+                Method::Query->value,
+                Method::Delete->value,
+                Method::Patch->value,
+                Method::Put->value,
+            ];
+
+            foreach ($tryMethods as $tryMethod) {
+                if (isset($this->routes["{$tryMethod}:{$path}"])) {
+                    return $this->routes["{$tryMethod}:{$path}"];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * @param array<mixed> $substitutions
      * @param array<mixed> $options
      */

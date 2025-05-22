@@ -19,6 +19,7 @@ final class RpcRouterFactory
         assert(is_array($config));
         assert(is_array($config['routes']));
 
+        /** @phpstan-ignore argument.type */
         return new RpcRouter($container, $config['routes']);
     }
 }
