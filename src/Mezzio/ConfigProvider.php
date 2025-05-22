@@ -33,8 +33,8 @@ use LesHttp\Middleware\Locale\LocaleMiddleware;
 use LesAbstractService\Mezzio\Router\RpcRouter;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LesAbstractService\Factory\Logger\HubFactory;
+use LesDocumentor\Route\Document\Property\Method;
 use LesHttp\Middleware\Cors\CorsMiddlewareFactory;
-use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
 use LesHttp\Middleware\Throttle\ThrottleMiddleware;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -213,6 +213,23 @@ final class ConfigProvider
                     'en_US',
                 ],
             ],
+            'cors' => [
+                'methods' => [
+                    Method::Post->value,
+                    Method::Put->value,
+                    Method::Patch->value,
+                    Method::Query->value,
+                    Method::Delete->value,
+                ],
+                'headers' => [
+                    'Accept-Language',
+                    'Authorization',
+                    'Content-Type',
+                    'If-Match',
+                    'x-build',
+                ],
+                'maxAge' => 3_600,
+            ],
         ];
     }
 
@@ -269,9 +286,9 @@ final class ConfigProvider
         yield from $builder->buildResultQueryRoute('countProcessable');
         yield from $builder->buildResultQueryRoute('countBuried');
         yield from $builder->buildResultsQueryRoute('getBuried');
-        yield from $builder->buildRoute('getStats', Category::Query, Http\Queue\Handler\GetStatsHandler::class);
+        yield from $builder->buildRouteV2(Method::Query, 'getStats', Http\Queue\Handler\GetStatsHandler::class);
 
-        yield from $builder->buildRoute('reanimate', Category::Command, Http\Queue\Handler\ReanimateHandler::class);
-        yield from $builder->buildRoute('delete', Category::Command, Http\Queue\Handler\DeleteHandler::class);
+        yield from $builder->buildRouteV2(Method::Patch, 'reanimate', Http\Queue\Handler\ReanimateHandler::class);
+        yield from $builder->buildRouteV2(Method::Delete, 'delete', Http\Queue\Handler\DeleteHandler::class);
     }
 }

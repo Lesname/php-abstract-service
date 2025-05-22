@@ -176,9 +176,11 @@ final class WriteCommand extends Command
             try {
                 $routeDocument = $this->routeDocumentor->document($route);
 
-                $paths[(string)$routeDocument->path] = [
-                    $routeDocument->method->value => $this->composePathDocument($routeDocument),
-                ];
+                if (!isset($paths[(string)$routeDocument->path])) {
+                    $paths[(string)$routeDocument->path] = [];
+                }
+
+                $paths[(string)$routeDocument->path][$routeDocument->method->value] = $this->composePathDocument($routeDocument);
             } catch (Throwable $e) {
                 $path = isset($route['path']) && is_string($route['path'])
                     ? $route['path']
@@ -280,10 +282,6 @@ final class WriteCommand extends Command
     private function composePathDocument(RouteDocument $routeDocument): array
     {
         return [
-            'tags' => [
-                $routeDocument->resource,
-                $routeDocument->category,
-            ],
             'deprecated' => $routeDocument->deprecated !== null,
             'requestBody' => [
                 'required' => true,
@@ -352,9 +350,10 @@ final class WriteCommand extends Command
             (
                 in_array($class, self::SHARED_REFERENCES, true)
                 ||
-                str_contains($class, '\\Model\\')
-                ||
-                str_contains($class, '\\Repository\\')
+                preg_match(
+                    '#^([a-z]+\\\\){2,}(Model|Repository)\\\\#i',
+                    $class
+                ) === 1
             );
     }
 
