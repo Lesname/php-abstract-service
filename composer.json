@@ -8,7 +8,7 @@
 
     "psr/http-server-handler": "^1.0.0",
 
-    "lesname/documentor": "^0.5.0",
+    "lesname/documentor": "^0.6.0",
     "lesname/resource": "^0.6.0",
     "lesname/domain": "^0.6.0",
     "lesname/validator": "^0.6.0",
