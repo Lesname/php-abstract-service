@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LesAbstractService\Http\Resource\Handler;
 
 use Override;
+use RuntimeException;
 use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
 use LesDomain\Event\Store\Store;
@@ -15,6 +16,7 @@ use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesValueObject\Number\Exception\MaxOutBounds;
 use LesValueObject\Number\Exception\MinOutBounds;
+use LesDocumentor\Route\Document\Property\Method;
 use LesValueObject\Number\Int\Date\MilliTimestamp;
 use LesValueObject\Number\Exception\NotMultipleOf;
 use LesValueObject\String\Format\Exception\NotFormat;
@@ -70,18 +72,50 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      */
     protected function getEventClass(ServerRequestInterface $request): string
     {
-        $path = $request->getUri()->getPath();
-        $method = $request->getMethod();
-        $key = "{$method}:{$path}";
+        $route = $this->getRoute($request);
 
-        assert(isset($this->routes[$key]));
-        $route = $this->routes[$key];
-
-        assert(is_array($route));
         assert(is_string($route['event']));
         assert(is_subclass_of($route['event'], Event::class));
 
         return $route['event'];
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getRoute(ServerRequestInterface $request): array
+    {
+        $method = strtolower($request->getMethod());
+        $key = "{$method}:{$request->getUri()->getPath()}";
+
+        if (isset($this->routes[$key])) {
+            $route = $this->routes[$key];
+            assert(is_array($route));
+
+            return $route;
+        }
+
+        if ($method === Method::Post->value) {
+            $tryMethods = [
+                Method::Query->value,
+                Method::Delete->value,
+                Method::Patch->value,
+                Method::Put->value,
+            ];
+
+            foreach ($tryMethods as $tryMethod) {
+                $key = "{$tryMethod}:{$request->getUri()->getPath()}";
+
+                if (isset($this->routes[$key])) {
+                    $route = $this->routes[$key];
+                    assert(is_array($route));
+
+                    return $route;
+                }
+            }
+        }
+
+        throw new RuntimeException();
     }
 
     /**

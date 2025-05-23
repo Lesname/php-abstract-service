@@ -22,6 +22,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use LesResource\Repository\Exception\NoResource;
+use LesDocumentor\Route\Document\Property\Method;
 
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
@@ -74,9 +75,7 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
      */
     protected function callProxy(ServerRequestInterface $request): mixed
     {
-        $key = "{$request->getMethod()}:{$request->getUri()->getPath()}";
-        $route = $this->routes[$key];
-        assert(is_array($route));
+        $route = $this->getRoute($request);
         assert(is_array($route['proxy']));
         assert(is_string($route['proxy']['class']));
         assert(interface_exists($route['proxy']['class']));
@@ -90,6 +89,44 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
         assert(is_object($proxy));
 
         return $proxy->{$route['proxy']['method']}(...$parameters);
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getRoute(ServerRequestInterface $request): array
+    {
+        $method = strtolower($request->getMethod());
+        $key = "{$method}:{$request->getUri()->getPath()}";
+
+        if (isset($this->routes[$key])) {
+            $route = $this->routes[$key];
+            assert(is_array($route));
+
+            return $route;
+        }
+
+        if ($method === Method::Post->value) {
+            $tryMethods = [
+                Method::Query->value,
+                Method::Delete->value,
+                Method::Patch->value,
+                Method::Put->value,
+            ];
+
+            foreach ($tryMethods as $tryMethod) {
+                $key = "{$tryMethod}:{$request->getUri()->getPath()}";
+
+                if (isset($this->routes[$key])) {
+                    $route = $this->routes[$key];
+                    assert(is_array($route));
+
+                    return $route;
+                }
+            }
+        }
+
+        throw new RuntimeException();
     }
 
     /**
