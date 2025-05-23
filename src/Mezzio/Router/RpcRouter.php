@@ -61,7 +61,7 @@ final class RpcRouter implements RouterInterface
      */
     private function findRoute(Request $request): ?array
     {
-        $method = $request->getMethod();
+        $method = strtolower($request->getMethod());
         $path = $request->getUri()->getPath();
 
         if (isset($this->routes["{$method}:{$path}"])) {
