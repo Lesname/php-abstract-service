@@ -223,7 +223,7 @@ final class RpcRouteBuilder
 
         yield from $this
             ->withExtraOption('event', $event)
-            ->withExtraOption('input', $event)
+            ->withInput($event)
             ->buildRoute(
                 $action,
                 Category::Command,
@@ -243,7 +243,7 @@ final class RpcRouteBuilder
 
         yield from $this
             ->withExtraOption('event', $event)
-            ->withExtraOption('input', $event)
+            ->withInput($event)
             ->buildRouteV2($method, $action, $handler);
     }
 
