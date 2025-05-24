@@ -19,6 +19,7 @@ use LesValueObject\String\Format\Resource\Type;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesValueObject\String\Format\Resource\Identifier;
+use LesDocumentor\Type\Document\Composite\Key\AnyKey;
 use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -30,6 +31,8 @@ use LesResource\Model\ResourceModel;
 use LesValueObject\Composite;
 use LesValueObject\Enum;
 use LesValueObject\Number;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
+use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
 use ReflectionException;
 use RuntimeException;
@@ -448,48 +451,53 @@ final class WriteCommand extends Command
     private function composeCompositeDocument(CompositeTypeDocument $typeDocument): array
     {
         $properties = $required = [];
+        $compDocument = [
+            'type' => 'object',
+            'additionalProperties' => $typeDocument->allowExtraProperties,
+            'properties' => $properties,
+            'required' => $required,
+        ];
 
-        foreach ($typeDocument->properties as $key => $property) {
-            try {
-                $propDocument = $this->composeTypeDocument($property->type, true);
-            } catch (Throwable $e) {
-                throw new RuntimeException("Failed on '{$key}'", previous: $e);
-            }
-
-            if ($property->required) {
-                $required[] = $key;
-            }
-
+        foreach ($typeDocument->properties as $property) {
+            $propDocument = $this->composeTypeDocument($property->type, true);
             $append = [];
 
             if ($property->deprecated) {
-                $append['deprecated'] = true;
+                $append['deprecated'] = $property->deprecated;
             }
 
             if ($property->required === false) {
                 $append['default'] = $property->default;
             }
 
-            if (count($append)) {
+            if (count($append) > 0) {
                 if (isset($propDocument['$ref'])) {
-                    $propDocument = array_replace(
-                        ['allOf' => [$propDocument]],
-                        $append,
-                    );
-                } else {
-                    $propDocument = array_replace($propDocument, $append);
+                    $propDocument = ['allOf' => $propDocument];
                 }
+
+                $propDocument = [...$propDocument, ...$append];
             }
 
-            $properties[$key] = $propDocument;
+            if ($property->key instanceof ExactKey) {
+                if ($property->required) {
+                    $compDocument['required'][] = $property->key->value;
+                }
+
+                $compDocument['properties'][$property->key->value] = $propDocument;
+            } elseif ($property->key instanceof RegexKey || $property->key instanceof AnyKey) {
+                if (!isset($compDocument['patternProperties'])) {
+                    $compDocument['patternProperties'] = [];
+                }
+
+                $pattern = $property->key instanceof RegexKey
+                    ? $property->key->pattern
+                    : '.*';
+
+                $compDocument['patternProperties'][$pattern] = $propDocument;
+            }
         }
 
-        return [
-            'type' => 'object',
-            'additionalProperties' => $typeDocument->allowExtraProperties,
-            'properties' => $properties,
-            'required' => $required,
-        ];
+        return $compDocument;
     }
 
     /**
