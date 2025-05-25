@@ -221,9 +221,12 @@ final class RpcRouteBuilder
     {
         assert($this->resourceRepository !== null);
 
-        yield from $this
+        $builder = $this->input === null
+            ? $this->withInput($event)
+            : $this;
+
+        yield from $builder
             ->withExtraOption('event', $event)
-            ->withInput($event)
             ->buildRoute(
                 $action,
                 Category::Command,
@@ -241,9 +244,12 @@ final class RpcRouteBuilder
     {
         assert($this->resourceRepository !== null);
 
-        yield from $this
+        $builder = $this->input === null
+            ? $this->withInput($event)
+            : $this;
+
+        yield from $builder
             ->withExtraOption('event', $event)
-            ->withInput($event)
             ->buildRouteV2($method, $action, $handler);
     }
 
