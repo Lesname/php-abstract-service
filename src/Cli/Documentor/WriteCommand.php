@@ -472,7 +472,7 @@ final class WriteCommand extends Command
 
             if (count($append) > 0) {
                 if (isset($propDocument['$ref'])) {
-                    $propDocument = ['allOf' => $propDocument];
+                    $propDocument = ['allOf' => [$propDocument]];
                 }
 
                 $propDocument = [...$propDocument, ...$append];
