@@ -21,7 +21,6 @@ use Mezzio\Helper\BodyParams\BodyParamsMiddleware;
 use Mezzio\Router\Middleware\DispatchMiddleware;
 use Mezzio\Router\Middleware\ImplicitOptionsMiddleware;
 use Mezzio\Router\Middleware\MethodNotAllowedMiddleware;
-use Mezzio\Router\Middleware\RouteMiddleware;
 
 final class PipelineRegister
 {

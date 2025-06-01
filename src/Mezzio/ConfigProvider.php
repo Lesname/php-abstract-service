@@ -20,6 +20,7 @@ use LesDomain\Event\Store\Store;
 use Psr\SimpleCache\CacheInterface;
 use LesValidator\TranslationHelper;
 use LesHydrator\ReflectionHydrator;
+use LesAbstractService\Application;
 use LesDomain\Event\Store\DbalStore;
 use LesHttp\Router\RpcRouterFactory;
 use LesCache\Redis\RedisCacheFactory;
@@ -129,6 +130,8 @@ final class ConfigProvider
                     AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
                 ],
                 'factories' => [
+                    Application::class => ReflectionFactory::class,
+
                     Mail\TemplateContainer::class => Mail\TemplateContainerFactory::class,
                     Mail\SenderContainer::class => Mail\SenderContainerFactory::class,
 
