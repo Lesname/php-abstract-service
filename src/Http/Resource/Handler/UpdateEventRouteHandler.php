@@ -17,19 +17,12 @@ use LesDocumentor\Route\Attribute\DocInputProvided;
 #[DocHttpResponse(code: 204)]
 final class UpdateEventRouteHandler extends AbstractEventRouteHandler
 {
-    /**
-     * @param ResponseFactoryInterface $responseFactory
-     * @param Hydrator $hydrator
-     * @param Store $store
-     * @param array<mixed> $routes
-     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         Hydrator $hydrator,
         Store $store,
-        array $routes,
     ) {
-        parent::__construct($hydrator, $store, $routes);
+        parent::__construct($hydrator, $store);
     }
 
     #[Override]

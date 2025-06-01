@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Mezzio;
 
+use LesHttp\Middleware\Route\RouterMiddleware;
 use LesHttp\Middleware\Locale\LocaleMiddleware;
+use LesHttp\Middleware\Route\NoRouteMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LesHttp\Middleware\Condition\ConditionMiddleware;
@@ -37,7 +39,8 @@ final class PipelineRegister
 
         $app->pipe(ThrottleMiddleware::class);
 
-        $app->pipe(RouteMiddleware::class);
+        $app->pipe(RouterMiddleware::class);
+        $app->pipe(NoRouteMiddleware::class);
 
         $app->pipe(ImplicitOptionsMiddleware::class);
 

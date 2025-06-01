@@ -5,6 +5,7 @@ namespace LesAbstractService\Http\Resource\ConditionConstraint;
 
 use Override;
 use RuntimeException;
+use LesHttp\Router\Route\Route;
 use Psr\Container\ContainerInterface;
 use LesResource\Model\ResourceModel;
 use Psr\Http\Message\ServerRequestInterface;
@@ -13,7 +14,7 @@ use LesValueObject\String\Exception\TooLong;
 use Psr\Container\ContainerExceptionInterface;
 use LesValueObject\String\Exception\TooShort;
 use LesResource\Repository\ResourceRepository;
-use LesDocumentor\Route\Document\Property\Method;
+use LesHttp\Router\Route\Exception\OptionNotSet;
 use LesValueObject\String\Format\Resource\Identifier;
 use LesValueObject\String\Format\Exception\NotFormat;
 use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
@@ -23,13 +24,8 @@ use LesHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstrain
 
 final class ExistsResourceConditionConstraint implements ConditionConstraint
 {
-    /**
-     * @param array<string, string> $resourceRepositories
-     */
-    public function __construct(
-        private readonly ContainerInterface $container,
-        private readonly array $resourceRepositories,
-    ) {}
+    public function __construct(private readonly ContainerInterface $container)
+    {}
 
     /**
      * @throws ContainerExceptionInterface
@@ -37,6 +33,7 @@ final class ExistsResourceConditionConstraint implements ConditionConstraint
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
+     * @throws OptionNotSet
      */
     #[Override]
     public function satisfies(ServerRequestInterface $request): ConditionConstraintResult
@@ -53,40 +50,23 @@ final class ExistsResourceConditionConstraint implements ConditionConstraint
     /**
      * @return ResourceRepository<ResourceModel>
      *
+     * @throws OptionNotSet
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
     protected function getResourceRepository(ServerRequestInterface $request): ResourceRepository
     {
-        $method = strtolower($request->getMethod());
-        $path = $request->getUri()->getPath();
-        $key = "{$method}:{$path}";
+        $route = $request->getAttribute('route');
 
-        if (array_key_exists($key, $this->resourceRepositories)) {
-            $resourceRepository = $this->container->get($this->resourceRepositories[$key]);
-            assert($resourceRepository instanceof ResourceRepository);
-
-            return $resourceRepository;
-        } elseif ($method === Method::Post->value) {
-            $tryMethods = [
-                Method::Query->value,
-                Method::Delete->value,
-                Method::Patch->value,
-                Method::Put->value,
-            ];
-
-            foreach ($tryMethods as $tryMethod) {
-                $key = "{$tryMethod}:{$path}";
-
-                if (array_key_exists($key, $this->resourceRepositories)) {
-                    $resourceRepository = $this->container->get($this->resourceRepositories[$key]);
-                    assert($resourceRepository instanceof ResourceRepository);
-
-                    return $resourceRepository;
-                }
-            }
+        if (!$route instanceof Route) {
+            throw new RuntimeException();
         }
 
-        throw new RuntimeException();
+        $resourceRepository = $route->getOption('resourceRepository');
+        assert(is_string($resourceRepository));
+
+        $resourceRepository = $this->container->get($resourceRepository);
+        assert($resourceRepository instanceof ResourceRepository);
+
+        return $resourceRepository;
     }
 }
