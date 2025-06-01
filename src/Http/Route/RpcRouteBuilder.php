@@ -289,6 +289,8 @@ final class RpcRouteBuilder
             ],
         );
 
+        $route = array_filter($route, fn (mixed $value): bool => $value !== null);
+
         yield "{$method->value}:/{$this->resourceName}.{$action}" => $route;
     }
 }
