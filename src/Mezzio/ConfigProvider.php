@@ -176,7 +176,7 @@ final class ConfigProvider
                     Http\Queue\Handler\ReanimateHandler::class => ReflectionFactory::class,
                     Http\Queue\Handler\GetStatsHandler::class => ReflectionFactory::class,
 
-                    Http\Resource\Handler\CreateEventRouteHandler::class => ReflectionFactory::class,
+                    Http\Resource\Handler\CreateEventRouteHandler::class => Http\Resource\Handler\CreateEventRouteHandlerFactory::class,
                     Http\Resource\Handler\UpdateEventRouteHandler::class => ReflectionFactory::class,
 
                     Http\Resource\Handler\ResultsQueryRouteHandler::class => ReflectionFactory::class,
