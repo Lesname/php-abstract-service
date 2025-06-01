@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LesAbstractService\Factory\Container;
 
 use Closure;
+use Throwable;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
@@ -12,6 +13,8 @@ use ReflectionException;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
+use LesAbstractService\Factory\Container\Exception\FailedClass;
+use LesAbstractService\Factory\Container\Exception\FailedParameter;
 
 final class ReflectionFactory
 {
@@ -21,13 +24,18 @@ final class ReflectionFactory
      *
      * @return iterable<mixed>
      *
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
+     * @throws FailedParameter
      */
     private function getParameters(ContainerInterface $container, ReflectionMethod $constructor): iterable
     {
         foreach ($constructor->getParameters() as $parameter) {
-            yield $this->getParameterDependency($container, $parameter);
+            try {
+                $dependency = $this->getParameterDependency($container, $parameter);
+            } catch (Throwable $e) {
+                throw new FailedParameter($parameter->getName(), $e);
+            }
+
+            yield $dependency;
         }
     }
 
@@ -69,8 +77,9 @@ final class ReflectionFactory
     public function __invoke(ContainerInterface $container, string $name)
     {
         $reflection = new ReflectionClass($name);
+        $factory = $this->createFactory($reflection, $container);
 
-        return $reflection->newLazyProxy($this->createFactory($reflection, $container));
+        return $reflection->newLazyProxy($factory);
     }
 
     /**
@@ -81,9 +90,14 @@ final class ReflectionFactory
         return function () use ($class, $container) {
             $constructor = $class->getConstructor();
 
-            $parameters = $constructor
-                ? $this->getParameters($container, $constructor)
-                : [];
+            try {
+                $parameters = $constructor
+                    ? [...$this->getParameters($container, $constructor)]
+                    : [];
+            } catch (Throwable $e) {
+                throw new FailedClass($class->getName(), $e);
+            }
+
 
             return $class->newInstance(...$parameters);
         };
