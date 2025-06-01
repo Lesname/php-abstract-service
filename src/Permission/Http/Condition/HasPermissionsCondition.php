@@ -6,11 +6,11 @@ namespace LesAbstractService\Permission\Http\Condition;
 use Override;
 use Psr\Http\Message\ServerRequestInterface;
 use LesValueObject\Composite\ForeignReference;
-use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LesAbstractService\Permission\Repository\PermissionsRepository;
-use LesHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
-use LesHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
-use LesHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\ConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
 final class HasPermissionsCondition implements ConditionConstraint
 {

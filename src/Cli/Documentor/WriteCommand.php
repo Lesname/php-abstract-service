@@ -168,8 +168,6 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
-     *
-     * @throws ReflectionException
      */
     private function composePaths(): array
     {

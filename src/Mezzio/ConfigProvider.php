@@ -26,10 +26,19 @@ use LesHttp\Router\RpcRouterFactory;
 use LesCache\Redis\RedisCacheFactory;
 use LesToken\Codec\TokenCodecFactory;
 use LesAbstractService\Container\Mail;
+use LesHttp\Handler\MiddlewarePipeline;
 use LesDocumentor\Route\RouteDocumentor;
 use LesDomain\Event\Publisher\Publisher;
 use LesDatabase\Factory\ConnectionFactory;
-use LesHttp\Middleware\Cors\CorsMiddleware;
+use Psr\Http\Server\RequestHandlerInterface;
+use LesHttp\Middleware\Input\TrimMiddleware;
+use LesHttp\Handler\MiddlewarePipelineFactory;
+use LesHttp\Middleware\Response\CorsMiddleware;
+use LesHttp\Middleware\Route\DispatchMiddleware;
+use LesHttp\Middleware\Input\ValidationMiddleware;
+use LesHttp\Middleware\Input\Decode\JsonMiddleware;
+use LesHttp\Middleware\Response\CorsMiddlewareFactory;
+use LesHttp\Middleware\Response\CatchExceptionMiddleware;
 use Symfony\Component\Translation\Translator;
 use LesDocumentor\Route\LesRouteDocumentor;
 use LesHttp\Middleware\Route\RouterMiddleware;
@@ -38,35 +47,32 @@ use LesHttp\Middleware\Route\NoRouteMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LesAbstractService\Factory\Logger\HubFactory;
 use LesDocumentor\Route\Document\Property\Method;
-use LesHttp\Middleware\Cors\CorsMiddlewareFactory;
+use LesHttp\Middleware\AccessControl\Condition\ConditionMiddleware;
+use LesHttp\Middleware\AccessControl\Authorization\AuthorizationMiddleware;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
-use LesHttp\Middleware\Throttle\ThrottleMiddleware;
+use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddleware;
+use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddlewareFactory;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use LesHttp\Middleware\Condition\ConditionMiddleware;
 use LesAbstractService\Factory\Logger\MonologFactory;
 use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LesHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LesDomain\Identifier\Generator\IdentifierGenerator;
-use LesHttp\Middleware\Validation\ValidationMiddleware;
 use LesAbstractService\Http;
 use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
-use LesHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
+use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddleware;
 use LesDomain\Event\Publisher\FiberSubscriptionsPublisher;
 use LesAbstractService\Factory\Container\ReflectionFactory;
-use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
 use LesDomain\Identifier\Generator\Uuid6IdentifierGenerator;
 use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
-use LesHttp\Middleware\Authorization\AuthorizationMiddleware;
-use LesHttp\Middleware\Authentication\AuthenticationMiddleware;
+use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddlewareFactory;
 use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
-use LesHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
-use LesHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
-use LesHttp\Middleware\Authorization\Constraint\GuestAuthorizationConstraint;
-use LesHttp\Middleware\Authorization\Constraint\AnyOneAuthorizationConstraint;
-use LesHttp\Middleware\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\GuestAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyOneAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LesAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
 
@@ -103,6 +109,8 @@ final class ConfigProvider
 
                     LoggerInterface::class => Logger::class,
                     HubInterface::class => Hub::class,
+
+                    RequestHandlerInterface::class => MiddlewarePipeline::class,
                 ],
                 'delegators' => [
                     ErrorHandler::class => [
@@ -146,15 +154,25 @@ final class ConfigProvider
 
                     FiberSubscriptionsPublisher::class => AbstractSubscriptionsPublisherFactory::class,
 
+                    MiddlewarePipeline::class => MiddlewarePipelineFactory::class,
+
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
-                    AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
-                    ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
-                    CorsMiddleware::class => CorsMiddlewareFactory::class,
-                    ValidationMiddleware::class => ReflectionFactory::class,
                     AuthorizationMiddleware::class => ReflectionFactory::class,
                     ConditionMiddleware::class => ReflectionFactory::class,
-                    RouterMiddleware::class => ReflectionFactory::class,
+                    ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
+
+                    AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
+
+                    ValidationMiddleware::class => ReflectionFactory::class,
+
+                    LocaleMiddleware::class => LocaleMiddlewareFactory::class,
+
+                    CatchExceptionMiddleware::class => ReflectionFactory::class,
+                    CorsMiddleware::class => CorsMiddlewareFactory::class,
+
+                    DispatchMiddleware::class => ReflectionFactory::class,
                     NoRouteMiddleware::class => ReflectionFactory::class,
+                    RouterMiddleware::class => ReflectionFactory::class,
 
                     Http\Queue\Handler\DeleteHandler::class => ReflectionFactory::class,
                     Http\Queue\Handler\ReanimateHandler::class => ReflectionFactory::class,
@@ -188,8 +206,6 @@ final class ConfigProvider
                     TokenCodec::class => TokenCodecFactory::class,
 
                     Translator::class => TranslatorFactory::class,
-
-                    LocaleMiddleware::class => LocaleMiddlewareFactory::class,
                 ],
             ],
             'laminas-cli' => [
@@ -233,6 +249,22 @@ final class ConfigProvider
                     'x-build',
                 ],
                 'maxAge' => 3_600,
+            ],
+            MiddlewarePipeline::class => [
+                CatchExceptionMiddleware::class,
+                CorsMiddleware::class,
+                AuthenticationMiddleware::class,
+                AnalyticsMiddleware::class,
+                ThrottleMiddleware::class,
+                RouterMiddleware::class,
+                NoRouteMiddleware::class,
+                JsonMiddleware::class,
+                TrimMiddleware::class,
+                LocaleMiddleware::class,
+                ValidationMiddleware::class,
+                AuthorizationMiddleware::class,
+                ConditionMiddleware::class,
+                DispatchMiddleware::class,
             ],
         ];
     }
@@ -282,7 +314,7 @@ final class ConfigProvider
      */
     private function composeQueueRoutes(): iterable
     {
-        $builder = (new RpcRouteBuilder('queue', [HasGrantPermissionAuthorization::class]))
+        $builder = (new Http\Route\RpcRouteBuilder('queue', [HasGrantPermissionAuthorization::class]))
             ->withProxyClass(Queue\Queue::class)
             ->withExtraOption('document', false);
 
@@ -290,9 +322,9 @@ final class ConfigProvider
         yield from $builder->buildResultQueryRoute('countProcessable');
         yield from $builder->buildResultQueryRoute('countBuried');
         yield from $builder->buildResultsQueryRoute('getBuried');
-        yield from $builder->buildRouteV2(Method::Query, 'getStats', Http\Queue\Handler\GetStatsHandler::class);
+        yield from $builder->buildRoute(Method::Query, 'getStats', Http\Queue\Handler\GetStatsHandler::class);
 
-        yield from $builder->buildRouteV2(Method::Patch, 'reanimate', Http\Queue\Handler\ReanimateHandler::class);
-        yield from $builder->buildRouteV2(Method::Delete, 'delete', Http\Queue\Handler\DeleteHandler::class);
+        yield from $builder->buildRoute(Method::Patch, 'reanimate', Http\Queue\Handler\ReanimateHandler::class);
+        yield from $builder->buildRoute(Method::Delete, 'delete', Http\Queue\Handler\DeleteHandler::class);
     }
 }

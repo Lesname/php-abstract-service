@@ -5,8 +5,8 @@ namespace LesAbstractService\Permission\Config;
 
 use LesAbstractService\Permission\Event;
 use LesAbstractService\Permission\Cli;
-use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
 use LesAbstractService\Permission\Repository;
+use LesAbstractService\Http\Route\RpcRouteBuilder;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Permission\Http\Condition;
 use LesAbstractService\Permission\Http\AuthorizationConstraint;

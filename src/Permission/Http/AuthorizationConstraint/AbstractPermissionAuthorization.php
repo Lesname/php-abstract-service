@@ -9,7 +9,7 @@ use LesValueObject\Composite\ForeignReference;
 use LesAbstractService\Permission\Model\Permission;
 use LesAbstractService\Permission\Repository\PermissionsRepository;
 use LesAbstractService\Permission\Repository\Exception\NoPermission;
-use LesHttp\Middleware\Authorization\Constraint\AbstractIdentityAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AbstractIdentityAuthorizationConstraint;
 
 abstract class AbstractPermissionAuthorization extends AbstractIdentityAuthorizationConstraint
 {

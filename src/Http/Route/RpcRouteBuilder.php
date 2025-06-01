@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LesAbstractService\Mezzio\Router\Route;
+namespace LesAbstractService\Http\Route;
 
 use LesDomain\Event\Event;
 use LesValidator\Validator;
@@ -10,19 +10,16 @@ use LesResource\Model\ResourceModel;
 use Psr\Http\Server\RequestHandlerInterface;
 use LesResource\Repository\ResourceRepository;
 use LesDocumentor\Route\Document\Property\Method;
-use LesDocumentor\Route\Document\Property\Category;
-use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
-use LesHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**
  * @psalm-immutable
- *
- * @deprecated use from Http\Route
  */
 final class RpcRouteBuilder
 {
@@ -195,7 +192,7 @@ final class RpcRouteBuilder
      */
     public function buildCreateEventRoute(string $action, string $event, string $handler = CreateEventRouteHandler::class): iterable
     {
-        yield from $this->buildEventRouteV2(Method::Put, $action, $event, $handler);
+        yield from $this->buildEventRoute(Method::Put, $action, $event, $handler);
     }
 
     /**
@@ -208,7 +205,7 @@ final class RpcRouteBuilder
     {
         yield from $this
             ->withAddedCondition(ExistsResourceConditionConstraint::class)
-            ->buildEventRouteV2(Method::Patch, $action, $event, $handler);
+            ->buildEventRoute(Method::Patch, $action, $event, $handler);
     }
 
     /**
@@ -216,10 +213,8 @@ final class RpcRouteBuilder
      * @param class-string<RequestHandlerInterface> $handler
      *
      * @return iterable<string, array<mixed>>
-     *
-     * @deprecated
      */
-    public function buildEventRoute(string $action, string $event, string $handler): iterable
+    public function buildEventRoute(Method $method, string $action, string $event, string $handler): iterable
     {
         assert($this->resourceRepository !== null);
 
@@ -229,30 +224,7 @@ final class RpcRouteBuilder
 
         yield from $builder
             ->withExtraOption('event', $event)
-            ->buildRoute(
-                $action,
-                Category::Command,
-                $handler,
-            );
-    }
-
-    /**
-     * @param class-string<Event> $event
-     * @param class-string<RequestHandlerInterface> $handler
-     *
-     * @return iterable<string, array<mixed>>
-     */
-    public function buildEventRouteV2(Method $method, string $action, string $event, string $handler): iterable
-    {
-        assert($this->resourceRepository !== null);
-
-        $builder = $this->input === null
-            ? $this->withInput($event)
-            : $this;
-
-        yield from $builder
-            ->withExtraOption('event', $event)
-            ->buildRouteV2($method, $action, $handler);
+            ->buildRoute($method, $action, $handler);
     }
 
     /**
@@ -286,7 +258,7 @@ final class RpcRouteBuilder
                     'method' => $action,
                 ],
             )
-            ->buildRouteV2(
+            ->buildRoute(
                 Method::Query,
                 $action,
                 $handler,
@@ -298,40 +270,8 @@ final class RpcRouteBuilder
      * @param array<string, mixed> $baseRoute
      *
      * @return iterable<string, array<mixed>>
-     *
-     * @deprecated
      */
-    public function buildRoute(string $action, Category $type, string $handler, array $baseRoute = []): iterable
-    {
-        $route = array_replace(
-            $baseRoute,
-            $this->extraOptions,
-            [
-                'path' => "/{$this->resourceName}.{$action}",
-                'authorizations' => $this->authorizations,
-                'resource' => $this->resourceName,
-                'middleware' => $handler,
-                'category' => $type,
-                'type' => $type,
-            ],
-        );
-
-        foreach (['resourceRepository', 'validator', 'input', 'conditions'] as $key) {
-            if ($this->{$key}) {
-                $route[$key] = $this->{$key};
-            }
-        }
-
-        yield "POST:/{$this->resourceName}.{$action}" => $route;
-    }
-
-    /**
-     * @param class-string<RequestHandlerInterface> $handler
-     * @param array<string, mixed> $baseRoute
-     *
-     * @return iterable<string, array<mixed>>
-     */
-    public function buildRouteV2(Method $method, string $action, string $handler, array $baseRoute = []): iterable
+    public function buildRoute(Method $method, string $action, string $handler, array $baseRoute = []): iterable
     {
         $route = array_replace(
             $baseRoute,

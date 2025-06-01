@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Middleware\Throttle;
 
-use LesHttp\Middleware\Throttle\Parameter\By;
+use LesHttp\Middleware\AccessControl\Throttle\Parameter\By;
 
 final class ThrottleBuilder
 {
