@@ -11,12 +11,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 use LesResource\Repository\ResourceRepository;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Route\Document\Property\Category;
-use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
 use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
-use LesHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**
