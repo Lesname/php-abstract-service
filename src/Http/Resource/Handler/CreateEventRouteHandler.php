@@ -27,9 +27,6 @@ use LesAbstractService\Http\Resource\Handler\Response\CreatedResponse;
 #[DocHttpResponse(CreatedResponse::class, 201)]
 final class CreateEventRouteHandler extends AbstractEventRouteHandler
 {
-    /**
-     * @param array<mixed> $routes
-     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly StreamFactoryInterface $streamFactory,
@@ -37,9 +34,8 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
         private readonly string $projectName,
         Hydrator $hydrator,
         Store $store,
-        array $routes,
     ) {
-        parent::__construct($hydrator, $store, $routes);
+        parent::__construct($hydrator, $store);
     }
 
     /**

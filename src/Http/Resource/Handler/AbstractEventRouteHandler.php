@@ -7,6 +7,7 @@ use Override;
 use RuntimeException;
 use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
+use LesHttp\Router\Route\Route;
 use LesDomain\Event\Store\Store;
 use LesDomain\Event\Property\Headers;
 use Psr\Http\Message\ResponseInterface;
@@ -14,9 +15,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
+use LesHttp\Router\Route\Exception\OptionNotSet;
 use LesValueObject\Number\Exception\MaxOutBounds;
 use LesValueObject\Number\Exception\MinOutBounds;
-use LesDocumentor\Route\Document\Property\Method;
 use LesValueObject\Number\Int\Date\MilliTimestamp;
 use LesValueObject\Number\Exception\NotMultipleOf;
 use LesValueObject\String\Format\Exception\NotFormat;
@@ -25,13 +26,9 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
 
-    /**
-     * @param array<mixed> $routes
-     */
     public function __construct(
         private readonly Hydrator $hydrator,
         private readonly Store $store,
-        private readonly array $routes,
     ) {}
 
     /**
@@ -39,6 +36,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MinOutBounds
      * @throws NotFormat
      * @throws NotMultipleOf
+     * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
      */
@@ -56,6 +54,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws MinOutBounds
      * @throws NotFormat
      * @throws NotMultipleOf
+     * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
      */
@@ -69,53 +68,23 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 
     /**
      * @return class-string<Event>
+     *
+     * @throws OptionNotSet
      */
     protected function getEventClass(ServerRequestInterface $request): string
     {
-        $route = $this->getRoute($request);
+        $route = $request->getAttribute('route');
 
-        assert(is_string($route['event']));
-        assert(is_subclass_of($route['event'], Event::class));
-
-        return $route['event'];
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    private function getRoute(ServerRequestInterface $request): array
-    {
-        $method = strtolower($request->getMethod());
-        $key = "{$method}:{$request->getUri()->getPath()}";
-
-        if (isset($this->routes[$key])) {
-            $route = $this->routes[$key];
-            assert(is_array($route));
-
-            return $route;
+        if (!$route instanceof Route) {
+            throw new RuntimeException();
         }
 
-        if ($method === Method::Post->value) {
-            $tryMethods = [
-                Method::Query->value,
-                Method::Delete->value,
-                Method::Patch->value,
-                Method::Put->value,
-            ];
+        $event = $route->getOption('event');
 
-            foreach ($tryMethods as $tryMethod) {
-                $key = "{$tryMethod}:{$request->getUri()->getPath()}";
+        assert(is_string($event));
+        assert(is_subclass_of($event, Event::class));
 
-                if (isset($this->routes[$key])) {
-                    $route = $this->routes[$key];
-                    assert(is_array($route));
-
-                    return $route;
-                }
-            }
-        }
-
-        throw new RuntimeException();
+        return $event;
     }
 
     /**

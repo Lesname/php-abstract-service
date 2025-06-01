@@ -8,18 +8,20 @@ use RuntimeException;
 use Sentry\State\Hub;
 use LesQueue as Queue;
 use LesHydrator\Hydrator;
+use LesHttp\Router\Router;
 use LesAbstractService\Cli;
 use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
+use LesHttp\Router\RpcRouter;
 use Sentry\State\HubInterface;
 use LesCache\Redis\RedisCache;
 use LesToken\Codec\TokenCodec;
 use LesDomain\Event\Store\Store;
-use Mezzio\Router\RouterInterface;
 use Psr\SimpleCache\CacheInterface;
 use LesValidator\TranslationHelper;
 use LesHydrator\ReflectionHydrator;
 use LesDomain\Event\Store\DbalStore;
+use LesHttp\Router\RpcRouterFactory;
 use LesCache\Redis\RedisCacheFactory;
 use LesToken\Codec\TokenCodecFactory;
 use LesAbstractService\Container\Mail;
@@ -29,8 +31,9 @@ use LesDatabase\Factory\ConnectionFactory;
 use LesHttp\Middleware\Cors\CorsMiddleware;
 use Symfony\Component\Translation\Translator;
 use LesDocumentor\Route\LesRouteDocumentor;
+use LesHttp\Middleware\Route\RouterMiddleware;
 use LesHttp\Middleware\Locale\LocaleMiddleware;
-use LesAbstractService\Mezzio\Router\RpcRouter;
+use LesHttp\Middleware\Route\NoRouteMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LesAbstractService\Factory\Logger\HubFactory;
 use LesDocumentor\Route\Document\Property\Method;
@@ -42,7 +45,6 @@ use LesHttp\Middleware\Condition\ConditionMiddleware;
 use LesAbstractService\Factory\Logger\MonologFactory;
 use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
 use LesHttp\Middleware\Locale\LocaleMiddlewareFactory;
-use LesAbstractService\Mezzio\Router\RpcRouterFactory;
 use LesDomain\Identifier\Generator\IdentifierGenerator;
 use LesHttp\Middleware\Validation\ValidationMiddleware;
 use LesAbstractService\Http;
@@ -52,15 +54,12 @@ use LesHttp\Middleware\Throttle\ThrottleMiddlewareFactory;
 use LesDomain\Event\Publisher\FiberSubscriptionsPublisher;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Mezzio\Router\Route\RpcRouteBuilder;
-use LesHttp\Middleware\Condition\ConditionMiddlewareFactory;
 use LesDomain\Identifier\Generator\Uuid6IdentifierGenerator;
 use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LesHttp\Middleware\Authorization\AuthorizationMiddleware;
-use LesHttp\Middleware\Validation\ValidationMiddlewareFactory;
 use LesHttp\Middleware\Authentication\AuthenticationMiddleware;
 use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
-use LesHttp\Middleware\Authorization\AuthorizationMiddlewareFactory;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
 use LesHttp\Middleware\Authentication\AuthenticationMiddlewareFactory;
 use LesHttp\Middleware\Authorization\Constraint\NoOneAuthorizationConstraint;
@@ -97,7 +96,7 @@ final class ConfigProvider
                     RouteDocumentor::class => LesRouteDocumentor::class,
                     RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
 
-                    RouterInterface::class => RpcRouter::class,
+                    Router::class => RpcRouter::class,
 
                     TranslatorInterface::class => Translator::class,
 
@@ -148,23 +147,25 @@ final class ConfigProvider
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
                     ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
                     CorsMiddleware::class => CorsMiddlewareFactory::class,
-                    ValidationMiddleware::class => ValidationMiddlewareFactory::class,
-                    AuthorizationMiddleware::class => AuthorizationMiddlewareFactory::class,
-                    ConditionMiddleware::class => ConditionMiddlewareFactory::class,
+                    ValidationMiddleware::class => ReflectionFactory::class,
+                    AuthorizationMiddleware::class => ReflectionFactory::class,
+                    ConditionMiddleware::class => ReflectionFactory::class,
+                    RouterMiddleware::class => ReflectionFactory::class,
+                    NoRouteMiddleware::class => ReflectionFactory::class,
 
                     Http\Queue\Handler\DeleteHandler::class => ReflectionFactory::class,
                     Http\Queue\Handler\ReanimateHandler::class => ReflectionFactory::class,
                     Http\Queue\Handler\GetStatsHandler::class => ReflectionFactory::class,
 
-                    Http\Resource\Handler\CreateEventRouteHandler::class => Http\Resource\Handler\CreateEventRouteHandlerFactory::class,
-                    Http\Resource\Handler\UpdateEventRouteHandler::class => Http\Resource\Handler\UpdateEventRouteHandlerFactory::class,
+                    Http\Resource\Handler\CreateEventRouteHandler::class => ReflectionFactory::class,
+                    Http\Resource\Handler\UpdateEventRouteHandler::class => ReflectionFactory::class,
 
-                    Http\Resource\Handler\ResultsQueryRouteHandler::class => Http\Resource\Handler\QueryRouteHandlerFactory::class,
-                    Http\Resource\Handler\ResultQueryRouteHandler::class => Http\Resource\Handler\QueryRouteHandlerFactory::class,
+                    Http\Resource\Handler\ResultsQueryRouteHandler::class => ReflectionFactory::class,
+                    Http\Resource\Handler\ResultQueryRouteHandler::class => ReflectionFactory::class,
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class => Http\Resource\ConditionConstraint\ExistsResourceConditionConstraintFactory::class,
+                    Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class => ReflectionFactory::class,
 
                     Cli\Cache\ClearCommand::class => ReflectionFactory::class,
 

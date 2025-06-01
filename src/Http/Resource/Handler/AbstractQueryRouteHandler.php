@@ -12,6 +12,7 @@ use ReflectionNamedType;
 use ReflectionParameter;
 use LesHydrator\Hydrator;
 use LesValueObject\ValueObject;
+use LesHttp\Router\Route\Route;
 use LesHttp\Response\ErrorResponse;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -22,28 +23,25 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use LesResource\Repository\Exception\NoResource;
-use LesDocumentor\Route\Document\Property\Method;
+use LesHttp\Router\Route\Exception\OptionNotSet;
 
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
     abstract protected function makeResponse(mixed $output): ResponseInterface;
 
-    /**
-     * @param array<mixed> $routes
-     */
     final public function __construct(
         protected readonly ResponseFactoryInterface $responseFactory,
         protected readonly StreamFactoryInterface $streamFactory,
         protected readonly ContainerInterface $container,
         protected readonly Hydrator $hydrator,
-        protected readonly array $routes,
     ) {}
 
     /**
      * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
-     * @throws ReflectionException
      * @throws JsonException
+     * @throws NotFoundExceptionInterface
+     * @throws OptionNotSet
+     * @throws ReflectionException
      */
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -69,64 +67,34 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
     }
 
     /**
-     * @throws ReflectionException
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws ReflectionException
+     * @throws OptionNotSet
      */
     protected function callProxy(ServerRequestInterface $request): mixed
     {
-        $route = $this->getRoute($request);
-        assert(is_array($route['proxy']));
-        assert(is_string($route['proxy']['class']));
-        assert(interface_exists($route['proxy']['class']));
-        assert(is_string($route['proxy']['method']));
+        $route = $request->getAttribute('route');
 
-        $refMethod = new ReflectionMethod($route['proxy']['class'], $route['proxy']['method']);
+        if (!$route instanceof Route) {
+            throw new RuntimeException();
+        }
+
+        $proxy = $route->getOption('proxy');
+
+        assert(is_array($proxy));
+        assert(is_string($proxy['class']));
+        assert(interface_exists($proxy['class']));
+        assert(is_string($proxy['method']));
+
+        $refMethod = new ReflectionMethod($proxy['class'], $proxy['method']);
 
         $parameters = $this->getParametersForMethod($refMethod, $request);
 
-        $proxy = $this->container->get($route['proxy']['class']);
-        assert(is_object($proxy));
+        $proxyClass = $this->container->get($proxy['class']);
+        assert(is_object($proxyClass));
 
-        return $proxy->{$route['proxy']['method']}(...$parameters);
-    }
-
-    /**
-     * @return array<mixed>
-     */
-    private function getRoute(ServerRequestInterface $request): array
-    {
-        $method = strtolower($request->getMethod());
-        $key = "{$method}:{$request->getUri()->getPath()}";
-
-        if (isset($this->routes[$key])) {
-            $route = $this->routes[$key];
-            assert(is_array($route));
-
-            return $route;
-        }
-
-        if ($method === Method::Post->value) {
-            $tryMethods = [
-                Method::Query->value,
-                Method::Delete->value,
-                Method::Patch->value,
-                Method::Put->value,
-            ];
-
-            foreach ($tryMethods as $tryMethod) {
-                $key = "{$tryMethod}:{$request->getUri()->getPath()}";
-
-                if (isset($this->routes[$key])) {
-                    $route = $this->routes[$key];
-                    assert(is_array($route));
-
-                    return $route;
-                }
-            }
-        }
-
-        throw new RuntimeException();
+        return $proxyClass->{$proxy['method']}(...$parameters);
     }
 
     /**
