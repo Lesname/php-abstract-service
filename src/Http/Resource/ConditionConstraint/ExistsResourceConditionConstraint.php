@@ -17,10 +17,10 @@ use LesResource\Repository\ResourceRepository;
 use LesHttp\Router\Route\Exception\OptionNotSet;
 use LesValueObject\String\Format\Resource\Identifier;
 use LesValueObject\String\Format\Exception\NotFormat;
-use LesHttp\Middleware\Condition\Constraint\ConditionConstraint;
-use LesHttp\Middleware\Condition\Constraint\Result\ConditionConstraintResult;
-use LesHttp\Middleware\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
-use LesHttp\Middleware\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\ConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
+use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
 final class ExistsResourceConditionConstraint implements ConditionConstraint
 {

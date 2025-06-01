@@ -13,6 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use LesResource\Repository\Exception\NoResource;
+use LesHttp\Router\Route\Exception\OptionNotSet;
 use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 
@@ -24,6 +25,7 @@ final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
      * @throws NotFoundExceptionInterface
      * @throws ReflectionException
      * @throws JsonException
+     * @throws OptionNotSet
      */
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface

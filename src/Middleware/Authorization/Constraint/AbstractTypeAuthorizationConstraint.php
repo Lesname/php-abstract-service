@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace LesAbstractService\Middleware\Authorization\Constraint;
 
 use Override;
-use LesHttp\Middleware\Authorization\Constraint\AuthorizationConstraint;
 use LesValueObject\Composite\ForeignReference;
 use Psr\Http\Message\ServerRequestInterface;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 
 abstract class AbstractTypeAuthorizationConstraint implements AuthorizationConstraint
 {

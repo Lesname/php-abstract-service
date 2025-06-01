@@ -13,7 +13,7 @@
     "lesname/domain": "^0.6.0",
     "lesname/validator": "^0.6.0",
     "lesname/queue": "^0.8.0",
-    "lesname/http": "^0.7.0",
+    "lesname/http": "^0.8.0-alpha",
     "lesname/value-object": "^0.5.0",
 
     "lesname/abstract-client": "^0.5.0",
@@ -29,7 +29,9 @@
     "symfony/console": "^7.0.0",
 
     "psr/http-message": "^1.0.0 || ^2.0.0",
-    "psr/container": "^1.0.0 || ^2.0.0"
+    "psr/container": "^1.0.0 || ^2.0.0",
+
+    "slim/psr7": "^1.7"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7.0",

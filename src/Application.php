@@ -3,30 +3,55 @@ declare(strict_types=1);
 
 namespace LesAbstractService;
 
-use Mezzio\MiddlewareFactoryInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Laminas\Stratigility\MiddlewarePipeInterface;
-use Laminas\HttpHandlerRunner\RequestHandlerRunnerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Slim\Psr7\Factory\ServerRequestFactory;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application
 {
-    public function __construct(
-        private readonly RequestHandlerRunnerInterface $runner,
-        private readonly MiddlewareFactoryInterface $factory,
-        private readonly MiddlewarePipeInterface $pipeline,
-    ) {
+    public function __construct(private readonly RequestHandlerInterface $handler)
+    {
     }
 
     public function run(): void
     {
-        $this->runner->run();
+        $this->handle(ServerRequestFactory::createFromGlobals());
     }
 
-    /**
-     * @param class-string<MiddlewareInterface>|MiddlewareInterface $middleware
-     */
-    public function pipe(MiddlewareInterface|string $middleware): void
+    public function handle(ServerRequestInterface $request): void
     {
-        $this->pipeline->pipe($this->factory->prepare($middleware));
+        $this->emit($this->handler->handle($request));
+    }
+
+    private function emit(ResponseInterface $response): void
+    {
+        $this->emitHeaders($response);
+        $this->emitStatusCode($response);
+        $this->emitBody($response);
+    }
+
+    private function emitHeaders(ResponseInterface $response): void
+    {
+        foreach ($response->getHeaders() as $headerName => $headerValues) {
+            assert(is_string($headerName));
+            $name = ucwords($headerName, '-');
+
+            foreach ($headerValues as $headerValue) {
+                $header = sprintf('%s: %s', $name, $headerValue);
+
+                header($header);
+            }
+        }
+    }
+
+    private function emitStatusCode(ResponseInterface $response): void
+    {
+        http_response_code($response->getStatusCode());
+    }
+
+    private function emitBody(ResponseInterface $response): void
+    {
+        echo $response->getBody();
     }
 }
