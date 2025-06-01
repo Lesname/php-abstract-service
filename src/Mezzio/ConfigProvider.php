@@ -133,6 +133,8 @@ final class ConfigProvider
                     GuestAuthorizationConstraint::class => GuestAuthorizationConstraint::class,
                     NoOneAuthorizationConstraint::class => NoOneAuthorizationConstraint::class,
 
+                    TrimMiddleware::class => TrimMiddleware::class,
+
                     AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class => AuthorizationConstraint\Account\AnyAccountAuthorizationConstraint::class,
                     AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class => AuthorizationConstraint\Consumer\AnyConsumerAuthorizationConstraint::class,
                     AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class => AuthorizationConstraint\Producer\AnyProducerAuthorizationConstraint::class,
@@ -156,20 +158,16 @@ final class ConfigProvider
 
                     MiddlewarePipeline::class => MiddlewarePipelineFactory::class,
 
+                    JsonMiddleware::class => ReflectionFactory::class,
                     AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
                     AuthorizationMiddleware::class => ReflectionFactory::class,
                     ConditionMiddleware::class => ReflectionFactory::class,
                     ThrottleMiddleware::class => ThrottleMiddlewareFactory::class,
-
                     AnalyticsMiddleware::class => AnalyticsMiddlewareFactory::class,
-
                     ValidationMiddleware::class => ReflectionFactory::class,
-
                     LocaleMiddleware::class => LocaleMiddlewareFactory::class,
-
                     CatchExceptionMiddleware::class => ReflectionFactory::class,
                     CorsMiddleware::class => CorsMiddlewareFactory::class,
-
                     DispatchMiddleware::class => ReflectionFactory::class,
                     NoRouteMiddleware::class => ReflectionFactory::class,
                     RouterMiddleware::class => ReflectionFactory::class,
@@ -178,7 +176,7 @@ final class ConfigProvider
                     Http\Queue\Handler\ReanimateHandler::class => ReflectionFactory::class,
                     Http\Queue\Handler\GetStatsHandler::class => ReflectionFactory::class,
 
-                    Http\Resource\Handler\CreateEventRouteHandler::class => ReflectionFactory::class,
+                    Http\Resource\Handler\CreateEventRouteHandler::class => Http\Resource\Handler\CreateEventRouteHandlerFactory::class,
                     Http\Resource\Handler\UpdateEventRouteHandler::class => ReflectionFactory::class,
 
                     Http\Resource\Handler\ResultsQueryRouteHandler::class => ReflectionFactory::class,
