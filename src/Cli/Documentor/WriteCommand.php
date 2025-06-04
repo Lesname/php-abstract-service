@@ -311,16 +311,6 @@ final class WriteCommand extends Command
 
             $name = $this->getReferenceName($reference);
             $document = ['$ref' => "#/components/schemas/{$name}"];
-
-            /** @phpstan-ignore method.deprecated */
-            if ($typeDocument->isNullable()) {
-                $document = [
-                    'anyOf' => [
-                        $document,
-                        ['type' => 'null'],
-                    ],
-                ];
-            }
         } else {
             $document = match ($typeDocument::class) {
                 AnyTypeDocument::class => $this->composeFromAnyTypeDocument(),
@@ -335,11 +325,16 @@ final class WriteCommand extends Command
                 UnionTypeDocument::class => $this->composeFromUnionTypeDocument($typeDocument),
                 default => throw new RuntimeException($typeDocument::class),
             };
+        }
 
-            /** @phpstan-ignore method.deprecated */
-            if ($typeDocument->isNullable()) {
-                $document['type'] = [$document['type'], 'null'];
-            }
+        /** @phpstan-ignore method.deprecated */
+        if ($typeDocument->isNullable()) {
+            $document = [
+                'anyOf' => [
+                    $document,
+                    ['type' => 'null'],
+                ],
+            ];
         }
 
         if ($typeDocument->getDescription() !== null) {
