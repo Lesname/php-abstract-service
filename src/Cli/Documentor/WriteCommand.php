@@ -16,7 +16,9 @@ use LesValueObject\String\Format\EmailAddress;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\RouteDocumentor;
 use LesValueObject\String\Format\Resource\Type;
+use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesValueObject\String\Format\Resource\Identifier;
 use LesDocumentor\Type\Document\Composite\Key\AnyKey;
@@ -256,6 +258,7 @@ final class WriteCommand extends Command
                     }
 
                     if ($this->isReference($doc)) {
+                        /** @phpstan-ignore method.deprecated */
                         $routeSchemas[$reference] = $doc->withNullable(false);
                     }
                 }
@@ -309,6 +312,7 @@ final class WriteCommand extends Command
             $name = $this->getReferenceName($reference);
             $document = ['$ref' => "#/components/schemas/{$name}"];
 
+            /** @phpstan-ignore method.deprecated */
             if ($typeDocument->isNullable()) {
                 $document = [
                     'anyOf' => [
@@ -319,17 +323,20 @@ final class WriteCommand extends Command
             }
         } else {
             $document = match ($typeDocument::class) {
-                BoolTypeDocument::class => $this->composeBoolDocument(),
-                CollectionTypeDocument::class => $this->composeCollectionDocument($typeDocument),
-                CompositeTypeDocument::class => $this->composeCompositeDocument($typeDocument),
-                EnumTypeDocument::class => $this->composeEnumDocument($typeDocument),
-                NumberTypeDocument::class => $this->composeNumberDocument($typeDocument),
-                StringTypeDocument::class => $this->composeStringDocument($typeDocument),
-                ReferenceTypeDocument::class => $this->composeReferenceDocument($typeDocument),
-                UnionTypeDocument::class => $this->compaseUnionDocument($typeDocument),
+                AnyTypeDocument::class => $this->composeFromAnyTypeDocument(),
+                BoolTypeDocument::class => ['type' => 'boolean'],
+                CollectionTypeDocument::class => $this->composeFromCollectionTypeDocument($typeDocument),
+                CompositeTypeDocument::class => $this->composeFromCompositeTypeDocument($typeDocument),
+                EnumTypeDocument::class => $this->composeFromEnumTypeDocument($typeDocument),
+                NullTypeDocument::class => ['type' => 'null'],
+                NumberTypeDocument::class => $this->composeFromNumberTypeDocument($typeDocument),
+                ReferenceTypeDocument::class => $this->composeFromReferenceTypeDocument($typeDocument),
+                StringTypeDocument::class => $this->composeFromStringTypeDocument($typeDocument),
+                UnionTypeDocument::class => $this->composeFromUnionTypeDocument($typeDocument),
                 default => throw new RuntimeException($typeDocument::class),
             };
 
+            /** @phpstan-ignore method.deprecated */
             if ($typeDocument->isNullable()) {
                 $document['type'] = [$document['type'], 'null'];
             }
@@ -416,9 +423,19 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      */
-    private function composeBoolDocument(): array
+    private function composeFromAnyTypeDocument(): array
     {
-        return ['type' => 'boolean'];
+        return [
+            'oneOf' => [
+                ['type' => 'array'],
+                ['type' => 'boolean'],
+                ['type' => 'integer'],
+                ['type' => 'null'],
+                ['type' => 'number'],
+                ['type' => 'object'],
+                ['type' => 'string'],
+            ],
+        ];
     }
 
     /**
@@ -426,7 +443,7 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function composeCollectionDocument(CollectionTypeDocument $typeDocument): array
+    private function composeFromCollectionTypeDocument(CollectionTypeDocument $typeDocument): array
     {
         $document = [
             'type' => 'array',
@@ -446,7 +463,7 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function composeCompositeDocument(CompositeTypeDocument $typeDocument): array
+    private function composeFromCompositeTypeDocument(CompositeTypeDocument $typeDocument): array
     {
         $properties = $required = [];
         $compDocument = [
@@ -501,7 +518,7 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      */
-    private function composeEnumDocument(EnumTypeDocument $typeDocument): array
+    private function composeFromEnumTypeDocument(EnumTypeDocument $typeDocument): array
     {
         return [
             'type' => 'string',
@@ -512,7 +529,7 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      */
-    private function composeNumberDocument(NumberTypeDocument $typeDocument): array
+    private function composeFromNumberTypeDocument(NumberTypeDocument $typeDocument): array
     {
         $document = [
             'type' => is_int($typeDocument->multipleOf)
@@ -539,7 +556,7 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      */
-    private function composeStringDocument(StringTypeDocument $typeDocument): array
+    private function composeFromStringTypeDocument(StringTypeDocument $typeDocument): array
     {
         $reference = $typeDocument->getReference();
         $document = ['type' => 'string'];
@@ -569,7 +586,7 @@ final class WriteCommand extends Command
     /**
      * @return array<mixed>
      */
-    private function composeReferenceDocument(ReferenceTypeDocument $typeDocument): array
+    private function composeFromReferenceTypeDocument(ReferenceTypeDocument $typeDocument): array
     {
         $reference = $typeDocument->getReference();
 
@@ -585,11 +602,11 @@ final class WriteCommand extends Command
      *
      * @throws ReflectionException
      */
-    private function compaseUnionDocument(UnionTypeDocument $typeDocument): array
+    private function composeFromUnionTypeDocument(UnionTypeDocument $typeDocument): array
     {
         return [
             'anyOf' => array_map(
-                fn (TypeDocument $subType) => $this->composeTypeDocument($subType, true),
+                fn(TypeDocument $subType) => $this->composeTypeDocument($subType, true),
                 $typeDocument->subTypes,
             ),
         ];
