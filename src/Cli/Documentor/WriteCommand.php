@@ -258,6 +258,7 @@ final class WriteCommand extends Command
                     }
 
                     if ($this->isReference($doc)) {
+                        /** @phpstan-ignore method.deprecated */
                         $routeSchemas[$reference] = $doc->withNullable(false);
                     }
                 }
@@ -311,6 +312,7 @@ final class WriteCommand extends Command
             $name = $this->getReferenceName($reference);
             $document = ['$ref' => "#/components/schemas/{$name}"];
 
+            /** @phpstan-ignore method.deprecated */
             if ($typeDocument->isNullable()) {
                 $document = [
                     'anyOf' => [
@@ -334,6 +336,7 @@ final class WriteCommand extends Command
                 default => throw new RuntimeException($typeDocument::class),
             };
 
+            /** @phpstan-ignore method.deprecated */
             if ($typeDocument->isNullable()) {
                 $document['type'] = [$document['type'], 'null'];
             }

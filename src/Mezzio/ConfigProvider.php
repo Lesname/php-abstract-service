@@ -38,6 +38,7 @@ use LesHttp\Middleware\Route\DispatchMiddleware;
 use LesHttp\Middleware\Input\ValidationMiddleware;
 use LesHttp\Middleware\Input\Decode\JsonMiddleware;
 use LesHttp\Middleware\Response\CorsMiddlewareFactory;
+use LesDocumentor\Route\Input\LesRouteInputDocumentor;
 use LesHttp\Middleware\Response\CatchExceptionMiddleware;
 use Symfony\Component\Translation\Translator;
 use LesDocumentor\Route\LesRouteDocumentor;
@@ -101,7 +102,7 @@ final class ConfigProvider
                     IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     RouteDocumentor::class => LesRouteDocumentor::class,
-                    RouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
+                    RouteInputDocumentor::class => LesRouteInputDocumentor::class,
 
                     Router::class => RpcRouter::class,
 
@@ -126,7 +127,9 @@ final class ConfigProvider
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     LesRouteDocumentor::class => LesRouteDocumentor::class,
+                    /** @phpstan-ignore-next-line  */
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
+                    LesRouteInputDocumentor::class => LesRouteInputDocumentor::class,
 
                     AnyIdentityAuthorizationConstraint::class => AnyIdentityAuthorizationConstraint::class,
                     AnyOneAuthorizationConstraint::class => AnyOneAuthorizationConstraint::class,
