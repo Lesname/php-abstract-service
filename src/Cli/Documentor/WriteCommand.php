@@ -305,22 +305,16 @@ final class WriteCommand extends Command
      */
     private function composeTypeDocument(TypeDocument $typeDocument, bool $useRef): array
     {
+        if ($typeDocument instanceof NullTypeDocument) {
+            return ['type' => 'null'];
+        }
+
         if ($useRef && $this->isReference($typeDocument)) {
             $reference = $typeDocument->getReference();
             assert(is_string($reference));
 
             $name = $this->getReferenceName($reference);
             $document = ['$ref' => "#/components/schemas/{$name}"];
-
-            /** @phpstan-ignore method.deprecated */
-            if ($typeDocument->isNullable()) {
-                $document = [
-                    'anyOf' => [
-                        $document,
-                        ['type' => 'null'],
-                    ],
-                ];
-            }
         } else {
             $document = match ($typeDocument::class) {
                 AnyTypeDocument::class => $this->composeFromAnyTypeDocument(),
@@ -328,18 +322,22 @@ final class WriteCommand extends Command
                 CollectionTypeDocument::class => $this->composeFromCollectionTypeDocument($typeDocument),
                 CompositeTypeDocument::class => $this->composeFromCompositeTypeDocument($typeDocument),
                 EnumTypeDocument::class => $this->composeFromEnumTypeDocument($typeDocument),
-                NullTypeDocument::class => ['type' => 'null'],
                 NumberTypeDocument::class => $this->composeFromNumberTypeDocument($typeDocument),
                 ReferenceTypeDocument::class => $this->composeFromReferenceTypeDocument($typeDocument),
                 StringTypeDocument::class => $this->composeFromStringTypeDocument($typeDocument),
                 UnionTypeDocument::class => $this->composeFromUnionTypeDocument($typeDocument),
                 default => throw new RuntimeException($typeDocument::class),
             };
+        }
 
-            /** @phpstan-ignore method.deprecated */
-            if ($typeDocument->isNullable()) {
-                $document['type'] = [$document['type'], 'null'];
-            }
+        /** @phpstan-ignore method.deprecated */
+        if ($typeDocument->isNullable() && !$typeDocument instanceof UnionTypeDocument) {
+            $document = [
+                'anyOf' => [
+                    $document,
+                    ['type' => 'null'],
+                ],
+            ];
         }
 
         if ($typeDocument->getDescription() !== null) {
