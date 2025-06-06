@@ -448,6 +448,10 @@ final class WriteCommand extends Command
             'items' => $this->composeTypeDocument($typeDocument->item, true),
         ];
 
+        if ($typeDocument->getMaxDepth()) {
+            $document['x-les-maxDepth'] = $typeDocument->getMaxDepth();
+        }
+
         if ($typeDocument->size) {
             $document['minItems'] = $typeDocument->size->minimal;
             $document['maxItems'] = $typeDocument->size->maximal;
@@ -470,6 +474,10 @@ final class WriteCommand extends Command
             'properties' => $properties,
             'required' => $required,
         ];
+
+        if ($typeDocument->getMaxDepth()) {
+            $compDocument['x-les-maxDepth'] = $typeDocument->getMaxDepth();
+        }
 
         foreach ($typeDocument->properties as $property) {
             $propDocument = $this->composeTypeDocument($property->type, true);
