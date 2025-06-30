@@ -22,10 +22,7 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\ConditionConstr
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
-/**
- * @deprecated use ExistsConditionConstraint
- */
-final class ExistsResourceConditionConstraint implements ConditionConstraint
+final class ExistsConditionConstraint implements ConditionConstraint
 {
     public function __construct(private readonly ContainerInterface $container)
     {}
