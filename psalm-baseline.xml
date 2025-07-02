@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="7.0.0-beta9@667088995f17e8c873cbf84a8aef9fac73880924">
+  <file src="src/Application.php">
+    <InternalMethod>
+      <code><![CDATA[ServerRequestFactory::createFromGlobals()]]></code>
+    </InternalMethod>
+  </file>
+  <file src="src/Cli/Documentor/WriteCommand.php">
+    <DeprecatedMethod>
+      <code><![CDATA[isNullable]]></code>
+      <code><![CDATA[withNullable]]></code>
+    </DeprecatedMethod>
+  </file>
+  <file src="src/Container/Mail/TemplateContainerFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$reference]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Factory/Container/Exception/FailedParameter.php">
+    <MutableDependency>
+      <code><![CDATA[Exception]]></code>
+    </MutableDependency>
+  </file>
+  <file src="src/Factory/Container/ReflectionFactory.php">
+    <InvalidOperand>
+      <code><![CDATA[$this->getParameters($container, $constructor)]]></code>
+    </InvalidOperand>
+    <MixedArgumentTypeCoercion>
+      <code><![CDATA[$factory]]></code>
+    </MixedArgumentTypeCoercion>
+    <MixedAssignment>
+      <code><![CDATA[$dependency]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Factory/Symfony/Translator/TranslatorFactory.php">
+    <MixedAssignment>
+      <code><![CDATA[$file]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Http/Resource/ConditionConstraint/ExistsConditionConstraint.php">
+    <MixedAssignment>
+      <code><![CDATA[$resourceRepository]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Http/Resource/ConditionConstraint/ExistsResourceConditionConstraint.php">
+    <InternalMethod>
+      <code><![CDATA[new UnsatisfiedConditionConstraintResult('resource.notExists', ['id' => $body['id']])]]></code>
+    </InternalMethod>
+    <MixedAssignment>
+      <code><![CDATA[$resourceRepository]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Http/Resource/ConditionConstraint/VersionConditionConstraint.php">
+    <MixedAssignment>
+      <code><![CDATA[$resourceRepository]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Http/Resource/Handler/AbstractQueryRouteHandler.php">
+    <MixedMethodCall>
+      <code><![CDATA[$proxy['method']]]></code>
+    </MixedMethodCall>
+  </file>
+  <file src="src/Http/Resource/Handler/CreateEventRouteHandler.php">
+    <NoInterfaceProperties>
+      <code><![CDATA[$event->id]]></code>
+      <code><![CDATA[$event->target]]></code>
+    </NoInterfaceProperties>
+  </file>
+  <file src="src/Mezzio/ConfigProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class]]></code>
+      <code><![CDATA[MezzioRouteInputDocumentor::class]]></code>
+      <code><![CDATA[MezzioRouteInputDocumentor::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/Router/Route/RpcRouteBuilder.php">
+    <DeprecatedClass>
+      <code><![CDATA[Category]]></code>
+      <code><![CDATA[Category::Command]]></code>
+    </DeprecatedClass>
+    <DeprecatedMethod>
+      <code><![CDATA[buildRoute]]></code>
+    </DeprecatedMethod>
+    <MixedAssignment>
+      <code><![CDATA[$route[$key]]]></code>
+    </MixedAssignment>
+  </file>
+  <file src="src/Permission/Event/GrantedEvent.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[GrantedEvent]]></code>
+      <code><![CDATA[GrantedEvent]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+  <file src="src/Permission/Event/UpdatedEvent.php">
+    <PropertyNotSetInConstructor>
+      <code><![CDATA[UpdatedEvent]]></code>
+      <code><![CDATA[UpdatedEvent]]></code>
+    </PropertyNotSetInConstructor>
+  </file>
+</files>

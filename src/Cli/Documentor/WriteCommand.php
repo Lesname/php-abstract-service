@@ -252,7 +252,7 @@ final class WriteCommand extends Command
 
                 $reference = $doc->getReference();
 
-                if ($reference) {
+                if ($reference !== null) {
                     if (array_key_exists($reference, $routeSchemas)) {
                         continue;
                     }
@@ -448,7 +448,7 @@ final class WriteCommand extends Command
             'items' => $this->composeTypeDocument($typeDocument->item, true),
         ];
 
-        if ($typeDocument->getMaxDepth()) {
+        if (is_int($typeDocument->getMaxDepth())) {
             $document['x-les-maxDepth'] = $typeDocument->getMaxDepth();
         }
 
@@ -475,7 +475,7 @@ final class WriteCommand extends Command
             'required' => $required,
         ];
 
-        if ($typeDocument->getMaxDepth()) {
+        if (is_int($typeDocument->getMaxDepth())) {
             $compDocument['x-les-maxDepth'] = $typeDocument->getMaxDepth();
         }
 

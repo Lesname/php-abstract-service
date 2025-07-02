@@ -35,11 +35,14 @@
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.7.0",
-    "phpstan/phpstan": "^2.0.0",
 
     "lesname/token": "^0.4.0",
 
+    "vimeo/psalm": "^7.0.0-beta9",
+
     "php-amqplib/php-amqplib": "^3.0.0",
+
+    "phpstan/phpstan": "^2.0.0",
     "phpstan/extension-installer": "^1.4",
     "phpstan/phpstan-deprecation-rules": "^2.0"
   },

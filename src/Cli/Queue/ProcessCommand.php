@@ -55,9 +55,12 @@ final class ProcessCommand extends Command
         return Command::SUCCESS;
     }
 
+    /**
+     * @return callable(Job $job): void
+     */
     private function getProcessor(OutputInterface $output): callable
     {
-        return function (Job $job) use ($output) {
+        return function (Job $job) use ($output): void {
             if ($job->name->value === 'queue:quit') {
                 $output->writeln('Queue quit');
                 $this->queue->stopProcessing();

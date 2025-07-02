@@ -43,7 +43,7 @@ final class ExistsConditionConstraint implements ConditionConstraint
         assert(is_string($body['id']));
 
         return !$this->getResourceRepository($request)->exists(new Identifier($body['id']))
-            ? new UnsatisfiedConditionConstraintResult('resource.notExists', ['id' => $body['id']])
+            ? UnsatisfiedConditionConstraintResult::constraint('resource.notExists', ['id' => $body['id']])
             : new SatisfiedConditionConstraintResult();
     }
 

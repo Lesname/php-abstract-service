@@ -34,7 +34,7 @@ final class HasPermissionsCondition implements ConditionConstraint
         );
 
         return !$this->permissionsRepository->existsWithIdentity($identity)
-            ? new UnsatisfiedConditionConstraintResult('permission.hasNoPermissions')
+            ? UnsatisfiedConditionConstraintResult::conflict('permission.hasNoPermissions')
             : new SatisfiedConditionConstraintResult();
     }
 }
