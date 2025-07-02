@@ -16,6 +16,7 @@ use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
 use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
 use LesAbstractService\Http\Resource\ConditionConstraint\ExistsConditionConstraint;
+use LesAbstractService\Http\Resource\ConditionConstraint\VersionConditionConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 
 /**
@@ -205,6 +206,7 @@ final class RpcRouteBuilder
     {
         yield from $this
             ->withAddedCondition(ExistsConditionConstraint::class)
+            ->withAddedCondition(VersionConditionConstraint::class)
             ->buildEventRoute(Method::Patch, $action, $event, $handler);
     }
 
