@@ -15,8 +15,8 @@ use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultsQueryRouteHandler;
 use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
+use LesAbstractService\Http\Resource\ConditionConstraint\ExistsConditionConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
-use LesAbstractService\Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint;
 
 /**
  * @psalm-immutable
@@ -204,7 +204,7 @@ final class RpcRouteBuilder
     public function buildUpdateEventRoute(string $action, string $event, string $handler = UpdateEventRouteHandler::class): iterable
     {
         yield from $this
-            ->withAddedCondition(ExistsResourceConditionConstraint::class)
+            ->withAddedCondition(ExistsConditionConstraint::class)
             ->buildEventRoute(Method::Patch, $action, $event, $handler);
     }
 
