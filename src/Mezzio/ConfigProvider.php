@@ -187,7 +187,10 @@ final class ConfigProvider
 
                     RpcRouter::class => RpcRouterFactory::class,
 
+                    /** @phpstan-ignore classConstant.deprecatedClass */
                     Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class => ReflectionFactory::class,
+                    Http\Resource\ConditionConstraint\ExistsConditionConstraint::class => ReflectionFactory::class,
+                    Http\Resource\ConditionConstraint\VersionConditionConstraint::class => ReflectionFactory::class,
 
                     Cli\Cache\ClearCommand::class => ReflectionFactory::class,
 

@@ -22,10 +22,7 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\ConditionConstr
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
-/**
- * @deprecated use ExistsConditionConstraint
- */
-final class ExistsResourceConditionConstraint implements ConditionConstraint
+final class ExistsConditionConstraint implements ConditionConstraint
 {
     public function __construct(private readonly ContainerInterface $container)
     {}
@@ -46,7 +43,7 @@ final class ExistsResourceConditionConstraint implements ConditionConstraint
         assert(is_string($body['id']));
 
         return !$this->getResourceRepository($request)->exists(new Identifier($body['id']))
-            ? new UnsatisfiedConditionConstraintResult('resource.notExists', ['id' => $body['id']])
+            ? UnsatisfiedConditionConstraintResult::constraint('resource.notExists', ['id' => $body['id']])
             : new SatisfiedConditionConstraintResult();
     }
 

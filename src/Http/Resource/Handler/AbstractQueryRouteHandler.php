@@ -113,6 +113,10 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
         assert(is_array($body));
 
         if (!isset($body[$parameter->getName()])) {
+            if ($parameter->isDefaultValueAvailable()) {
+                return $parameter->getDefaultValue();
+            }
+
             if (!$parameter->allowsNull()) {
                 throw new RuntimeException();
             }
