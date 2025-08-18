@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LesAbstractService\Mezzio;
+namespace LesAbstractService\Mezzio\ConfigProvider\Provider;
 
 use Monolog\Logger;
 use RuntimeException;
@@ -11,6 +11,7 @@ use LesHydrator\Hydrator;
 use LesHttp\Router\Router;
 use LesAbstractService\Cli;
 use Psr\Log\LoggerInterface;
+use LesAbstractService\Http;
 use Doctrine\DBAL\Connection;
 use LesHttp\Router\RpcRouter;
 use Sentry\State\HubInterface;
@@ -27,60 +28,55 @@ use LesCache\Redis\RedisCacheFactory;
 use LesToken\Codec\TokenCodecFactory;
 use LesAbstractService\Container\Mail;
 use LesHttp\Handler\MiddlewarePipeline;
+use LesAbstractService\Mezzio\Listener;
 use LesDocumentor\Route\RouteDocumentor;
 use LesDomain\Event\Publisher\Publisher;
 use LesDatabase\Factory\ConnectionFactory;
+use LesDocumentor\Route\LesRouteDocumentor;
 use Psr\Http\Server\RequestHandlerInterface;
 use LesHttp\Middleware\Input\TrimMiddleware;
-use LesHttp\Handler\MiddlewarePipelineFactory;
-use LesHttp\Middleware\Response\CorsMiddleware;
-use LesHttp\Middleware\Route\DispatchMiddleware;
-use LesHttp\Middleware\Input\ValidationMiddleware;
-use LesHttp\Middleware\Input\Decode\JsonMiddleware;
-use LesHttp\Middleware\Response\CorsMiddlewareFactory;
-use LesDocumentor\Route\Input\LesRouteInputDocumentor;
-use LesHttp\Middleware\Response\CatchExceptionMiddleware;
 use Symfony\Component\Translation\Translator;
-use LesDocumentor\Route\LesRouteDocumentor;
+use LesHttp\Handler\MiddlewarePipelineFactory;
 use LesHttp\Middleware\Route\RouterMiddleware;
+use LesHttp\Middleware\Response\CorsMiddleware;
 use LesHttp\Middleware\Locale\LocaleMiddleware;
 use LesHttp\Middleware\Route\NoRouteMiddleware;
+use LesHttp\Middleware\Route\DispatchMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 use LesAbstractService\Factory\Logger\HubFactory;
 use LesDocumentor\Route\Document\Property\Method;
-use LesHttp\Middleware\AccessControl\Condition\ConditionMiddleware;
-use LesHttp\Middleware\AccessControl\Authorization\AuthorizationMiddleware;
+use LesHttp\Middleware\Input\ValidationMiddleware;
+use LesHttp\Middleware\Input\Decode\JsonMiddleware;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
-use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddleware;
-use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddlewareFactory;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use LesAbstractService\Factory\Logger\MonologFactory;
 use LesHttp\Middleware\Analytics\AnalyticsMiddleware;
+use LesHttp\Middleware\Response\CorsMiddlewareFactory;
+use LesDocumentor\Route\Input\LesRouteInputDocumentor;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use LesHttp\Middleware\Locale\LocaleMiddlewareFactory;
 use LesDomain\Identifier\Generator\IdentifierGenerator;
-use LesAbstractService\Http;
-use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LesHttp\Middleware\Response\CatchExceptionMiddleware;
 use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
-use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddleware;
 use LesDomain\Event\Publisher\FiberSubscriptionsPublisher;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesDomain\Identifier\Generator\Uuid6IdentifierGenerator;
 use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
-use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddlewareFactory;
+use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddleware;
+use LesHttp\Middleware\AccessControl\Condition\ConditionMiddleware;
 use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
 use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
+use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddlewareFactory;
+use LesHttp\Middleware\AccessControl\Authorization\AuthorizationMiddleware;
+use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddleware;
+use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddlewareFactory;
+use LesAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\GuestAuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\NoOneAuthorizationConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyOneAuthorizationConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
-use LesHttp\Middleware\AccessControl\Authorization\Constraint\NoOneAuthorizationConstraint;
-use LesAbstractService\Middleware\Authorization\Constraint as AuthorizationConstraint;
-use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
 
-/**
- * @deprecated
- */
-final class ConfigProvider
+final class BaseProvider
 {
     /**
      * @return array<string, mixed>
@@ -130,7 +126,6 @@ final class ConfigProvider
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     LesRouteDocumentor::class => LesRouteDocumentor::class,
-                    MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
                     LesRouteInputDocumentor::class => LesRouteInputDocumentor::class,
 
                     AnyIdentityAuthorizationConstraint::class => AnyIdentityAuthorizationConstraint::class,
@@ -189,7 +184,6 @@ final class ConfigProvider
 
                     RpcRouter::class => RpcRouterFactory::class,
 
-                    Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class => ReflectionFactory::class,
                     Http\Resource\ConditionConstraint\ExistsConditionConstraint::class => ReflectionFactory::class,
                     Http\Resource\ConditionConstraint\VersionConditionConstraint::class => ReflectionFactory::class,
 
@@ -227,9 +221,6 @@ final class ConfigProvider
                     'service.update' => Cli\Service\UpdateCommand::class,
                     'service.cleanUp' => Cli\Service\CleanUpCommand::class,
                 ],
-            ],
-            'routes' => [
-                ...$this->composeQueueRoutes(),
             ],
             LocaleMiddleware::class => [
                 'defaultLocale' => 'nl_NL',
@@ -314,24 +305,5 @@ final class ConfigProvider
         }
 
         return $translator;
-    }
-
-    /**
-     * @return iterable<string, array<mixed>>
-     */
-    private function composeQueueRoutes(): iterable
-    {
-        $builder = (new Http\Route\RpcRouteBuilder('queue', [HasGrantPermissionAuthorization::class]))
-            ->withProxyClass(Queue\Queue::class)
-            ->withExtraOption('document', false);
-
-        yield from $builder->buildResultQueryRoute('countProcessing');
-        yield from $builder->buildResultQueryRoute('countProcessable');
-        yield from $builder->buildResultQueryRoute('countBuried');
-        yield from $builder->buildResultsQueryRoute('getBuried');
-        yield from $builder->buildRoute(Method::Query, 'getStats', Http\Queue\Handler\GetStatsHandler::class);
-
-        yield from $builder->buildRoute(Method::Patch, 'reanimate', Http\Queue\Handler\ReanimateHandler::class);
-        yield from $builder->buildRoute(Method::Delete, 'delete', Http\Queue\Handler\DeleteHandler::class);
     }
 }

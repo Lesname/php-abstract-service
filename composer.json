@@ -13,7 +13,7 @@
     "lesname/domain": "^0.6.0",
     "lesname/validator": "^0.6.0",
     "lesname/queue": "^0.8.0",
-    "lesname/http": "^0.8.0-alpha",
+    "lesname/http": "^0.8.0",
     "lesname/value-object": "^0.5.0",
 
     "lesname/abstract-client": "^0.5.0",
