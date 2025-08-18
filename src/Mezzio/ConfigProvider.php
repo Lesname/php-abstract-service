@@ -127,7 +127,7 @@ final class ConfigProvider
                     Uuid6IdentifierGenerator::class => Uuid6IdentifierGenerator::class,
 
                     LesRouteDocumentor::class => LesRouteDocumentor::class,
-                    /** @phpstan-ignore-next-line  */
+                    /** @phpstan-ignore-next-line */
                     MezzioRouteInputDocumentor::class => MezzioRouteInputDocumentor::class,
                     LesRouteInputDocumentor::class => LesRouteInputDocumentor::class,
 
@@ -238,21 +238,23 @@ final class ConfigProvider
                 ],
             ],
             'cors' => [
-                'methods' => [
-                    Method::Post->value,
-                    Method::Put->value,
-                    Method::Patch->value,
-                    Method::Query->value,
-                    Method::Delete->value,
+                'default' => [
+                    'methods' => [
+                        Method::Post->value,
+                        Method::Put->value,
+                        Method::Patch->value,
+                        Method::Query->value,
+                        Method::Delete->value,
+                    ],
+                    'headers' => [
+                        'Accept-Language',
+                        'Authorization',
+                        'Content-Type',
+                        'If-Match',
+                        'x-build',
+                    ],
+                    'maxAge' => 3_600,
                 ],
-                'headers' => [
-                    'Accept-Language',
-                    'Authorization',
-                    'Content-Type',
-                    'If-Match',
-                    'x-build',
-                ],
-                'maxAge' => 3_600,
             ],
             MiddlewarePipeline::class => [
                 CatchExceptionMiddleware::class,
