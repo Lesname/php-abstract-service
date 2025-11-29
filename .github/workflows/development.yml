@@ -56,19 +56,19 @@ jobs:
           path: vendor
           key: ${{ github.sha }}-composer84
       - run: ./vendor/bin/phpcs --standard=./phpcs.xml
-#  psalm84:
-#    runs-on: ubuntu-latest
-#    needs: [ composer84 ]
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.4'
-#          extensions: intl
-#          tools: composer
-#      - name: Retrieve cached vendor folder
-#        uses: actions/cache@v4
-#        with:
-#          path: vendor
-#          key: ${{ github.sha }}-composer84
-#      - run: ./vendor/bin/psalm
+  psalm84:
+    runs-on: ubuntu-latest
+    needs: [ composer84 ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: intl
+          tools: composer
+      - name: Retrieve cached vendor folder
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: ${{ github.sha }}-composer84
+      - run: ./vendor/bin/psalm
