@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesAbstractService\Cli\Documentor;
@@ -258,8 +259,7 @@ final class WriteCommand extends Command
                     }
 
                     if ($this->isReference($doc)) {
-                        /** @phpstan-ignore method.deprecated */
-                        $routeSchemas[$reference] = $doc->withNullable(false);
+                        $routeSchemas[$reference] = UnionTypeDocument::nullable($doc);
                     }
                 }
 
@@ -328,16 +328,6 @@ final class WriteCommand extends Command
                 UnionTypeDocument::class => $this->composeFromUnionTypeDocument($typeDocument),
                 default => throw new RuntimeException($typeDocument::class),
             };
-        }
-
-        /** @phpstan-ignore method.deprecated */
-        if ($typeDocument->isNullable() && !$typeDocument instanceof UnionTypeDocument) {
-            $document = [
-                'anyOf' => [
-                    $document,
-                    ['type' => 'null'],
-                ],
-            ];
         }
 
         if ($typeDocument->getDescription() !== null) {
