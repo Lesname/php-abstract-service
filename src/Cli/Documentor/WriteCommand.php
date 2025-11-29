@@ -211,19 +211,20 @@ final class WriteCommand extends Command
 
         foreach ($this->getSchemas() as $schema) {
             $reference = $schema->getReference();
-            assert(is_string($reference));
 
-            if (isset($document[$this->getReferenceName($reference)])) {
-                if (!isset($document[$this->getReferenceName($reference)]['$ref'])) {
-                    continue;
+            if (is_string($reference)) {
+                if (isset($document[$this->getReferenceName($reference)])) {
+                    if (!isset($document[$this->getReferenceName($reference)]['$ref'])) {
+                        continue;
+                    }
+
+                    if ($schema instanceof ReferenceTypeDocument) {
+                        continue;
+                    }
                 }
 
-                if ($schema instanceof ReferenceTypeDocument) {
-                    continue;
-                }
+                $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
             }
-
-            $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
         }
 
         return $document;
