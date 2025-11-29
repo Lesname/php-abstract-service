@@ -356,33 +356,22 @@ final class WriteCommand extends Command
     private function getReferenceName(string $class): string
     {
         if (
-            str_contains($class, '\\Model\\')
-            &&
-            !is_subclass_of($class, ResourceModel::class)
-            &&
             preg_match(
-                '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                '/^[a-zA-Z]+(?<model>\\\\[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model(?<part>\\\\[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
                 $class,
                 $matches,
             )
         ) {
-            $model = str_replace('\\', '', $matches['model']);
-            $part = preg_replace_callback(
-                '/\\\\(.)/',
-                static function (array $input) {
-                    return '.' . strtolower($input[1]);
-                },
-                $matches['part'],
-            );
+            $name = str_replace($matches['part'], '', $matches['model'])
+                . $matches['part'];
+            $name = trim($name, '\\');
+            $parts = explode('\\', $name);
+            $parts = array_map(lcfirst(...), $parts);
 
-            assert(is_string($part));
-
-            return lcfirst($model) . '.' . lcfirst($part);
+            return join('.', $parts);
         }
 
         if (
-            str_contains($class, '\\Repository\\')
-            &&
             preg_match(
                 '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Repository\\\\[a-zA-Z]+\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
                 $class,
