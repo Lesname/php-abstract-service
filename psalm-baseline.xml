@@ -54,13 +54,13 @@
   </file>
   <file src="src/Permission/Event/GrantedEvent.php">
     <PropertyNotSetInConstructor>
-      <code><![CDATA[GrantedEvent]]></code>
+      <code><![CDATA[$action]]></code>
       <code><![CDATA[GrantedEvent]]></code>
     </PropertyNotSetInConstructor>
   </file>
   <file src="src/Permission/Event/UpdatedEvent.php">
     <PropertyNotSetInConstructor>
-      <code><![CDATA[UpdatedEvent]]></code>
+      <code><![CDATA[$action]]></code>
       <code><![CDATA[UpdatedEvent]]></code>
     </PropertyNotSetInConstructor>
   </file>
