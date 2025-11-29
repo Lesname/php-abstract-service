@@ -36,14 +36,6 @@
       <code><![CDATA[$resourceRepository]]></code>
     </MixedAssignment>
   </file>
-  <file src="src/Http/Resource/ConditionConstraint/ExistsResourceConditionConstraint.php">
-    <InternalMethod>
-      <code><![CDATA[new UnsatisfiedConditionConstraintResult('resource.notExists', ['id' => $body['id']])]]></code>
-    </InternalMethod>
-    <MixedAssignment>
-      <code><![CDATA[$resourceRepository]]></code>
-    </MixedAssignment>
-  </file>
   <file src="src/Http/Resource/ConditionConstraint/VersionConditionConstraint.php">
     <MixedAssignment>
       <code><![CDATA[$resourceRepository]]></code>
