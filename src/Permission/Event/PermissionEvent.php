@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesAbstractService\Permission\Event;
@@ -10,11 +11,7 @@ use LesDomain\Event\Property\Target;
  */
 trait PermissionEvent
 {
-    /**
-     * @psalm-pure
-     */
-    public function getTarget(): Target
-    {
-        return new Target('permission');
+    public Target $target {
+        get => new Target('permission');
     }
 }

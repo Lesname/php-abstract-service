@@ -8,15 +8,13 @@
 
     "psr/http-server-handler": "^1.0.0",
 
-    "lesname/documentor": "^0.6.0",
+    "lesname/documentor": "^0.7.0",
     "lesname/resource": "^0.6.0",
-    "lesname/domain": "^0.6.0",
+    "lesname/domain": "^0.7.0",
     "lesname/validator": "^0.6.0",
     "lesname/queue": "^0.8.0",
-    "lesname/http": "^0.8.0",
-    "lesname/value-object": "^0.5.0",
-
-    "lesname/abstract-client": "^0.5.0",
+    "lesname/http": "^0.9.0",
+    "lesname/value-object": "^0.6.0",
 
     "mezzio/mezzio": "^3.20.0",
     "mezzio/mezzio-helpers": "^5.0.0",
@@ -31,10 +29,10 @@
     "psr/http-message": "^1.0.0 || ^2.0.0",
     "psr/container": "^1.0.0 || ^2.0.0",
 
-    "slim/psr7": "^1.7"
+    "slim/psr7": "^1.7.0"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "^3.7.0",
+    "squizlabs/php_codesniffer": "^4.0.0",
 
     "lesname/token": "^0.4.0",
 
@@ -43,8 +41,8 @@
     "php-amqplib/php-amqplib": "^3.0.0",
 
     "phpstan/phpstan": "^2.0.0",
-    "phpstan/extension-installer": "^1.4",
-    "phpstan/phpstan-deprecation-rules": "^2.0"
+    "phpstan/extension-installer": "^1.4.0",
+    "phpstan/phpstan-deprecation-rules": "^2.0.0"
   },
   "autoload": {
     "psr-4": {

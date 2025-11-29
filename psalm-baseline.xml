@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="7.0.0-beta9@667088995f17e8c873cbf84a8aef9fac73880924">
+<files psalm-version="7.0.0-beta11@24cb5084ef3db7259d26047ea3a7ddef30f36144">
   <file src="src/Application.php">
     <InternalMethod>
       <code><![CDATA[ServerRequestFactory::createFromGlobals()]]></code>
     </InternalMethod>
-  </file>
-  <file src="src/Cli/Documentor/WriteCommand.php">
-    <DeprecatedMethod>
-      <code><![CDATA[isNullable]]></code>
-      <code><![CDATA[withNullable]]></code>
-    </DeprecatedMethod>
   </file>
   <file src="src/Container/Mail/TemplateContainerFactory.php">
     <MixedAssignment>
@@ -65,25 +59,6 @@
       <code><![CDATA[$event->id]]></code>
       <code><![CDATA[$event->target]]></code>
     </NoInterfaceProperties>
-  </file>
-  <file src="src/Mezzio/ConfigProvider.php">
-    <DeprecatedClass>
-      <code><![CDATA[Http\Resource\ConditionConstraint\ExistsResourceConditionConstraint::class]]></code>
-      <code><![CDATA[MezzioRouteInputDocumentor::class]]></code>
-      <code><![CDATA[MezzioRouteInputDocumentor::class]]></code>
-    </DeprecatedClass>
-  </file>
-  <file src="src/Mezzio/Router/Route/RpcRouteBuilder.php">
-    <DeprecatedClass>
-      <code><![CDATA[Category]]></code>
-      <code><![CDATA[Category::Command]]></code>
-    </DeprecatedClass>
-    <DeprecatedMethod>
-      <code><![CDATA[buildRoute]]></code>
-    </DeprecatedMethod>
-    <MixedAssignment>
-      <code><![CDATA[$route[$key]]]></code>
-    </MixedAssignment>
   </file>
   <file src="src/Permission/Event/GrantedEvent.php">
     <PropertyNotSetInConstructor>

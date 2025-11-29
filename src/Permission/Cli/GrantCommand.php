@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesAbstractService\Permission\Cli;
@@ -64,7 +65,7 @@ final class GrantCommand extends Command
                         $input->getOption('all') || $input->getOption('update'),
                     ),
                     MilliTimestamp::now(),
-                    Headers::forCli(),
+                    Headers::forCli('permission.grant'),
                 ),
             );
 

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesAbstractService\Container\Mail;
@@ -8,7 +9,9 @@ use Psr\Container\ContainerInterface;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesValueObject\Composite\ForeignReference;
+use LesValueObject\String\Format\Resource\Type;
 use LesValueObject\String\Format\Exception\NotFormat;
+use LesValueObject\String\Format\Resource\Identifier;
 use LesAbstractService\Container\Mail\Exception\UnknownReference;
 
 /**
@@ -35,11 +38,9 @@ abstract class AbstractReferenceContainer implements ContainerInterface
             throw new UnknownReference($id);
         }
 
-        return ForeignReference::fromArray(
-            [
-                'type' => $this->references[$id]['type'],
-                'id' => $this->references[$id]['id'],
-            ],
+        return new ForeignReference(
+            new Type($this->references[$id]['type']),
+            new Identifier($this->references[$id]['id']),
         );
     }
 
