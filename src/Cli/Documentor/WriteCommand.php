@@ -211,19 +211,20 @@ final class WriteCommand extends Command
 
         foreach ($this->getSchemas() as $schema) {
             $reference = $schema->getReference();
-            assert(is_string($reference));
 
-            if (isset($document[$this->getReferenceName($reference)])) {
-                if (!isset($document[$this->getReferenceName($reference)]['$ref'])) {
-                    continue;
+            if (is_string($reference)) {
+                if (isset($document[$this->getReferenceName($reference)])) {
+                    if (!isset($document[$this->getReferenceName($reference)]['$ref'])) {
+                        continue;
+                    }
+
+                    if ($schema instanceof ReferenceTypeDocument) {
+                        continue;
+                    }
                 }
 
-                if ($schema instanceof ReferenceTypeDocument) {
-                    continue;
-                }
+                $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
             }
-
-            $document[$this->getReferenceName($reference)] = $this->composeTypeDocument($schema, false);
         }
 
         return $document;
@@ -236,10 +237,10 @@ final class WriteCommand extends Command
      */
     private function getSchemas(): iterable
     {
+        $routeSchemas = [];
+
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
-            $routeSchemas = [];
-
             $docs = [$routeDocument->input];
 
             foreach ($routeDocument->responses as $response) {
@@ -250,7 +251,6 @@ final class WriteCommand extends Command
 
             while (count($docs) > 0) {
                 $doc = array_shift($docs);
-
                 $reference = $doc->getReference();
 
                 if ($reference !== null) {
@@ -259,7 +259,7 @@ final class WriteCommand extends Command
                     }
 
                     if ($this->isReference($doc)) {
-                        $routeSchemas[$reference] = UnionTypeDocument::nullable($doc);
+                        $routeSchemas[$reference] = $doc;
                     }
                 }
 
@@ -273,9 +273,9 @@ final class WriteCommand extends Command
                     $docs = array_merge($docs, $doc->subTypes);
                 }
             }
-
-            yield from $routeSchemas;
         }
+
+        yield from array_values($routeSchemas);
     }
 
     /**
