@@ -237,10 +237,10 @@ final class WriteCommand extends Command
      */
     private function getSchemas(): iterable
     {
+        $routeSchemas = [];
+
         foreach ($this->routes as $route) {
             $routeDocument = $this->routeDocumentor->document($route);
-            $routeSchemas = [];
-
             $docs = [$routeDocument->input];
 
             foreach ($routeDocument->responses as $response) {
@@ -251,7 +251,6 @@ final class WriteCommand extends Command
 
             while (count($docs) > 0) {
                 $doc = array_shift($docs);
-
                 $reference = $doc->getReference();
 
                 if ($reference !== null) {
@@ -260,7 +259,7 @@ final class WriteCommand extends Command
                     }
 
                     if ($this->isReference($doc)) {
-                        $routeSchemas[$reference] = UnionTypeDocument::nullable($doc);
+                        $routeSchemas[$reference] = $doc;
                     }
                 }
 
@@ -274,9 +273,9 @@ final class WriteCommand extends Command
                     $docs = array_merge($docs, $doc->subTypes);
                 }
             }
-
-            yield from $routeSchemas;
         }
+
+        yield from array_values($routeSchemas);
     }
 
     /**
