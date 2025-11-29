@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Permission\Event;
 
-use LesDomain\Event\Property\Action;
 use LesDomain\Event\Property\Headers;
 use LesDomain\Event\AbstractAggregateEvent;
 use LesValueObject\Composite\ForeignReference;
@@ -17,12 +16,6 @@ use LesAbstractService\Permission\Model\Attributes\Flags;
  */
 final class GrantedEvent extends AbstractAggregateEvent
 {
-    use PermissionEvent;
-
-    public Action $action {
-        get => new Action('granted');
-    }
-
     public function __construct(
         Identifier $id,
         public readonly ForeignReference $identity,
