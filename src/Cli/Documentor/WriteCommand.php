@@ -357,15 +357,22 @@ final class WriteCommand extends Command
     {
         if (
             preg_match(
-                '/^[a-zA-Z]+(?<model>\\\\[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model(?<part>\\\\[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
+                '/^[a-zA-Z]+\\\\(?<concept>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
                 $class,
                 $matches,
             )
         ) {
-            $name = str_replace($matches['part'], '', $matches['model'])
-                . $matches['part'];
-            $name = trim($name, '\\');
-            $parts = explode('\\', $name);
+            $parts = [];
+
+            foreach (explode('\\', $matches['concept']) as $conceptPart) {
+                if (str_starts_with($matches['part'], $conceptPart)) {
+                    break;
+                }
+
+                $parts[] = $conceptPart;
+            }
+
+            $parts = array_merge($parts, explode('\\', $matches['part']));
             $parts = array_map(lcfirst(...), $parts);
 
             return join('.', $parts);
