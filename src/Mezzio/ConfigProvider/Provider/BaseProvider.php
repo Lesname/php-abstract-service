@@ -277,10 +277,10 @@ final class BaseProvider
             'defaultLocale' => 'nl_NL',
             'translation' => [
                 'nl_NL' => [
-                    __DIR__ . '/../../docs/translations/nl_NL.php',
+                    __DIR__ . '/../../../../docs/translations/nl_NL.php',
                 ],
                 'en_US' => [
-                    __DIR__ . '/../../docs/translations/en_US.php',
+                    __DIR__ . '/../../../../docs/translations/en_US.php',
                 ],
             ],
         ];
