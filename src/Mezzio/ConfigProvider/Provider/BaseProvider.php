@@ -250,8 +250,8 @@ final class BaseProvider
                 ],
             ],
             MiddlewarePipeline::class => [
-                CatchExceptionMiddleware::class,
                 CorsMiddleware::class,
+                CatchExceptionMiddleware::class,
                 AuthenticationMiddleware::class,
                 AnalyticsMiddleware::class,
                 ThrottleMiddleware::class,
