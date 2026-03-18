@@ -30,7 +30,6 @@ use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Type\Document\NumberTypeDocument;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
-use LesResource\Model\ResourceModel;
 use LesValueObject\Composite;
 use LesValueObject\Enum;
 use LesValueObject\Number;
