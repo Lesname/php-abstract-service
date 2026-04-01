@@ -596,7 +596,7 @@ final class WriteCommand extends Command
     private function composeFromUnionTypeDocument(UnionTypeDocument $typeDocument): array
     {
         return [
-            'anyOf' => array_map(
+            'oneOf' => array_map(
                 fn(TypeDocument $subType) => $this->composeTypeDocument($subType, true),
                 $typeDocument->subTypes,
             ),
