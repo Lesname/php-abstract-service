@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace LesAbstractService\Factory\Logger;
 
 use Monolog\Logger;
+use Sentry\SentrySdk;
+use Sentry\Logs\LogLevel;
+use Sentry\Monolog\LogsHandler;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Sentry\Monolog\Handler;
 use Sentry\State\HubInterface;
 
 final class SentryMonologDelegatorFactory
@@ -25,7 +27,13 @@ final class SentryMonologDelegatorFactory
         $hub = $container->get(HubInterface::class);
         assert($hub instanceof HubInterface);
 
-        $logger->pushHandler(new Handler($hub));
+        SentrySdk::setCurrentHub($hub);
+
+        $logger->pushHandler(
+            new LogsHandler(
+                LogLevel::info(),
+            ),
+        );
 
         return $logger;
     }
