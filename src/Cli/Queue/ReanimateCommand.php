@@ -31,10 +31,10 @@ final class ReanimateCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $page = $input->getArgument('page');
+        $page = $input->getOption('page');
         assert(is_int($page) || is_string($page));
 
-        $perPage = $input->getArgument('perPage');
+        $perPage = $input->getOption('perPage');
         assert(is_int($perPage) || is_string($perPage));
 
         $paginate = new Paginate(
