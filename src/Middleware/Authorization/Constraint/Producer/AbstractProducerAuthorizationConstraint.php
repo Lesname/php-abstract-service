@@ -9,6 +9,9 @@ use LesAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthoriza
 
 abstract class AbstractProducerAuthorizationConstraint extends AbstractTypeAuthorizationConstraint
 {
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function getAllowedType(): string
     {

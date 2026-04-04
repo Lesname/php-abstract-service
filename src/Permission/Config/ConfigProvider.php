@@ -17,6 +17,8 @@ final class ConfigProvider
 {
     /**
      * @return array<string, mixed>
+     *
+     * @psalm-mutation-free
      */
     public function __invoke(): array
     {

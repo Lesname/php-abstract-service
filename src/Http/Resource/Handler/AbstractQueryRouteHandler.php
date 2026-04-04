@@ -30,6 +30,9 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
     abstract protected function makeResponse(mixed $output): ResponseInterface;
 
+    /**
+     * @psalm-pure
+     */
     final public function __construct(
         protected readonly ResponseFactoryInterface $responseFactory,
         protected readonly StreamFactoryInterface $streamFactory,

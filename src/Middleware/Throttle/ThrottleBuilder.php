@@ -14,6 +14,8 @@ final class ThrottleBuilder
 
     /**
      * @param array<int, int> $multiples
+     *
+     * @psalm-pure
      */
     private function __construct(
         private int $basePoints,
@@ -21,6 +23,9 @@ final class ThrottleBuilder
         private array $multiples,
     ) {}
 
+    /**
+     * @psalm-pure
+     */
     public static function normal(): self
     {
         return new self(
@@ -35,6 +40,9 @@ final class ThrottleBuilder
         );
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function strict(): self
     {
         return new self(
@@ -93,6 +101,8 @@ final class ThrottleBuilder
 
     /**
      * @return iterable<int, array{action: string | null, by: By | null, duration: int, points: int}>
+     *
+     * @psalm-mutation-free
      */
     public function build(): iterable
     {

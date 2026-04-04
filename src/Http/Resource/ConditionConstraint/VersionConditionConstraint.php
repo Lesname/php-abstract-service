@@ -25,6 +25,9 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedCond
 
 final class VersionConditionConstraint implements ConditionConstraint
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly ContainerInterface $container)
     {
     }

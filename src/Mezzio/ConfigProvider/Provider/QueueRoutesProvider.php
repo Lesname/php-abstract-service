@@ -13,17 +13,25 @@ use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissio
 
 final class QueueRoutesProvider
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly Http\Route\RpcRouteBuilder $baseRpcRouteBuilder)
     {}
 
     /**
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     *
+     * @psalm-pure
      */
     public static function withAuthorizations(array $authorizations): self
     {
         return new self(new Http\Route\RpcRouteBuilder('queue', $authorizations));
     }
 
+    /**
+     * @psalm-pure
+     */
     public static function withGrantPermission(): self
     {
         return self::withAuthorizations([HasGrantPermissionAuthorization::class]);
@@ -31,6 +39,8 @@ final class QueueRoutesProvider
 
     /**
      * @return array<string, mixed>
+     *
+     * @psalm-mutation-free
      */
     public function __invoke(): array
     {

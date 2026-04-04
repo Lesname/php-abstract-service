@@ -15,6 +15,9 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedCond
 
 final class HasNoPermissionsCondition implements ConditionConstraint
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly PermissionsRepository $permissionsRepository)
     {}
 

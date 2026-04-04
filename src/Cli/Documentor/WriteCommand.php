@@ -136,6 +136,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-mutation-free
      */
     private function getBaseDocument(): array
     {
@@ -154,6 +156,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<array{name: string}>
+     *
+     * @psalm-mutation-free
      */
     private function getResourceTags(): array
     {
@@ -352,6 +356,9 @@ final class WriteCommand extends Command
             );
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     private function getReferenceName(string $class): string
     {
         if (
@@ -576,6 +583,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-mutation-free
      */
     private function composeFromReferenceTypeDocument(ReferenceTypeDocument $typeDocument): array
     {

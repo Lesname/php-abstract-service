@@ -31,12 +31,15 @@ final class ReanimateCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $page = (int)$input->getArgument('page');
-        $perPage = (int)$input->getArgument('perPage');
+        $page = $input->getArgument('page');
+        assert(is_int($page) || is_string($page));
+
+        $perPage = $input->getArgument('perPage');
+        assert(is_int($perPage) || is_string($perPage));
 
         $paginate = new Paginate(
-            new PerPage($perPage),
-            new Page($page),
+            new PerPage((int)$perPage),
+            new Page((int)$page),
         );
 
         foreach ($this->queue->getBuried($paginate) as $job) {

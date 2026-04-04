@@ -46,6 +46,8 @@ final class RpcRouteBuilder
     /**
      * @param non-empty-string $resourceName
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     *
+     * @psalm-pure
      */
     public function __construct(
         public readonly string $resourceName,
