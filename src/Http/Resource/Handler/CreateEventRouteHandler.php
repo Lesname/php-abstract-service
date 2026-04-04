@@ -28,6 +28,9 @@ use LesAbstractService\Http\Resource\Handler\Response\CreatedResponse;
 #[DocHttpResponse(CreatedResponse::class, 201)]
 final class CreateEventRouteHandler extends AbstractEventRouteHandler
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly StreamFactoryInterface $streamFactory,

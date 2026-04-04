@@ -9,6 +9,9 @@ use Throwable;
 
 final class FailedClass extends Exception
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(public readonly string $class, Throwable $previous)
     {
         parent::__construct("Failed to create class '{$class}'", previous: $previous);

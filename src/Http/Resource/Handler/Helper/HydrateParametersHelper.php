@@ -26,6 +26,9 @@ trait HydrateParametersHelper
         return $this->getHydrator()->hydrate($parametersClass, $parameters);
     }
 
+    /**
+     * @psalm-pure
+     */
     protected function getHydrator(): Hydrator
     {
         return new ReflectionHydrator();

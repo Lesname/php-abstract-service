@@ -19,6 +19,9 @@ final class DbalListener implements Listener
 {
     use DelegateActionListenerHelper;
 
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly Connection $connection)
     {}
 

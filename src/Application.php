@@ -11,6 +11,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class Application
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly RequestHandlerInterface $handler)
     {
     }

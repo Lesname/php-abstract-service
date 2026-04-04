@@ -14,6 +14,9 @@ use LesHttp\Middleware\AccessControl\Authorization\Constraint\AbstractIdentityAu
 
 abstract class AbstractPermissionAuthorization extends AbstractIdentityAuthorizationConstraint
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly PermissionsRepository $permissionsRepository)
     {}
 
@@ -29,5 +32,8 @@ abstract class AbstractPermissionAuthorization extends AbstractIdentityAuthoriza
         return $this->hasPermissionFlag($permission);
     }
 
+    /**
+     * @psalm-pure
+     */
     abstract protected function hasPermissionFlag(Permission $permission): bool;
 }

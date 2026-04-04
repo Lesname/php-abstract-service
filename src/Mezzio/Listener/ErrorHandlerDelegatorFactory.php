@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Mezzio\Listener;
 
-use Sentry\State\HubInterface;
+use Throwable;
+use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 
-final class SentryErrorListenerDelegatorFactory
+final class ErrorHandlerDelegatorFactory
 {
     /**
      * @throws ContainerExceptionInterface
@@ -21,11 +22,10 @@ final class SentryErrorListenerDelegatorFactory
         $errorHandler = $callback();
         assert($errorHandler instanceof ErrorHandler);
 
-        $hub = $container->get(HubInterface::class);
-        assert($hub instanceof HubInterface);
+        $logger = $container->get(LoggerInterface::class);
+        assert($logger instanceof LoggerInterface);
 
-        $listener = new SentryErrorListener($hub);
-        $errorHandler->attachListener($listener);
+        $errorHandler->attachListener(static fn (Throwable $e) => $logger->error($e->getMessage(), ['exception' => $e]));
 
         return $errorHandler;
     }

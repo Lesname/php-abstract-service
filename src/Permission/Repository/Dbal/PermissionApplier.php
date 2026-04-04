@@ -9,9 +9,15 @@ use LesResource\Repository\Dbal\Applier\AbstractResourceApplier;
 
 final class PermissionApplier extends AbstractResourceApplier
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly string $serviceName)
     {}
 
+    /**
+     * @psalm-mutation-free
+     */
     #[Override]
     protected function getFields(): array
     {
@@ -33,12 +39,18 @@ final class PermissionApplier extends AbstractResourceApplier
         ];
     }
 
+    /**
+     * @psalm-pure
+     */
     #[Override]
     public function getTableName(): string
     {
         return 'permission';
     }
 
+    /**
+     * @psalm-pure
+     */
     #[Override]
     public function getTableAlias(): string
     {

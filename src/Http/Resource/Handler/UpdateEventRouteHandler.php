@@ -18,6 +18,9 @@ use LesDocumentor\Route\Attribute\DocInputProvided;
 #[DocHttpResponse(code: 204)]
 final class UpdateEventRouteHandler extends AbstractEventRouteHandler
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         Hydrator $hydrator,

@@ -30,7 +30,6 @@ use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Type\Document\NumberTypeDocument;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
-use LesResource\Model\ResourceModel;
 use LesValueObject\Composite;
 use LesValueObject\Enum;
 use LesValueObject\Number;
@@ -137,6 +136,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-mutation-free
      */
     private function getBaseDocument(): array
     {
@@ -155,6 +156,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<array{name: string}>
+     *
+     * @psalm-mutation-free
      */
     private function getResourceTags(): array
     {
@@ -353,6 +356,9 @@ final class WriteCommand extends Command
             );
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     private function getReferenceName(string $class): string
     {
         if (
@@ -577,6 +583,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-mutation-free
      */
     private function composeFromReferenceTypeDocument(ReferenceTypeDocument $typeDocument): array
     {
@@ -597,7 +605,7 @@ final class WriteCommand extends Command
     private function composeFromUnionTypeDocument(UnionTypeDocument $typeDocument): array
     {
         return [
-            'anyOf' => array_map(
+            'oneOf' => array_map(
                 fn(TypeDocument $subType) => $this->composeTypeDocument($subType, true),
                 $typeDocument->subTypes,
             ),

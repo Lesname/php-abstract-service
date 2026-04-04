@@ -21,6 +21,9 @@ final class DeleteHandler implements RequestHandlerInterface
 {
     use HydrateParametersHelper;
 
+    /**
+     * @psalm-pure
+     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly Queue $queue,

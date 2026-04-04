@@ -27,6 +27,9 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
 
+    /**
+     * @psalm-pure
+     */
     public function __construct(
         private readonly Hydrator $hydrator,
         private readonly Store $store,

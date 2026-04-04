@@ -40,6 +40,8 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
      * @throws NoPermissionWithIdentity
      * @throws Exception
      * @throws JsonException
+     *
+     * @psalm-mutable
      */
     #[Override]
     public function getWithIdentity(ForeignReference $identity): Permission
@@ -56,6 +58,8 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
 
     /**
      * @throws Exception
+     *
+     * @psalm-mutable
      */
     #[Override]
     public function existsWithIdentity(ForeignReference $identity): bool
@@ -66,6 +70,9 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
         return $this->getCountFromResultsBuilder($builder) > 0;
     }
 
+    /**
+     * @psalm-mutable
+     */
     private function applyWithIdentity(QueryBuilder $builder, ForeignReference $identity): void
     {
         $builder->andWhere('p.identity_type = :identity_type');
@@ -78,6 +85,8 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
     /**
      * @throws Exception
      * @throws JsonException
+     *
+     * @psalm-mutable
      */
     #[Override]
     public function getWithFlags(Flags $flags, Paginate $paginate): ResourceSet
@@ -95,18 +104,27 @@ final class DbalPermissionsRepository extends AbstractDbalResourceRepository imp
         return $this->getResourceSetFromBuilder($builder);
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     #[Override]
     protected function getResourceApplier(): ResourceApplier
     {
         return new PermissionApplier($this->serviceName);
     }
 
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function getResourceModelClass(): string
     {
         return Permission::class;
     }
 
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function getNoResourceWithIdClass(): string
     {

@@ -27,6 +27,9 @@ use LesAbstractService\Http\Queue\Handler\Parameters\GetStatsParameters;
 #[DocInput(GetStatsParameters::class)]
 final class GetStatsHandler implements RequestHandlerInterface
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly StreamFactoryInterface $streamFactory,

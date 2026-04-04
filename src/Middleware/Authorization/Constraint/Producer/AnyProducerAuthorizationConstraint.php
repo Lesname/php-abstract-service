@@ -10,6 +10,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class AnyProducerAuthorizationConstraint extends AbstractProducerAuthorizationConstraint
 {
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool
     {

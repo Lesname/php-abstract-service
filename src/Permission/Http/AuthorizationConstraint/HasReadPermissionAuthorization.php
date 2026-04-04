@@ -9,6 +9,9 @@ use LesAbstractService\Permission\Model\Permission;
 
 final class HasReadPermissionAuthorization extends AbstractPermissionAuthorization
 {
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function hasPermissionFlag(Permission $permission): bool
     {
