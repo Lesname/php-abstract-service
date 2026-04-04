@@ -115,7 +115,7 @@ final class BaseProvider
                 ],
                 'delegators' => [
                     ErrorHandler::class => [
-                        Listener\SentryErrorListenerDelegatorFactory::class,
+                        Listener\ErrorHandlerDelegatorFactory::class,
                     ],
                     Logger::class => [
                         SentryMonologDelegatorFactory::class,
@@ -196,6 +196,7 @@ final class BaseProvider
                     Cli\Queue\CountProcessingCommand::class => ReflectionFactory::class,
                     Cli\Queue\ProcessCommand::class => Cli\Queue\ProcessCommandFactory::class,
                     Cli\Queue\QuitCommand::class => ReflectionFactory::class,
+                    Cli\Queue\ReanimateCommand::class => ReflectionFactory::class,
 
                     Cli\Service\CleanUpCommand::class => ReflectionFactory::class,
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
@@ -218,6 +219,7 @@ final class BaseProvider
                     'queue.countProcessing' => Cli\Queue\CountProcessingCommand::class,
                     'queue.process' => Cli\Queue\ProcessCommand::class,
                     'queue.quit' => Cli\Queue\QuitCommand::class,
+                    'queue.reanimate' => Cli\Queue\ReanimateCommand::class,
 
                     'service.update' => Cli\Service\UpdateCommand::class,
                     'service.cleanUp' => Cli\Service\CleanUpCommand::class,
