@@ -2,7 +2,7 @@
   "name": "lesname/abstract-service",
   "license": "MIT",
   "require": {
-    "php": "^8.4.0",
+    "php": "^8.5.0",
 
     "ext-openssl": "*",
 
