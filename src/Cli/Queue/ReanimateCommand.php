@@ -36,14 +36,20 @@ final class ReanimateCommand extends Command
 
         $perPage = $input->getOption('perPage');
         assert(is_int($perPage) || is_string($perPage));
+        $perPage = (int)$perPage;
+
+        $maxPerPage = PerPage::getMaximumValue();
+        $runs = ceil($perPage / $maxPerPage);
 
         $paginate = new Paginate(
-            new PerPage((int)$perPage),
+            new PerPage(min($perPage, $maxPerPage)),
             new Page((int)$page),
         );
 
-        foreach ($this->queue->getBuried($paginate) as $job) {
-            $this->queue->reanimate($job->id);
+        for ($run = 1; $run <= $runs; $run += 1) {
+            foreach ($this->queue->getBuried($paginate) as $job) {
+                $this->queue->reanimate($job->id);
+            }
         }
 
         return self::SUCCESS;
