@@ -72,6 +72,10 @@ final class ProcessCommand extends Command
                     $output->writeln("process: {$job->name}");
                 }
 
+                if ($output->isVeryVerbose()) {
+                    $output->writeln(json_encode($job->data, flags: JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES));
+                }
+
                 try {
                     $this
                         ->getWorkerForJob($job->name)
