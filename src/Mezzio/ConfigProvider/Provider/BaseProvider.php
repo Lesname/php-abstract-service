@@ -6,7 +6,6 @@ namespace LesAbstractService\Mezzio\ConfigProvider\Provider;
 
 use Monolog\Logger;
 use RuntimeException;
-use Sentry\State\Hub;
 use LesQueue as Queue;
 use LesHydrator\Hydrator;
 use LesHttp\Router\Router;
@@ -15,7 +14,6 @@ use Psr\Log\LoggerInterface;
 use LesAbstractService\Http;
 use Doctrine\DBAL\Connection;
 use LesHttp\Router\RpcRouter;
-use Sentry\State\HubInterface;
 use LesCache\Redis\RedisCache;
 use LesToken\Codec\TokenCodec;
 use LesDomain\Event\Store\Store;
@@ -65,8 +63,8 @@ use LesHttp\Middleware\Analytics\AnalyticsMiddlewareFactory;
 use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddleware;
 use LesHttp\Middleware\AccessControl\Condition\ConditionMiddleware;
 use LesAbstractService\Factory\Symfony\Translator\TranslatorFactory;
-use LesAbstractService\Factory\Logger\SentryMonologDelegatorFactory;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
+use LesAbstractService\Factory\Logger\RollbarMonologDelegatorFactory;
 use LesHttp\Middleware\AccessControl\Throttle\ThrottleMiddlewareFactory;
 use LesHttp\Middleware\AccessControl\Authorization\AuthorizationMiddleware;
 use LesHttp\Middleware\AccessControl\Authentication\AuthenticationMiddleware;
@@ -109,7 +107,6 @@ final class BaseProvider
                     TranslatorInterface::class => Translator::class,
 
                     LoggerInterface::class => Logger::class,
-                    HubInterface::class => Hub::class,
 
                     RequestHandlerInterface::class => MiddlewarePipeline::class,
                 ],
@@ -118,7 +115,7 @@ final class BaseProvider
                         Listener\ErrorHandlerDelegatorFactory::class,
                     ],
                     Logger::class => [
-                        SentryMonologDelegatorFactory::class,
+                        RollbarMonologDelegatorFactory::class,
                     ],
                 ],
                 'invokables' => [
@@ -202,7 +199,6 @@ final class BaseProvider
                     Cli\Service\UpdateCommand::class => ReflectionFactory::class,
 
                     Logger::class => MonologFactory::class,
-                    Hub::class => HubFactory::class,
 
                     TokenCodec::class => TokenCodecFactory::class,
 

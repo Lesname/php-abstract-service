@@ -25,7 +25,7 @@ use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConst
  */
 final class RpcRouteBuilder
 {
-    /** @var class-string<ResourceRepository<ResourceModel>>|null */
+    /** @var class-string<ResourceRepository<covariant ResourceModel>>|null */
     private ?string $resourceRepository;
 
     /** @var class-string|null */
@@ -63,11 +63,10 @@ final class RpcRouteBuilder
 
     public function withExtraOption(string $key, mixed $value): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->extraOptions[$key] = $value;
-
-        return $clone;
+        return clone (
+            $this,
+            ['extraOptions' => $this->extraOptions + [$key => $value]],
+        );
     }
 
     /**
@@ -83,11 +82,10 @@ final class RpcRouteBuilder
      */
     public function withAuthorizations(array $authorizations): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->authorizations = $authorizations;
-
-        return $clone;
+        return clone(
+            $this,
+            ['authorizations' => $authorizations],
+        );
     }
 
     /**
@@ -116,11 +114,10 @@ final class RpcRouteBuilder
      */
     public function withConditions(array $conditions): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->conditions = $conditions;
-
-        return $clone;
+        return clone(
+            $this,
+            ['conditions' => $conditions],
+        );
     }
 
     /**
@@ -143,13 +140,13 @@ final class RpcRouteBuilder
      */
     public function withResourceRepository(string $resourceRepository): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->resourceRepository = $resourceRepository;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->proxyClass = $resourceRepository;
-
-        return $clone;
+        return clone(
+            $this,
+            [
+                'resourceRepository' => $resourceRepository,
+                'proxyClass' => $resourceRepository,
+            ],
+        );
     }
 
     /**
@@ -157,11 +154,10 @@ final class RpcRouteBuilder
      */
     public function withProxyClass(string $proxyClass): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->proxyClass = $proxyClass;
-
-        return $clone;
+        return clone(
+            $this,
+            ['proxyClass' => $proxyClass],
+        );
     }
 
     /**
@@ -169,11 +165,10 @@ final class RpcRouteBuilder
      */
     public function withValidator(string $validator): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->validator = $validator;
-
-        return $clone;
+        return clone (
+            $this,
+            ['validator' => $validator],
+        );
     }
 
     /**
@@ -181,11 +176,10 @@ final class RpcRouteBuilder
      */
     public function withInput(string $input): self
     {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->input = $input;
-
-        return $clone;
+        return clone(
+            $this,
+            ['input' => $input],
+        );
     }
 
     /**
