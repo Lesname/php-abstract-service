@@ -22,7 +22,7 @@
     "laminas/laminas-cli": "^1.0.0",
 
     "monolog/monolog": "^3.0.0",
-    "sentry/sdk": "^4.0.0",
+    "rollbar/rollbar": "~4.0",
 
     "symfony/console": "^7.0.0",
 
