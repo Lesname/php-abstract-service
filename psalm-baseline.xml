@@ -35,6 +35,12 @@
       <code><![CDATA[$dependency]]></code>
     </MixedAssignment>
   </file>
+  <file src="src/Factory/Queue/RabbitMqQueueFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[RabbitMqQueue]]></code>
+      <code><![CDATA[new RabbitMqQueue($connection, $database)]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Factory/Symfony/Translator/TranslatorFactory.php">
     <MixedAssignment>
       <code><![CDATA[$file]]></code>
@@ -143,6 +149,33 @@
     <UndefinedDocblockClass>
       <code><![CDATA[?string]]></code>
     </UndefinedDocblockClass>
+  </file>
+  <file src="src/Mezzio/ConfigProvider/Provider/BaseProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[Queue\RabbitMqQueue::class]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Mezzio/ConfigProvider/Provider/QueueProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[RabbitMqQueue::class]]></code>
+    </DeprecatedClass>
+    <LessSpecificReturnStatement>
+      <code><![CDATA[clone (
+            $this,
+            ['useQueue' => $queue],
+        )]]></code>
+      <code><![CDATA[clone (
+            $this,
+            ['useRpcRouteBuilder' => $rpcRouteBuilder],
+        )]]></code>
+    </LessSpecificReturnStatement>
+    <MissingPureAnnotation>
+      <code><![CDATA[cliCommands]]></code>
+    </MissingPureAnnotation>
+    <MoreSpecificReturnType>
+      <code><![CDATA[QueueProvider]]></code>
+      <code><![CDATA[QueueProvider]]></code>
+    </MoreSpecificReturnType>
   </file>
   <file src="src/Mezzio/ConfigProvider/Provider/QueueRoutesProvider.php">
     <MissingImmutableAnnotation>

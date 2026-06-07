@@ -149,6 +149,7 @@ final class BaseProvider
 
                     DbalStore::class => ReflectionFactory::class,
 
+                    // @phpstan-ignore-next-line
                     Queue\RabbitMqQueue::class => RabbitMqQueueFactory::class,
                     Queue\DbalQueue::class => ReflectionFactory::class,
 

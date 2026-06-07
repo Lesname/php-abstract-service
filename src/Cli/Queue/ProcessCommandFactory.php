@@ -28,11 +28,25 @@ final class ProcessCommandFactory
 
         $config = $container->get('config');
         assert(is_array($config));
-        assert(is_array($config['workers']));
+
+        if (isset($config['queue'])) {
+            assert(is_array($config['queue']));
+            assert(is_array($config['queue']['workers']));
+
+            $workers = $config['queue']['workers'];
+        } elseif (isset($config['workers'])) {
+            assert(is_array($config['workers']));
+
+            $workers = $config['workers'];
+
+            trigger_error('The "workers" key is deprecated, use "queue.workers" instead.', E_USER_DEPRECATED);
+        } else {
+            throw new RuntimeException("Missing 'queue' or 'workers' key in config.");
+        }
 
         $workerMap = [];
 
-        foreach ($config['workers'] as $name => $worker) {
+        foreach ($workers as $name => $worker) {
             if (!is_string($name)) {
                 throw new RuntimeException();
             }
