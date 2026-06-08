@@ -11,6 +11,9 @@ use LesDocumentor\Route\Document\Property\Method;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 use LesAbstractService\Permission\Http\AuthorizationConstraint\HasGrantPermissionAuthorization;
 
+/**
+ * @deprecated use QueueProvider
+ */
 final class QueueRoutesProvider
 {
     /**
