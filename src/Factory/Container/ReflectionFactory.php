@@ -8,6 +8,7 @@ use Closure;
 use Throwable;
 use ReflectionClass;
 use ReflectionMethod;
+use RuntimeException;
 use ReflectionParameter;
 use ReflectionNamedType;
 use ReflectionException;
@@ -48,7 +49,18 @@ final class ReflectionFactory
     {
         $type = $parameter->getType();
         assert($type instanceof ReflectionNamedType);
-        assert($type->isBuiltin() === false);
+
+        if ($type->isBuiltin()) {
+            if ($parameter->isDefaultValueAvailable()) {
+                return $parameter->getDefaultValue();
+            }
+
+            if ($type->allowsNull()) {
+                return null;
+            }
+
+            throw new RuntimeException();
+        }
 
         if ($type->getName() === ContainerInterface::class) {
             return $container;

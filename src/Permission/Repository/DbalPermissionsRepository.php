@@ -28,6 +28,9 @@ use LesAbstractService\Permission\Repository\Exception\NoPermissionWithIdentity;
  */
 final class DbalPermissionsRepository extends AbstractDbalResourceRepository implements PermissionsRepository
 {
+    /**
+     * @psalm-mutation-free
+     */
     public function __construct(
         private readonly string $serviceName,
         Connection $connection,
