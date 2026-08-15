@@ -42,7 +42,6 @@ use LesHttp\Middleware\Locale\LocaleMiddleware;
 use LesHttp\Middleware\Route\NoRouteMiddleware;
 use LesHttp\Middleware\Route\DispatchMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
-use LesAbstractService\Factory\Logger\HubFactory;
 use LesDocumentor\Route\Document\Property\Method;
 use LesHttp\Middleware\Input\ValidationMiddleware;
 use LesHttp\Middleware\Input\Decode\JsonMiddleware;
