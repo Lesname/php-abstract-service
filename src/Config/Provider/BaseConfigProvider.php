@@ -7,6 +7,8 @@ namespace LesAbstractService\Config\Provider;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use LesAbstractService\Application;
+use LesAbstractService\Clock\Clock;
+use LesAbstractService\Clock\ActiveClock;
 use LesAbstractService\Cli\Queue\QuitCommand;
 use LesAbstractService\Cli\Cache\ClearCommand;
 use LesAbstractService\Cli\Queue\ProcessCommand;
@@ -61,6 +63,8 @@ final class BaseConfigProvider
             'dependencies' => [
                 'aliases' => [
                     LoggerInterface::class => Logger::class,
+
+                    Clock::class => ActiveClock::class,
                 ],
                 'delegators' => [
                     ErrorHandler::class => [
@@ -74,6 +78,8 @@ final class BaseConfigProvider
                     AnyAccountAuthorizationConstraint::class => AnyAccountAuthorizationConstraint::class,
                     AnyConsumerAuthorizationConstraint::class => AnyConsumerAuthorizationConstraint::class,
                     AnyProducerAuthorizationConstraint::class => AnyProducerAuthorizationConstraint::class,
+
+                    ActiveClock::class => ActiveClock::class,
                 ],
                 'factories' => [
                     Application::class => ReflectionFactory::class,
