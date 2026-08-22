@@ -10,6 +10,7 @@ use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
 use LesHttp\Router\Route\Route;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,6 +37,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     public function __construct(
         private readonly Hydrator $hydrator,
         private readonly Store $store,
+        private readonly Clock $clock,
     ) {}
 
     /**
@@ -97,14 +99,9 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     /**
      * @return array<mixed>
      *
-     * @throws MinOutBounds
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
-     * @throws NotMultipleOf
-     * @throws MaxOutBounds
-     *
-     * @psalm-suppress DeprecatedMethod
      */
     protected function getEventData(ServerRequestInterface $request): array
     {
@@ -112,7 +109,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
         assert(is_array($data));
 
         // @phpstan-ignore-next-line
-        $data['occurredOn'] = MilliTimestamp::now();
+        $data['occurredOn'] = $this->clock->milliTimestamp();
         $data['headers'] = Headers::fromRequest($request);
 
         return $data;

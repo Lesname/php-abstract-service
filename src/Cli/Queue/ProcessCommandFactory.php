@@ -39,7 +39,7 @@ final class ProcessCommandFactory
 
             $workers = $config['workers'];
 
-            trigger_error('The "workers" key is deprecated, use "queue.workers" instead.', E_USER_DEPRECATED);
+            $logger->debug('The "workers" key is deprecated, use "queue.workers" instead.');
         } else {
             throw new RuntimeException("Missing 'queue' or 'workers' key in config.");
         }

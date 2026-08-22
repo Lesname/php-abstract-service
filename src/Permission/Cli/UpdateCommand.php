@@ -6,6 +6,7 @@ namespace LesAbstractService\Permission\Cli;
 
 use Override;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
 use Symfony\Component\Console\Command\Command;
 use LesValueObject\Composite\ForeignReference;
@@ -26,6 +27,7 @@ final class UpdateCommand extends Command
 {
     public function __construct(
         private readonly PermissionsRepository $permissionsRepository,
+        private readonly Clock $clock,
         private readonly Store $store,
     ) {
         parent::__construct();
@@ -45,12 +47,7 @@ final class UpdateCommand extends Command
 
     /**
      * @throws NoPermission
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws NotMultipleOf
      * @throws UnknownVersion
-     *
-     * @psalm-suppress DeprecatedMethod
      */
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -75,8 +72,7 @@ final class UpdateCommand extends Command
                         $input->getOption('all') || $input->getOption('create'),
                         $input->getOption('all') || $input->getOption('update'),
                     ),
-                    // @phpstan-ignore-next-line
-                    MilliTimestamp::now(),
+                    $this->clock->milliTimestamp(),
                     Headers::forCli('permission.update'),
                 ),
             );
