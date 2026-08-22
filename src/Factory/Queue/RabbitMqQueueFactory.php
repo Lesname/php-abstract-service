@@ -11,6 +11,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
+/**
+ * @deprecated
+ */
 final class RabbitMqQueueFactory
 {
     /**

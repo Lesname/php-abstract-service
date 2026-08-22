@@ -9,6 +9,9 @@ use SensitiveParameter;
 use LesQueue\PgsqlQueue;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated
+ */
 final class PgsqlQueueFactory
 {
     public function __invoke(ContainerInterface $container): PgsqlQueue
