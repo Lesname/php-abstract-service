@@ -10,6 +10,9 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class AnyConsumerAuthorizationConstraint extends AbstractConsumerAuthorizationConstraint
 {
+    /**
+     * @psalm-pure
+     */
     #[Override]
     protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool
     {

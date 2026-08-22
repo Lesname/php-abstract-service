@@ -19,7 +19,7 @@ use LesValidator\Config\ConfigProvider as ValidatorConfigProvider;
 final class AppConfigProvider
 {
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      *
      * @psalm-mutation-free
      */

@@ -14,13 +14,16 @@ use LesAbstractService\Http\Queue\Handler\ReanimateHandler;
 
 final class QueueRoutesProvider
 {
+    /**
+     * @psalm-pure
+     */
     public function __construct(private readonly RpcRouteBuilder $rpcRouteBuilder)
     {}
 
     /**
      * @return array<string, mixed>
      *
-     * @psalm-mutation-free
+     * @psalm-impure
      */
     public function __invoke(): array
     {
@@ -39,7 +42,7 @@ final class QueueRoutesProvider
     /**
      * @return array<string, array<mixed>>
      *
-     * @psalm-mutation-free
+     * @psalm-impure
      */
     private function routes(): array
     {

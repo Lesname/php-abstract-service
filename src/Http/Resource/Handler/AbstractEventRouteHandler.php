@@ -25,6 +25,9 @@ use LesValueObject\String\Format\Exception\NotFormat;
 
 abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {
+    /**
+     * @psalm-impure
+     */
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
 
     /**
@@ -100,12 +103,15 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws NotFormat
      * @throws NotMultipleOf
      * @throws MaxOutBounds
+     *
+     * @psalm-suppress DeprecatedMethod
      */
     protected function getEventData(ServerRequestInterface $request): array
     {
         $data = $request->getParsedBody();
         assert(is_array($data));
 
+        // @phpstan-ignore-next-line
         $data['occurredOn'] = MilliTimestamp::now();
         $data['headers'] = Headers::fromRequest($request);
 

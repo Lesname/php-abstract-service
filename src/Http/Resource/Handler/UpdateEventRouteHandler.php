@@ -29,6 +29,9 @@ final class UpdateEventRouteHandler extends AbstractEventRouteHandler
         parent::__construct($hydrator, $store);
     }
 
+    /**
+     * @psalm-impure
+     */
     #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface
     {

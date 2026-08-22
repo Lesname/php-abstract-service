@@ -79,6 +79,8 @@ final class BaseProvider
 {
     /**
      * @return array<string, mixed>
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -266,6 +268,8 @@ final class BaseProvider
 
     /**
      * @return array{defaultLocale: string, translation: array<string, array<string>>}
+     *
+     * @psalm-suppress DeprecatedClass
      */
     private function getTranslator(): array
     {

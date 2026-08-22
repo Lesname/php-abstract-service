@@ -44,6 +44,8 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
 
     /**
      * @throws JsonException
+     *
+     * @psalm-impure
      */
     #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface

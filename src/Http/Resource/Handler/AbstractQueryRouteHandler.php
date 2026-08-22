@@ -28,6 +28,9 @@ use LesHttp\Router\Route\Exception\OptionNotSet;
 
 abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
 {
+    /**
+     * @psalm-impure
+     */
     abstract protected function makeResponse(mixed $output): ResponseInterface;
 
     /**

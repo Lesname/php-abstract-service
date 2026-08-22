@@ -15,6 +15,8 @@ final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
 {
     /**
      * @throws JsonException
+     *
+     * @psalm-impure
      */
     #[Override]
     protected function makeResponse(mixed $output): ResponseInterface

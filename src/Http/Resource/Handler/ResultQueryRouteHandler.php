@@ -27,6 +27,8 @@ final class ResultQueryRouteHandler extends AbstractQueryRouteHandler
      * @throws ReflectionException
      * @throws JsonException
      * @throws OptionNotSet
+     *
+     * @psalm-impure
      */
     #[Override]
     public function handle(ServerRequestInterface $request): ResponseInterface

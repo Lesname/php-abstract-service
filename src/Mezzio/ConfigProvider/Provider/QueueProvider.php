@@ -66,7 +66,9 @@ final class QueueProvider
     /**
      * @return array<string, mixed>
      *
-     * @psalm-mutation-free
+     * @psalm-impure
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function __invoke(): array
     {
@@ -105,7 +107,7 @@ final class QueueProvider
     /**
      * @return array<string, class-string<Command>>
      *
-     * @psalm-mutation-free
+     * @psalm-pure
      */
     private function cliCommands(): array
     {
@@ -121,7 +123,7 @@ final class QueueProvider
     /**
      * @return array<string, array<mixed>>
      *
-     * @psalm-mutation-free
+     * @psalm-impure
      */
     private function routes(): array
     {

@@ -7,13 +7,15 @@ namespace LesAbstractService\Config\Provider;
 final class ConfigProviderMerger
 {
     /**
-     * @param array<callable(): array> $providers
+     * @param array<callable(): array<mixed>> $providers
+     *
+     * @psalm-pure
      */
     public function __construct(private readonly array $providers)
     {}
 
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function __invoke(): array
     {
@@ -32,6 +34,14 @@ final class ConfigProviderMerger
         return $config;
     }
 
+    /**
+     * @param array<mixed> $left
+     * @param array<mixed> $right
+     *
+     * @return array<mixed>
+     *
+     * @psalm-mutation-free
+     */
     private function mergeArray(array $left, array $right): array
     {
         foreach ($right as $key => $value) {

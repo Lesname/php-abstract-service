@@ -8,13 +8,16 @@
 
     "psr/http-server-handler": "^1.0.0",
 
-    "lesname/documentor": "^0.7.0",
-    "lesname/resource": "^0.6.0",
-    "lesname/domain": "^0.7.0",
-    "lesname/validator": "^0.6.0",
-    "lesname/queue": "^0.9.0",
-    "lesname/http": "^0.9.0",
-    "lesname/value-object": "^0.6.0",
+    "lesname/cache": "^0.4.3",
+    "lesname/documentor": "^0.7.4",
+    "lesname/database": "^0.5.6",
+    "lesname/resource": "^0.6.7",
+    "lesname/domain": "^0.7.7",
+    "lesname/validator": "^0.6.11",
+    "lesname/queue": "^0.9.3",
+    "lesname/http": "^0.9.5",
+    "lesname/value-object": "^0.7.1",
+    "lesname/token": "^0.4.0",
 
     "mezzio/mezzio": "^3.20.0",
     "mezzio/mezzio-helpers": "^5.0.0",
@@ -29,12 +32,14 @@
     "psr/http-message": "^1.0.0 || ^2.0.0",
     "psr/container": "^1.0.0 || ^2.0.0",
 
-    "slim/psr7": "^1.7.0"
+    "slim/psr7": "^1.7.0",
+
+    "symfony/translation": "^7.0.0"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^4.0.0",
 
-    "lesname/token": "^0.4.0",
+    "phpunit/phpunit": "^13.0.0",
 
     "vimeo/psalm": "^7.0.0-beta9",
 
@@ -47,6 +52,11 @@
   "autoload": {
     "psr-4": {
       "LesAbstractService\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "LesAbstractServiceTest\\": "test/"
     }
   },
   "config": {

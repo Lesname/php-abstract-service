@@ -20,7 +20,6 @@ final class RabbitMqQueueFactory
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      */
-    // @phpstan-ignore-next-line
     public function __invoke(ContainerInterface $container): RabbitMqQueue
     {
         $config = $container->get('config');
@@ -48,7 +47,6 @@ final class RabbitMqQueueFactory
         $database = $container->get(Connection::class);
         assert($database instanceof Connection);
 
-        // @phpstan-ignore-next-line
         return new RabbitMqQueue($connection, $database);
     }
 }

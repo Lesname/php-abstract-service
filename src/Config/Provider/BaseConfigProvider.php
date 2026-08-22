@@ -20,7 +20,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use LesAbstractService\Container\Mail\SenderContainer;
 use LesAbstractService\Cli\Queue\ProcessCommandFactory;
 use LesAbstractService\Container\Mail\TemplateContainer;
-use LesAbstractService\Http\Queue\Handler\DeleteHandler;
 use LesAbstractService\Cli\Queue\CountProcessingCommand;
 use LesAbstractService\Cli\Queue\CountProcessableCommand;
 use LesAbstractService\Factory\Container\ReflectionFactory;
@@ -42,7 +41,6 @@ use LesAbstractService\Middleware\Authorization\Constraint\Consumer\AnyConsumerA
 
 final class BaseConfigProvider
 {
-
     /**
      * @return array<string, mixed>
      */

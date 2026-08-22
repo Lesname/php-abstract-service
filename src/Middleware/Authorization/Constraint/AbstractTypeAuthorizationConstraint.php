@@ -11,6 +11,9 @@ use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConst
 
 abstract class AbstractTypeAuthorizationConstraint implements AuthorizationConstraint
 {
+    /**
+     * @psalm-impure
+     */
     #[Override]
     public function isAllowed(ServerRequestInterface $request): bool
     {
@@ -22,7 +25,13 @@ abstract class AbstractTypeAuthorizationConstraint implements AuthorizationConst
             && $this->isIdentityAllowed($request, $identity);
     }
 
+    /**
+     * @psalm-impure
+     */
     abstract protected function getAllowedType(): string;
 
+    /**
+     * @psalm-impure
+     */
     abstract protected function isIdentityAllowed(ServerRequestInterface $request, ForeignReference $identity): bool;
 }

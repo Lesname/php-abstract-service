@@ -340,6 +340,9 @@ final class WriteCommand extends Command
         return $document;
     }
 
+    /**
+     * @psalm-pure
+     */
     private function isReference(TypeDocument $typeDocument): bool
     {
         $class = $typeDocument->getReference();
@@ -349,19 +352,18 @@ final class WriteCommand extends Command
             (
                 in_array($class, self::SHARED_REFERENCES, true)
                 ||
-                preg_match(
-                    '#^([a-z]+\\\\){2,}(Model|Repository)\\\\#i',
-                    $class
-                ) === 1
+                // @phpstan-ignore possiblyImpure.functionCall
+                preg_match('#^([a-z]+\\\\){2,}(Model|Repository)\\\\#i', $class) === 1
             );
     }
 
     /**
-     * @psalm-mutation-free
+     * @psalm-pure
      */
     private function getReferenceName(string $class): string
     {
         if (
+            // @phpstan-ignore possiblyImpure.functionCall
             preg_match(
                 '/^[a-zA-Z]+\\\\(?<concept>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Model\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
                 $class,
@@ -385,12 +387,14 @@ final class WriteCommand extends Command
         }
 
         if (
+            // @phpstan-ignore possiblyImpure.functionCall
             preg_match(
                 '/^[a-zA-Z]+\\\\(?<model>[a-zA-Z]+(\\\\[a-zA-Z]+)*)\\\\Repository\\\\[a-zA-Z]+\\\\(?<part>[a-zA-Z]+(\\\\[a-zA-Z]+)*)$/',
                 $class,
                 $matches,
             )
         ) {
+            // @phpstan-ignore possiblyImpure.functionCall
             $model = str_replace('\\', '', $matches['model']);
             $part = preg_replace_callback(
                 '/\\\\(.)/',
@@ -400,18 +404,22 @@ final class WriteCommand extends Command
                 $matches['part'],
             );
 
-            assert(is_string($part));
+            if (!is_string($part)) {
+                throw new RuntimeException();
+            }
 
             return lcfirst($model) . '.repository.' . lcfirst($part);
         }
 
         $parts = explode('\\', $class);
 
-        return lcfirst(array_pop($parts));
+        return lcfirst(array_last($parts));
     }
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-pure
      */
     private function composeFromAnyTypeDocument(): array
     {
@@ -515,6 +523,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-pure
      */
     private function composeFromEnumTypeDocument(EnumTypeDocument $typeDocument): array
     {
@@ -526,6 +536,8 @@ final class WriteCommand extends Command
 
     /**
      * @return array<mixed>
+     *
+     * @psalm-pure
      */
     private function composeFromNumberTypeDocument(NumberTypeDocument $typeDocument): array
     {
