@@ -17,6 +17,9 @@ use LesAbstractService\Factory\Queue\PgsqlQueueFactory;
 use LesAbstractService\Factory\Queue\RabbitMqQueueFactory;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 
+/**
+ * @deprecated use QueueRoutesProvider and ConfigProvider from Queue lib
+ */
 final class QueueProvider
 {
     /** @var class-string<Queue>|null */
@@ -79,7 +82,6 @@ final class QueueProvider
                 'aliases' => $aliases,
                 'factories' => [
                     DbalQueue::class => ReflectionFactory::class,
-                    // @phpstan-ignore-next-line
                     RabbitMqQueue::class => RabbitMqQueueFactory::class,
                     PgsqlQueue::class => PgSqlQueueFactory::class,
 

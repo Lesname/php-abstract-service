@@ -34,7 +34,6 @@ use LesDatabase\Factory\ConnectionFactory;
 use LesDocumentor\Route\LesRouteDocumentor;
 use Psr\Http\Server\RequestHandlerInterface;
 use LesHttp\Middleware\Input\TrimMiddleware;
-use Symfony\Component\Translation\Translator;
 use LesHttp\Handler\MiddlewarePipelineFactory;
 use LesHttp\Middleware\Route\RouterMiddleware;
 use LesHttp\Middleware\Response\CorsMiddleware;
@@ -42,7 +41,6 @@ use LesHttp\Middleware\Locale\LocaleMiddleware;
 use LesHttp\Middleware\Route\NoRouteMiddleware;
 use LesHttp\Middleware\Route\DispatchMiddleware;
 use Laminas\Stratigility\Middleware\ErrorHandler;
-use LesDocumentor\Route\Document\Property\Method;
 use LesHttp\Middleware\Input\ValidationMiddleware;
 use LesHttp\Middleware\Input\Decode\JsonMiddleware;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
@@ -74,6 +72,9 @@ use LesHttp\Middleware\AccessControl\Authorization\Constraint\NoOneAuthorization
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyOneAuthorizationConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AnyIdentityAuthorizationConstraint;
 
+/**
+ * @deprecated use AppConfigProvider
+ */
 final class BaseProvider
 {
     /**
@@ -102,8 +103,6 @@ final class BaseProvider
                     RouteInputDocumentor::class => LesRouteInputDocumentor::class,
 
                     Router::class => RpcRouter::class,
-
-                    TranslatorInterface::class => Translator::class,
 
                     LoggerInterface::class => Logger::class,
 
@@ -148,7 +147,6 @@ final class BaseProvider
 
                     DbalStore::class => ReflectionFactory::class,
 
-                    // @phpstan-ignore-next-line
                     Queue\RabbitMqQueue::class => RabbitMqQueueFactory::class,
                     Queue\DbalQueue::class => ReflectionFactory::class,
 
@@ -202,7 +200,7 @@ final class BaseProvider
 
                     TokenCodec::class => TokenCodecFactory::class,
 
-                    Translator::class => TranslatorFactory::class,
+                    TranslatorInterface::class => TranslatorFactory::class,
                 ],
             ],
             'laminas-cli' => [
@@ -231,11 +229,11 @@ final class BaseProvider
             'cors' => [
                 'default' => [
                     'methods' => [
-                        Method::Post->value,
-                        Method::Put->value,
-                        Method::Patch->value,
-                        Method::Query->value,
-                        Method::Delete->value,
+                        'post',
+                        'put',
+                        'patch',
+                        'query',
+                        'delete',
                     ],
                     'headers' => [
                         'Accept-Language',
