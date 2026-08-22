@@ -18,10 +18,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesHttp\Router\Route\Exception\OptionNotSet;
-use LesValueObject\Number\Exception\MaxOutBounds;
-use LesValueObject\Number\Exception\MinOutBounds;
-use LesValueObject\Number\Int\Date\MilliTimestamp;
-use LesValueObject\Number\Exception\NotMultipleOf;
 use LesValueObject\String\Format\Exception\NotFormat;
 
 abstract class AbstractEventRouteHandler implements RequestHandlerInterface
@@ -41,10 +37,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     ) {}
 
     /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      * @throws NotFormat
-     * @throws NotMultipleOf
      * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
@@ -59,10 +52,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     }
 
     /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      * @throws NotFormat
-     * @throws NotMultipleOf
      * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
@@ -108,7 +98,6 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
         $data = $request->getParsedBody();
         assert(is_array($data));
 
-        // @phpstan-ignore-next-line
         $data['occurredOn'] = $this->clock->milliTimestamp();
         $data['headers'] = Headers::fromRequest($request);
 
