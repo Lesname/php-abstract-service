@@ -7,6 +7,9 @@ namespace LesAbstractService\Middleware\Authorization\Constraint\Producer;
 use Override;
 use LesAbstractService\Middleware\Authorization\Constraint\AbstractTypeAuthorizationConstraint;
 
+/**
+ * @deprecated no replacement
+ */
 abstract class AbstractProducerAuthorizationConstraint extends AbstractTypeAuthorizationConstraint
 {
     /**

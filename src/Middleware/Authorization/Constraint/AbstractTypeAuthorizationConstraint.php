@@ -9,6 +9,9 @@ use LesValueObject\Composite\ForeignReference;
 use Psr\Http\Message\ServerRequestInterface;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 
+/**
+ * @deprecated no replacement
+ */
 abstract class AbstractTypeAuthorizationConstraint implements AuthorizationConstraint
 {
     /**

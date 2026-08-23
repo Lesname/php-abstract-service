@@ -10,6 +10,16 @@
       <code><![CDATA[array_last($parts)]]></code>
     </MixedArgument>
   </file>
+  <file src="src/Config/Provider/BaseConfigProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[AnyAccountAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AnyAccountAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AnyConsumerAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AnyConsumerAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AnyProducerAuthorizationConstraint::class]]></code>
+      <code><![CDATA[AnyProducerAuthorizationConstraint::class]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Config/Provider/ConfigProviderMerger.php">
     <MixedAssignment>
       <code><![CDATA[$left[$key]]]></code>
@@ -123,6 +133,36 @@
       <code><![CDATA[QueueProvider]]></code>
       <code><![CDATA[QueueProvider]]></code>
     </MoreSpecificReturnType>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Account/AbstractAccountAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractTypeAuthorizationConstraint]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Account/AnyAccountAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractAccountAuthorizationConstraint]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Consumer/AbstractConsumerAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractTypeAuthorizationConstraint]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Consumer/AnyConsumerAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractConsumerAuthorizationConstraint]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Producer/AbstractProducerAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractTypeAuthorizationConstraint]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Middleware/Authorization/Constraint/Producer/AnyProducerAuthorizationConstraint.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractProducerAuthorizationConstraint]]></code>
+    </DeprecatedClass>
   </file>
   <file src="src/Permission/Event/GrantedEvent.php">
     <PropertyNotSetInConstructor>
