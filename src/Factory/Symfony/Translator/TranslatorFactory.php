@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace LesAbstractService\Factory\Symfony\Translator;
 
+use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\LoggingTranslator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Translation\Loader\PhpFileLoader;
 
 final class TranslatorFactory
 {
-    public function __invoke(ContainerInterface $container): Translator
+    public function __invoke(ContainerInterface $container): TranslatorInterface
     {
         $config = $container->get('config');
 
@@ -34,6 +37,12 @@ final class TranslatorFactory
             }
         }
 
-        return $translator;
+        $logger = $container->get(LoggerInterface::class);
+        assert($logger instanceof LoggerInterface);
+
+        return new LoggingTranslator(
+            $translator,
+            $logger,
+        );
     }
 }

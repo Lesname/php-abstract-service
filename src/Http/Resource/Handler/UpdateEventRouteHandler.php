@@ -8,6 +8,7 @@ use Override;
 use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -25,10 +26,14 @@ final class UpdateEventRouteHandler extends AbstractEventRouteHandler
         private readonly ResponseFactoryInterface $responseFactory,
         Hydrator $hydrator,
         Store $store,
+        Clock $clock,
     ) {
-        parent::__construct($hydrator, $store);
+        parent::__construct($hydrator, $store, $clock);
     }
 
+    /**
+     * @psalm-impure
+     */
     #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface
     {

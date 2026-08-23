@@ -7,6 +7,7 @@ namespace LesAbstractService\Http\Resource\Handler;
 use RuntimeException;
 use LesHydrator\Hydrator;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -47,6 +48,9 @@ final class CreateEventRouteHandlerFactory
         $store = $container->get(Store::class);
         assert($store instanceof Store);
 
+        $clock = $container->get(Clock::class);
+        assert($clock instanceof Clock);
+
         return new CreateEventRouteHandler(
             $responseFactory,
             $streamFactory,
@@ -54,6 +58,7 @@ final class CreateEventRouteHandlerFactory
             $matches['projectName'],
             $hydrator,
             $store,
+            $clock,
         );
     }
 }

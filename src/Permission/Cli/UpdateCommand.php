@@ -6,21 +6,28 @@ namespace LesAbstractService\Permission\Cli;
 
 use Override;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
 use Symfony\Component\Console\Command\Command;
 use LesValueObject\Composite\ForeignReference;
+use LesValueObject\Number\Exception\MinOutBounds;
+use LesValueObject\Number\Exception\MaxOutBounds;
 use Symfony\Component\Console\Input\InputArgument;
+use LesValueObject\Number\Exception\NotMultipleOf;
 use Symfony\Component\Console\Input\InputInterface;
 use LesValueObject\Number\Int\Date\MilliTimestamp;
 use Symfony\Component\Console\Output\OutputInterface;
 use LesAbstractService\Permission\Event\UpdatedEvent;
 use LesAbstractService\Permission\Model\Attributes\Flags;
+use LesValueObject\String\Format\Exception\UnknownVersion;
 use LesAbstractService\Permission\Repository\PermissionsRepository;
+use LesAbstractService\Permission\Repository\Exception\NoPermission;
 
 final class UpdateCommand extends Command
 {
     public function __construct(
         private readonly PermissionsRepository $permissionsRepository,
+        private readonly Clock $clock,
         private readonly Store $store,
     ) {
         parent::__construct();
@@ -38,6 +45,10 @@ final class UpdateCommand extends Command
             ->addOption('all');
     }
 
+    /**
+     * @throws NoPermission
+     * @throws UnknownVersion
+     */
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -61,7 +72,7 @@ final class UpdateCommand extends Command
                         $input->getOption('all') || $input->getOption('create'),
                         $input->getOption('all') || $input->getOption('update'),
                     ),
-                    MilliTimestamp::now(),
+                    $this->clock->milliTimestamp(),
                     Headers::forCli('permission.update'),
                 ),
             );

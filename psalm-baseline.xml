@@ -6,13 +6,16 @@
     </InternalMethod>
   </file>
   <file src="src/Cli/Documentor/WriteCommand.php">
-    <MissingPureAnnotation>
-      <code><![CDATA[composeFromAnyTypeDocument]]></code>
-      <code><![CDATA[composeFromEnumTypeDocument]]></code>
-      <code><![CDATA[composeFromNumberTypeDocument]]></code>
-      <code><![CDATA[getReferenceName]]></code>
-      <code><![CDATA[isReference]]></code>
-    </MissingPureAnnotation>
+    <MixedArgument>
+      <code><![CDATA[array_last($parts)]]></code>
+    </MixedArgument>
+  </file>
+  <file src="src/Config/Provider/ConfigProviderMerger.php">
+    <MixedAssignment>
+      <code><![CDATA[$left[$key]]]></code>
+      <code><![CDATA[$left[]]]></code>
+      <code><![CDATA[$value]]></code>
+    </MixedAssignment>
   </file>
   <file src="src/Container/Mail/TemplateContainerFactory.php">
     <MixedAssignment>
@@ -56,15 +59,7 @@
       <code><![CDATA[$resourceRepository]]></code>
     </MixedAssignment>
   </file>
-  <file src="src/Http/Resource/Handler/AbstractEventRouteHandler.php">
-    <MissingAbstractPureAnnotation>
-      <code><![CDATA[createResponse]]></code>
-    </MissingAbstractPureAnnotation>
-  </file>
   <file src="src/Http/Resource/Handler/AbstractQueryRouteHandler.php">
-    <MissingAbstractPureAnnotation>
-      <code><![CDATA[makeResponse]]></code>
-    </MissingAbstractPureAnnotation>
     <MixedMethodCall>
       <code><![CDATA[$proxy['method']]]></code>
     </MixedMethodCall>
@@ -75,44 +70,13 @@
     </NoInterfaceProperties>
   </file>
   <file src="src/Http/Route/RpcRouteBuilder.php">
-    <ImpureMethodCall>
-      <code><![CDATA[yield from $builder
-            ->withExtraOption('event', $event)
-            ->buildRoute($method, $action, $handler)]]></code>
-      <code><![CDATA[yield from $this
-            ->withAddedCondition(ExistsConditionConstraint::class)
-            ->withAddedCondition(VersionConditionConstraint::class)
-            ->buildEventRoute(Method::Patch, $action, $event, $handler)]]></code>
-      <code><![CDATA[yield from $this
-            ->withExtraOption(
-                'proxy',
-                [
-                    'class' => $this->proxyClass,
-                    'method' => $action,
-                ],
-            )
-            ->buildRoute(
-                Method::Query,
-                $action,
-                $handler,
-            )]]></code>
-      <code><![CDATA[yield from $this->buildEventRoute(Method::Put, $action, $event, $handler)]]></code>
-      <code><![CDATA[yield from $this->buildQueryRoute($action, ResultQueryRouteHandler::class)]]></code>
-      <code><![CDATA[yield from $this->buildQueryRoute($method, ResultsQueryRouteHandler::class)]]></code>
-    </ImpureMethodCall>
     <InvalidTemplateParam>
       <code><![CDATA[?string]]></code>
       <code><![CDATA[mixed]]></code>
     </InvalidTemplateParam>
     <LessSpecificReturnStatement>
-      <code><![CDATA[clone (
-            $this,
-            ['extraOptions' => $this->extraOptions + [$key => $value]],
-        )]]></code>
-      <code><![CDATA[clone (
-            $this,
-            ['validator' => $validator],
-        )]]></code>
+      <code><![CDATA[clone ($this, ['extraOptions' => $this->extraOptions + [$key => $value]])]]></code>
+      <code><![CDATA[clone ($this, ['validator' => $validator])]]></code>
       <code><![CDATA[clone(
             $this,
             [
@@ -128,14 +92,8 @@
             $this,
             ['conditions' => $conditions],
         )]]></code>
-      <code><![CDATA[clone(
-            $this,
-            ['input' => $input],
-        )]]></code>
-      <code><![CDATA[clone(
-            $this,
-            ['proxyClass' => $proxyClass],
-        )]]></code>
+      <code><![CDATA[clone($this, ['input' => $input])]]></code>
+      <code><![CDATA[clone($this, ['proxyClass' => $proxyClass])]]></code>
     </LessSpecificReturnStatement>
     <MoreSpecificReturnType>
       <code><![CDATA[self]]></code>
@@ -150,15 +108,7 @@
       <code><![CDATA[?string]]></code>
     </UndefinedDocblockClass>
   </file>
-  <file src="src/Mezzio/ConfigProvider/Provider/BaseProvider.php">
-    <DeprecatedClass>
-      <code><![CDATA[Queue\RabbitMqQueue::class]]></code>
-    </DeprecatedClass>
-  </file>
   <file src="src/Mezzio/ConfigProvider/Provider/QueueProvider.php">
-    <DeprecatedClass>
-      <code><![CDATA[RabbitMqQueue::class]]></code>
-    </DeprecatedClass>
     <LessSpecificReturnStatement>
       <code><![CDATA[clone (
             $this,
@@ -169,34 +119,10 @@
             ['useRpcRouteBuilder' => $rpcRouteBuilder],
         )]]></code>
     </LessSpecificReturnStatement>
-    <MissingPureAnnotation>
-      <code><![CDATA[cliCommands]]></code>
-    </MissingPureAnnotation>
     <MoreSpecificReturnType>
       <code><![CDATA[QueueProvider]]></code>
       <code><![CDATA[QueueProvider]]></code>
     </MoreSpecificReturnType>
-  </file>
-  <file src="src/Mezzio/ConfigProvider/Provider/QueueRoutesProvider.php">
-    <MissingImmutableAnnotation>
-      <code><![CDATA[QueueRoutesProvider]]></code>
-    </MissingImmutableAnnotation>
-  </file>
-  <file src="src/Middleware/Authorization/Constraint/AbstractTypeAuthorizationConstraint.php">
-    <MissingAbstractPureAnnotation>
-      <code><![CDATA[getAllowedType]]></code>
-      <code><![CDATA[isIdentityAllowed]]></code>
-    </MissingAbstractPureAnnotation>
-  </file>
-  <file src="src/Middleware/Authorization/Constraint/Consumer/AnyConsumerAuthorizationConstraint.php">
-    <MissingPureAnnotation>
-      <code><![CDATA[isIdentityAllowed]]></code>
-    </MissingPureAnnotation>
-  </file>
-  <file src="src/Permission/Config/ConfigProvider.php">
-    <MissingImmutableAnnotation>
-      <code><![CDATA[ConfigProvider]]></code>
-    </MissingImmutableAnnotation>
   </file>
   <file src="src/Permission/Event/GrantedEvent.php">
     <PropertyNotSetInConstructor>

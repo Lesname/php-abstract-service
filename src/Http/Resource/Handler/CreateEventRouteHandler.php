@@ -9,6 +9,7 @@ use JsonException;
 use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
@@ -38,12 +39,15 @@ final class CreateEventRouteHandler extends AbstractEventRouteHandler
         private readonly string $projectName,
         Hydrator $hydrator,
         Store $store,
+        Clock $clock,
     ) {
-        parent::__construct($hydrator, $store);
+        parent::__construct($hydrator, $store, $clock);
     }
 
     /**
      * @throws JsonException
+     *
+     * @psalm-impure
      */
     #[Override]
     protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface

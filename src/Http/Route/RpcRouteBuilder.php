@@ -20,9 +20,6 @@ use LesAbstractService\Http\Resource\ConditionConstraint\ExistsConditionConstrai
 use LesAbstractService\Http\Resource\ConditionConstraint\VersionConditionConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
 
-/**
- * @psalm-immutable
- */
 final class RpcRouteBuilder
 {
     /** @var class-string<ResourceRepository<covariant ResourceModel>>|null */
@@ -61,16 +58,18 @@ final class RpcRouteBuilder
         $this->extraOptions = [];
     }
 
+    /**
+     * @psalm-mutation-free
+     */
     public function withExtraOption(string $key, mixed $value): self
     {
-        return clone (
-            $this,
-            ['extraOptions' => $this->extraOptions + [$key => $value]],
-        );
+        return clone ($this, ['extraOptions' => $this->extraOptions + [$key => $value]]);
     }
 
     /**
      * @param class-string<AuthorizationConstraint> $authorization
+     *
+     * @psalm-mutation-free
      */
     public function withAuthorization(string $authorization): self
     {
@@ -79,6 +78,8 @@ final class RpcRouteBuilder
 
     /**
      * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     *
+     * @psalm-mutation-free
      */
     public function withAuthorizations(array $authorizations): self
     {
@@ -90,6 +91,8 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<AuthorizationConstraint> $authorization
+     *
+     * @psalm-mutation-free
      */
     public function withAddedAuthorization(string $authorization): self
     {
@@ -103,6 +106,8 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<ConditionConstraint> $condition
+     *
+     * @psalm-mutation-free
      */
     public function withCondition(string $condition): self
     {
@@ -111,6 +116,8 @@ final class RpcRouteBuilder
 
     /**
      * @param array<class-string<ConditionConstraint>> $conditions
+     *
+     * @psalm-mutation-free
      */
     public function withConditions(array $conditions): self
     {
@@ -122,6 +129,8 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<ConditionConstraint> $condition
+     *
+     * @psalm-mutation-free
      */
     public function withAddedCondition(string $condition): self
     {
@@ -137,6 +146,8 @@ final class RpcRouteBuilder
      * @template T of ResourceModel
      *
      * @param class-string<ResourceRepository<T>> $resourceRepository
+     *
+     * @psalm-mutation-free
      */
     public function withResourceRepository(string $resourceRepository): self
     {
@@ -151,35 +162,32 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string $proxyClass
+     *
+     * @psalm-mutation-free
      */
     public function withProxyClass(string $proxyClass): self
     {
-        return clone(
-            $this,
-            ['proxyClass' => $proxyClass],
-        );
+        return clone($this, ['proxyClass' => $proxyClass]);
     }
 
     /**
      * @param class-string<Validator> $validator
+     *
+     * @psalm-mutation-free
      */
     public function withValidator(string $validator): self
     {
-        return clone (
-            $this,
-            ['validator' => $validator],
-        );
+        return clone ($this, ['validator' => $validator]);
     }
 
     /**
      * @param class-string<ValueObject> $input
+     *
+     * @psalm-mutation-free
      */
     public function withInput(string $input): self
     {
-        return clone(
-            $this,
-            ['input' => $input],
-        );
+        return clone($this, ['input' => $input]);
     }
 
     /**
@@ -187,6 +195,8 @@ final class RpcRouteBuilder
      * @param class-string<RequestHandlerInterface> $handler
      *
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildCreateEventRoute(string $action, string $event, string $handler = CreateEventRouteHandler::class): iterable
     {
@@ -198,6 +208,8 @@ final class RpcRouteBuilder
      * @param class-string<RequestHandlerInterface> $handler
      *
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildUpdateEventRoute(string $action, string $event, string $handler = UpdateEventRouteHandler::class): iterable
     {
@@ -212,6 +224,8 @@ final class RpcRouteBuilder
      * @param class-string<RequestHandlerInterface> $handler
      *
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildEventRoute(Method $method, string $action, string $event, string $handler): iterable
     {
@@ -228,6 +242,8 @@ final class RpcRouteBuilder
 
     /**
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildResultQueryRoute(string $action): iterable
     {
@@ -236,6 +252,8 @@ final class RpcRouteBuilder
 
     /**
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildResultsQueryRoute(string $method): iterable
     {
@@ -246,6 +264,8 @@ final class RpcRouteBuilder
      * @param class-string<RequestHandlerInterface> $handler
      *
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-impure
      */
     public function buildQueryRoute(string $action, string $handler): iterable
     {
@@ -269,6 +289,8 @@ final class RpcRouteBuilder
      * @param array<string, mixed> $baseRoute
      *
      * @return iterable<string, array<mixed>>
+     *
+     * @psalm-mutation-free
      */
     public function buildRoute(Method $method, string $action, string $handler, array $baseRoute = []): iterable
     {

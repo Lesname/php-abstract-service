@@ -10,6 +10,7 @@ use LesHydrator\Hydrator;
 use LesDomain\Event\Event;
 use LesHttp\Router\Route\Route;
 use LesDomain\Event\Store\Store;
+use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -17,14 +18,13 @@ use Psr\Http\Server\RequestHandlerInterface;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesHttp\Router\Route\Exception\OptionNotSet;
-use LesValueObject\Number\Exception\MaxOutBounds;
-use LesValueObject\Number\Exception\MinOutBounds;
-use LesValueObject\Number\Int\Date\MilliTimestamp;
-use LesValueObject\Number\Exception\NotMultipleOf;
 use LesValueObject\String\Format\Exception\NotFormat;
 
 abstract class AbstractEventRouteHandler implements RequestHandlerInterface
 {
+    /**
+     * @psalm-impure
+     */
     abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
 
     /**
@@ -33,13 +33,11 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     public function __construct(
         private readonly Hydrator $hydrator,
         private readonly Store $store,
+        private readonly Clock $clock,
     ) {}
 
     /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      * @throws NotFormat
-     * @throws NotMultipleOf
      * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
@@ -54,10 +52,7 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     }
 
     /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      * @throws NotFormat
-     * @throws NotMultipleOf
      * @throws OptionNotSet
      * @throws TooLong
      * @throws TooShort
@@ -94,19 +89,16 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
     /**
      * @return array<mixed>
      *
-     * @throws MinOutBounds
      * @throws TooLong
      * @throws TooShort
      * @throws NotFormat
-     * @throws NotMultipleOf
-     * @throws MaxOutBounds
      */
     protected function getEventData(ServerRequestInterface $request): array
     {
         $data = $request->getParsedBody();
         assert(is_array($data));
 
-        $data['occurredOn'] = MilliTimestamp::now();
+        $data['occurredOn'] = $this->clock->milliTimestamp();
         $data['headers'] = Headers::fromRequest($request);
 
         return $data;
