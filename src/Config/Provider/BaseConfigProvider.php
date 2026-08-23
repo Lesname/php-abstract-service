@@ -75,8 +75,11 @@ final class BaseConfigProvider
                     ],
                 ],
                 'invokables' => [
+                    // @phpstan-ignore-next-line
                     AnyAccountAuthorizationConstraint::class => AnyAccountAuthorizationConstraint::class,
+                    // @phpstan-ignore-next-line
                     AnyConsumerAuthorizationConstraint::class => AnyConsumerAuthorizationConstraint::class,
+                    // @phpstan-ignore-next-line
                     AnyProducerAuthorizationConstraint::class => AnyProducerAuthorizationConstraint::class,
 
                     ActiveClock::class => ActiveClock::class,
