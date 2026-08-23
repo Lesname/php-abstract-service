@@ -8,6 +8,9 @@ use Override;
 use LesValueObject\Composite\ForeignReference;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @deprecated no replacement
+ */
 final class AnyProducerAuthorizationConstraint extends AbstractProducerAuthorizationConstraint
 {
     /**
