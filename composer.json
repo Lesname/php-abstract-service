@@ -11,7 +11,7 @@
     "lesname/cache": "^0.4.3",
     "lesname/documentor": "^0.7.4",
     "lesname/database": "^0.5.6",
-    "lesname/resource": "^0.7.0",
+    "lesname/resource": "^0.7.1",
     "lesname/domain": "^0.7.7",
     "lesname/validator": "^0.6.11",
     "lesname/queue": "^0.9.3",
