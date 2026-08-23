@@ -11,6 +11,7 @@ use LesResource\Model\ResourceModel;
 use Psr\Http\Server\RequestHandlerInterface;
 use LesResource\Repository\ResourceRepository;
 use LesDocumentor\Route\Document\Property\Method;
+use LesHttp\Middleware\Route\Handler\RouteHandler;
 use LesAbstractService\Http\Resource\Handler\CreateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\UpdateEventRouteHandler;
 use LesAbstractService\Http\Resource\Handler\ResultQueryRouteHandler;
@@ -19,6 +20,7 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\ConditionConstraint;
 use LesAbstractService\Http\Resource\ConditionConstraint\ExistsConditionConstraint;
 use LesAbstractService\Http\Resource\ConditionConstraint\VersionConditionConstraint;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AuthorizationConstraint;
+use LesHttp\Middleware\AccessControl\Authorization\Constraint\Chain\AuthorizationConstraintChain;
 
 final class RpcRouteBuilder
 {
@@ -42,7 +44,7 @@ final class RpcRouteBuilder
 
     /**
      * @param non-empty-string $resourceName
-     * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     * @param non-empty-array<class-string<AuthorizationConstraint>|AuthorizationConstraint|AuthorizationConstraintChain> $authorizations
      *
      * @psalm-pure
      */
@@ -67,17 +69,17 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string<AuthorizationConstraint> $authorization
+     * @param class-string<AuthorizationConstraint>|AuthorizationConstraint|AuthorizationConstraintChain $authorization
      *
      * @psalm-mutation-free
      */
-    public function withAuthorization(string $authorization): self
+    public function withAuthorization(AuthorizationConstraint|AuthorizationConstraintChain|string $authorization): self
     {
         return $this->withAuthorizations([$authorization]);
     }
 
     /**
-     * @param non-empty-array<class-string<AuthorizationConstraint>> $authorizations
+     * @param non-empty-array<class-string<AuthorizationConstraint>|AuthorizationConstraint|AuthorizationConstraintChain> $authorizations
      *
      * @psalm-mutation-free
      */
@@ -90,11 +92,11 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string<AuthorizationConstraint> $authorization
+     * @param class-string<AuthorizationConstraint>|AuthorizationConstraint|AuthorizationConstraintChain $authorization
      *
      * @psalm-mutation-free
      */
-    public function withAddedAuthorization(string $authorization): self
+    public function withAddedAuthorization(AuthorizationConstraint|AuthorizationConstraintChain|string $authorization): self
     {
         return $this->withAuthorizations(
             [
@@ -192,7 +194,7 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<Event> $event
-     * @param class-string<RequestHandlerInterface> $handler
+     * @param class-string<RequestHandlerInterface|RouteHandler> $handler
      *
      * @return iterable<string, array<mixed>>
      *
@@ -205,7 +207,7 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<Event> $event
-     * @param class-string<RequestHandlerInterface> $handler
+     * @param class-string<RequestHandlerInterface|RouteHandler> $handler
      *
      * @return iterable<string, array<mixed>>
      *
@@ -221,7 +223,7 @@ final class RpcRouteBuilder
 
     /**
      * @param class-string<Event> $event
-     * @param class-string<RequestHandlerInterface> $handler
+     * @param class-string<RequestHandlerInterface|RouteHandler> $handler
      *
      * @return iterable<string, array<mixed>>
      *
@@ -261,7 +263,7 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string<RequestHandlerInterface> $handler
+     * @param class-string<RequestHandlerInterface|RouteHandler> $handler
      *
      * @return iterable<string, array<mixed>>
      *
@@ -285,7 +287,7 @@ final class RpcRouteBuilder
     }
 
     /**
-     * @param class-string<RequestHandlerInterface> $handler
+     * @param class-string<RequestHandlerInterface|RouteHandler> $handler
      * @param array<string, mixed> $baseRoute
      *
      * @return iterable<string, array<mixed>>
@@ -305,6 +307,7 @@ final class RpcRouteBuilder
                 'resource' => $this->resourceName,
                 'validator' => $this->validator,
                 'middleware' => $handler,
+                'handler' => $handler,
                 'method' => $method->value,
                 'input' => $this->input,
             ],
