@@ -111,6 +111,7 @@ final class BaseProvider
                     RequestHandlerInterface::class => MiddlewarePipeline::class,
                 ],
                 'delegators' => [
+                    // when dropped, drop laminas/laminas-stratigility require
                     ErrorHandler::class => [
                         Listener\ErrorHandlerDelegatorFactory::class,
                     ],

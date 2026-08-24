@@ -19,10 +19,7 @@
     "lesname/value-object": "^0.7.1",
     "lesname/token": "^0.4.0",
 
-    "mezzio/mezzio": "^3.20.0",
-    "mezzio/mezzio-helpers": "^5.0.0",
-
-    "laminas/laminas-cli": "^1.0.0",
+    "laminas/laminas-stratigility": "^4.3.1",
 
     "monolog/monolog": "^3.0.0",
     "rollbar/rollbar": "~4.0",
@@ -32,7 +29,8 @@
     "psr/http-message": "^1.0.0 || ^2.0.0",
     "psr/container": "^1.0.0 || ^2.0.0",
 
-    "slim/psr7": "^1.7.0",
+    "nyholm/psr7": "^1.8.0",
+    "nyholm/psr7-server": "^1.1.0",
 
     "symfony/translation": "^7.0.0"
   },
