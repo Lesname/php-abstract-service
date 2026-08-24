@@ -19,10 +19,7 @@
     "lesname/value-object": "^0.7.1",
     "lesname/token": "^0.4.0",
 
-    "mezzio/mezzio": "^3.20.0",
-    "mezzio/mezzio-helpers": "^5.0.0",
-
-    "laminas/laminas-cli": "^1.0.0",
+    "laminas/laminas-stratigility": "^4.3.1",
 
     "monolog/monolog": "^3.0.0",
     "rollbar/rollbar": "~4.0",
