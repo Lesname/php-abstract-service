@@ -13,6 +13,9 @@ use LesAbstractService\Permission\Http\Condition;
 use LesAbstractService\Permission\Http\AuthorizationConstraint;
 use LesDomain\Event\Publisher\AbstractSubscriptionsPublisherFactory;
 
+/**
+ * @deprecated no replacement
+ */
 final class ConfigProvider
 {
     /**

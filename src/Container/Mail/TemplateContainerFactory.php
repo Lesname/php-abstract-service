@@ -6,6 +6,9 @@ namespace LesAbstractService\Container\Mail;
 
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated no replacement
+ */
 final class TemplateContainerFactory
 {
     public function __invoke(ContainerInterface $container): TemplateContainer

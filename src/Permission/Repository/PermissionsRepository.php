@@ -17,6 +17,8 @@ use LesAbstractService\Permission\Repository\Exception\NoPermission;
  * @extends ResourceRepository<Permission>
  *
  * @psalm-mutable
+ *
+ * @deprecated no replacement
  */
 #[DocResource(Permission::class)]
 interface PermissionsRepository extends ResourceRepository

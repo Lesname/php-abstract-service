@@ -10,12 +10,8 @@ use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
 use Symfony\Component\Console\Command\Command;
 use LesValueObject\Composite\ForeignReference;
-use LesValueObject\Number\Exception\MinOutBounds;
-use LesValueObject\Number\Exception\MaxOutBounds;
 use Symfony\Component\Console\Input\InputArgument;
-use LesValueObject\Number\Exception\NotMultipleOf;
 use Symfony\Component\Console\Input\InputInterface;
-use LesValueObject\Number\Int\Date\MilliTimestamp;
 use Symfony\Component\Console\Output\OutputInterface;
 use LesAbstractService\Permission\Event\UpdatedEvent;
 use LesAbstractService\Permission\Model\Attributes\Flags;
@@ -23,6 +19,9 @@ use LesValueObject\String\Format\Exception\UnknownVersion;
 use LesAbstractService\Permission\Repository\PermissionsRepository;
 use LesAbstractService\Permission\Repository\Exception\NoPermission;
 
+/**
+ * @deprecated no replacement
+ */
 final class UpdateCommand extends Command
 {
     public function __construct(

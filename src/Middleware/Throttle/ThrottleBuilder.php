@@ -6,6 +6,9 @@ namespace LesAbstractService\Middleware\Throttle;
 
 use LesHttp\Middleware\AccessControl\Throttle\Parameter\By;
 
+/**
+ * @todo move to LesHttp
+ */
 final class ThrottleBuilder
 {
     private ?string $action = null;

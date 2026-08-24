@@ -6,6 +6,8 @@ namespace LesAbstractService\Container\Mail;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class TemplateContainer extends AbstractReferenceContainer
 {

@@ -25,6 +25,8 @@ use LesAbstractService\Permission\Repository\Exception\NoPermissionWithIdentity;
 
 /**
  * @extends AbstractDbalResourceRepository<Permission>
+ *
+ * @deprecated no replacement
  */
 final class DbalPermissionsRepository extends AbstractDbalResourceRepository implements PermissionsRepository
 {

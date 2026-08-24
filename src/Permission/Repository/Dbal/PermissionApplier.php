@@ -7,6 +7,9 @@ namespace LesAbstractService\Permission\Repository\Dbal;
 use Override;
 use LesResource\Repository\Dbal\Applier\AbstractResourceApplier;
 
+/**
+ * @deprecated no replacement
+ */
 final class PermissionApplier extends AbstractResourceApplier
 {
     /**

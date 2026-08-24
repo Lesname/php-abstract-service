@@ -8,6 +8,8 @@ use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class Flags extends AbstractCompositeValueObject
 {

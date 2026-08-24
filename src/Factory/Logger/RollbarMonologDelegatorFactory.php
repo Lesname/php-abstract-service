@@ -6,17 +6,16 @@ namespace LesAbstractService\Factory\Logger;
 
 use Monolog\Logger;
 use Rollbar\Rollbar;
-use Sentry\SentrySdk;
 use RuntimeException;
-use Sentry\Logs\LogLevel;
 use Rollbar\RollbarLogger;
-use Sentry\Monolog\LogsHandler;
 use Monolog\Handler\RollbarHandler;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Sentry\State\HubInterface;
 
+/**
+ * @deprecated merge into MonologFactory
+ */
 final class RollbarMonologDelegatorFactory
 {
     /**

@@ -18,6 +18,12 @@
       <code><![CDATA[AnyConsumerAuthorizationConstraint::class]]></code>
       <code><![CDATA[AnyProducerAuthorizationConstraint::class]]></code>
       <code><![CDATA[AnyProducerAuthorizationConstraint::class]]></code>
+      <code><![CDATA[ErrorHandlerDelegatorFactory::class]]></code>
+      <code><![CDATA[RollbarMonologDelegatorFactory::class]]></code>
+      <code><![CDATA[SenderContainer::class]]></code>
+      <code><![CDATA[SenderContainerFactory::class]]></code>
+      <code><![CDATA[TemplateContainer::class]]></code>
+      <code><![CDATA[TemplateContainerFactory::class]]></code>
     </DeprecatedClass>
   </file>
   <file src="src/Config/Provider/ConfigProviderMerger.php">
@@ -27,7 +33,27 @@
       <code><![CDATA[$value]]></code>
     </MixedAssignment>
   </file>
+  <file src="src/Container/Mail/SenderContainer.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractReferenceContainer]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Container/Mail/SenderContainerFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[SenderContainer]]></code>
+      <code><![CDATA[new SenderContainer($senders)]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Container/Mail/TemplateContainer.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractReferenceContainer]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Container/Mail/TemplateContainerFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[TemplateContainer]]></code>
+      <code><![CDATA[new TemplateContainer($mappedTemplates)]]></code>
+    </DeprecatedClass>
     <MixedAssignment>
       <code><![CDATA[$reference]]></code>
     </MixedAssignment>
@@ -134,6 +160,11 @@
       <code><![CDATA[QueueProvider]]></code>
     </MoreSpecificReturnType>
   </file>
+  <file src="src/Mezzio/ConfigProvider/Provider/QueueRoutesProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[HasGrantPermissionAuthorization::class]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Middleware/Authorization/Constraint/Account/AbstractAccountAuthorizationConstraint.php">
     <DeprecatedClass>
       <code><![CDATA[AbstractTypeAuthorizationConstraint]]></code>
@@ -164,16 +195,192 @@
       <code><![CDATA[AbstractProducerAuthorizationConstraint]]></code>
     </DeprecatedClass>
   </file>
+  <file src="src/Permission/Cli/GrantCommand.php">
+    <DeprecatedClass>
+      <code><![CDATA[new Flags(
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
+                    )]]></code>
+      <code><![CDATA[new GrantedEvent(
+                    $id,
+                    $identity,
+                    new Flags(
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
+                    ),
+                    $this->clock->milliTimestamp(),
+                    Headers::forCli('permission.grant'),
+                )]]></code>
+    </DeprecatedClass>
+    <DeprecatedInterface>
+      <code><![CDATA[private]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Cli/UpdateCommand.php">
+    <DeprecatedClass>
+      <code><![CDATA[new Flags(
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
+                    )]]></code>
+      <code><![CDATA[new UpdatedEvent(
+                    $permissions->id,
+                    new Flags(
+                        $input->getOption('all') || $input->getOption('grant'),
+                        $input->getOption('all') || $input->getOption('read'),
+                        $input->getOption('all') || $input->getOption('create'),
+                        $input->getOption('all') || $input->getOption('update'),
+                    ),
+                    $this->clock->milliTimestamp(),
+                    Headers::forCli('permission.update'),
+                )]]></code>
+    </DeprecatedClass>
+    <DeprecatedInterface>
+      <code><![CDATA[private]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Config/ConfigProvider.php">
+    <DeprecatedClass>
+      <code><![CDATA[AuthorizationConstraint\HasCreatePermissionAuthorization::class]]></code>
+      <code><![CDATA[AuthorizationConstraint\HasGrantPermissionAuthorization::class]]></code>
+      <code><![CDATA[AuthorizationConstraint\HasGrantPermissionAuthorization::class]]></code>
+      <code><![CDATA[AuthorizationConstraint\HasReadPermissionAuthorization::class]]></code>
+      <code><![CDATA[AuthorizationConstraint\HasUpdatePermissionAuthorization::class]]></code>
+      <code><![CDATA[Cli\GrantCommand::class]]></code>
+      <code><![CDATA[Cli\GrantCommand::class]]></code>
+      <code><![CDATA[Cli\UpdateCommand::class]]></code>
+      <code><![CDATA[Cli\UpdateCommand::class]]></code>
+      <code><![CDATA[Condition\HasNoPermissionsCondition::class]]></code>
+      <code><![CDATA[Condition\HasNoPermissionsCondition::class]]></code>
+      <code><![CDATA[Condition\HasPermissionsCondition::class]]></code>
+      <code><![CDATA[Condition\HasPermissionsCondition::class]]></code>
+      <code><![CDATA[Event\GrantedEvent::class]]></code>
+      <code><![CDATA[Event\GrantedEvent::class]]></code>
+      <code><![CDATA[Event\Listener\DbalListener::class]]></code>
+      <code><![CDATA[Event\Listener\DbalListener::class]]></code>
+      <code><![CDATA[Event\UpdatedEvent::class]]></code>
+      <code><![CDATA[Event\UpdatedEvent::class]]></code>
+      <code><![CDATA[Repository\DbalPermissionsRepository::class]]></code>
+      <code><![CDATA[Repository\DbalPermissionsRepository::class]]></code>
+      <code><![CDATA[Repository\DbalPermissionsRepositoryFactory::class]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Permission/Event/GrantedEvent.php">
+    <DeprecatedClass>
+      <code><![CDATA[public]]></code>
+    </DeprecatedClass>
     <PropertyNotSetInConstructor>
       <code><![CDATA[GrantedEvent]]></code>
       <code><![CDATA[GrantedEvent]]></code>
     </PropertyNotSetInConstructor>
   </file>
+  <file src="src/Permission/Event/Listener/DbalListener.php">
+    <DeprecatedClass>
+      <code><![CDATA[Event\GrantedEvent]]></code>
+      <code><![CDATA[Event\UpdatedEvent]]></code>
+    </DeprecatedClass>
+  </file>
   <file src="src/Permission/Event/UpdatedEvent.php">
+    <DeprecatedClass>
+      <code><![CDATA[public]]></code>
+    </DeprecatedClass>
     <PropertyNotSetInConstructor>
       <code><![CDATA[UpdatedEvent]]></code>
       <code><![CDATA[UpdatedEvent]]></code>
     </PropertyNotSetInConstructor>
+  </file>
+  <file src="src/Permission/Http/AuthorizationConstraint/AbstractPermissionAuthorization.php">
+    <DeprecatedClass>
+      <code><![CDATA[Permission]]></code>
+    </DeprecatedClass>
+    <DeprecatedInterface>
+      <code><![CDATA[private]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Http/AuthorizationConstraint/HasCreatePermissionAuthorization.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractPermissionAuthorization]]></code>
+      <code><![CDATA[Permission]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Http/AuthorizationConstraint/HasGrantPermissionAuthorization.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractPermissionAuthorization]]></code>
+      <code><![CDATA[Permission]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Http/AuthorizationConstraint/HasReadPermissionAuthorization.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractPermissionAuthorization]]></code>
+      <code><![CDATA[Permission]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Http/AuthorizationConstraint/HasUpdatePermissionAuthorization.php">
+    <DeprecatedClass>
+      <code><![CDATA[AbstractPermissionAuthorization]]></code>
+      <code><![CDATA[Permission]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Http/Condition/HasNoPermissionsCondition.php">
+    <DeprecatedInterface>
+      <code><![CDATA[private]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Http/Condition/HasPermissionsCondition.php">
+    <DeprecatedInterface>
+      <code><![CDATA[private]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Model/Attributes.php">
+    <DeprecatedClass>
+      <code><![CDATA[public]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Model/Permission.php">
+    <DeprecatedClass>
+      <code><![CDATA[public]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Repository/DbalPermissionsRepository.php">
+    <DeprecatedClass>
+      <code><![CDATA[DbalPermissionsRepository]]></code>
+      <code><![CDATA[Flags]]></code>
+      <code><![CDATA[NoPermissionWithId::class]]></code>
+      <code><![CDATA[Permission]]></code>
+      <code><![CDATA[Permission::class]]></code>
+      <code><![CDATA[new NoPermissionWithIdentity($identity)]]></code>
+      <code><![CDATA[new PermissionApplier($this->serviceName)]]></code>
+    </DeprecatedClass>
+    <DeprecatedInterface>
+      <code><![CDATA[DbalPermissionsRepository]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Repository/DbalPermissionsRepositoryFactory.php">
+    <DeprecatedClass>
+      <code><![CDATA[DbalPermissionsRepository]]></code>
+      <code><![CDATA[new DbalPermissionsRepository(
+            $matches['serviceName'],
+            $connection,
+            $hydrator,
+        )]]></code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Permission/Repository/Exception/NoPermissionWithIdentity.php">
+    <DeprecatedInterface>
+      <code><![CDATA[NoPermissionWithIdentity]]></code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/Permission/Repository/PermissionsRepository.php">
+    <DeprecatedClass>
+      <code><![CDATA[Flags]]></code>
+      <code><![CDATA[Permission]]></code>
+      <code><![CDATA[Permission::class]]></code>
+      <code><![CDATA[ResourceSet<Permission>]]></code>
+    </DeprecatedClass>
   </file>
 </files>
