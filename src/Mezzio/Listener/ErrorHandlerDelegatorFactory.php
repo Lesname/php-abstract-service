@@ -11,6 +11,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Laminas\Stratigility\Middleware\ErrorHandler;
 
+/**
+ * @deprecated
+ */
 final class ErrorHandlerDelegatorFactory
 {
     /**

@@ -13,6 +13,8 @@ use LesAbstractService\Permission\Model\Attributes\Flags;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class GrantedEvent extends AbstractAggregateEvent
 {

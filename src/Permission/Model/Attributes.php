@@ -10,6 +10,8 @@ use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class Attributes extends AbstractCompositeValueObject
 {

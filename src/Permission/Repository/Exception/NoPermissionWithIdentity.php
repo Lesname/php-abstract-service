@@ -9,6 +9,8 @@ use LesValueObject\Composite\ForeignReference;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class NoPermissionWithIdentity extends AbstractException implements NoPermission
 {

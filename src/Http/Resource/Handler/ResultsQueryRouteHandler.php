@@ -5,41 +5,33 @@ declare(strict_types=1);
 namespace LesAbstractService\Http\Resource\Handler;
 
 use Override;
-use JsonException;
-use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
+use LesHttp\Middleware\Route\Handler\Response\HandleResponse;
 use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LesDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
+use LesHttp\Middleware\Route\Handler\Response\SuccessHandleResponse;
 
 #[DocTypeWrapper(ResultsTypeDocumentWrapper::class)]
 final class ResultsQueryRouteHandler extends AbstractQueryRouteHandler
 {
     /**
-     * @throws JsonException
-     *
-     * @psalm-impure
+     * @psalm-pure
      */
     #[Override]
-    protected function makeResponse(mixed $output): ResponseInterface
+    protected function makeResponse(mixed $output): HandleResponse
     {
-        assert(is_iterable($output));
-        assert(is_countable($output));
+        if (!is_iterable($output) || !is_countable($output)) {
+            throw new RuntimeException();
+        }
 
-        $stream = $this->streamFactory->createStream(
-            json_encode(
-                [
-                    'results' => $output,
-                    'meta' => [
-                        'total' => count($output),
-                    ],
+        // @phpstan-ignore possiblyImpure.new
+        return new SuccessHandleResponse(
+            [
+                'results' => $output,
+                'meta' => [
+                    'total' => count($output),
                 ],
-                flags: JSON_THROW_ON_ERROR,
-            ),
+            ]
         );
-
-        return $this
-            ->responseFactory
-            ->createResponse()
-            ->withAddedHeader('content-type', 'application/json')
-            ->withBody($stream);
     }
 }

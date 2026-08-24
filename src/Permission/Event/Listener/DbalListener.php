@@ -15,6 +15,9 @@ use LesDatabase\Query\Builder\Applier\Values\InsertValuesApplier;
 use LesDatabase\Query\Builder\Applier\Values\UpdateValuesApplier;
 use LesDatabase\Query\Builder\Applier\Resource\UpdateResourceApplier;
 
+/**
+ * @deprecated no replacement
+ */
 final class DbalListener implements Listener
 {
     use DelegateActionListenerHelper;

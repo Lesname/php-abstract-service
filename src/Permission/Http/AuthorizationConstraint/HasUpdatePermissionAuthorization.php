@@ -7,6 +7,9 @@ namespace LesAbstractService\Permission\Http\AuthorizationConstraint;
 use Override;
 use LesAbstractService\Permission\Model\Permission;
 
+/**
+ * @deprecated no replacement
+ */
 final class HasUpdatePermissionAuthorization extends AbstractPermissionAuthorization
 {
     /**

@@ -11,6 +11,8 @@ use LesValueObject\String\Format\Resource\Identifier;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 final class Permission extends AbstractResourceModel implements ResourceModel
 {

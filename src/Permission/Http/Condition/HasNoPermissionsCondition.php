@@ -13,6 +13,9 @@ use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\ConditionConstr
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\SatisfiedConditionConstraintResult;
 use LesHttp\Middleware\AccessControl\Condition\Constraint\Result\UnsatisfiedConditionConstraintResult;
 
+/**
+ * @deprecated no replacement
+ */
 final class HasNoPermissionsCondition implements ConditionConstraint
 {
     /**

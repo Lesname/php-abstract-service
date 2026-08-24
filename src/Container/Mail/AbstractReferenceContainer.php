@@ -16,6 +16,8 @@ use LesAbstractService\Container\Mail\Exception\UnknownReference;
 
 /**
  * @psalm-immutable
+ *
+ * @deprecated no replacement
  */
 abstract class AbstractReferenceContainer implements ContainerInterface
 {

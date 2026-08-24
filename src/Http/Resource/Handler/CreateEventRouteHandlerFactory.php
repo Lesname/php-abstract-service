@@ -33,12 +33,6 @@ final class CreateEventRouteHandlerFactory
             throw new RuntimeException('Cannot find project name');
         }
 
-        $responseFactory = $container->get(ResponseFactoryInterface::class);
-        assert($responseFactory instanceof ResponseFactoryInterface);
-
-        $streamFactory = $container->get(StreamFactoryInterface::class);
-        assert($streamFactory instanceof StreamFactoryInterface);
-
         $identifierGenerator = $container->get(IdentifierGenerator::class);
         assert($identifierGenerator instanceof IdentifierGenerator);
 
@@ -52,8 +46,6 @@ final class CreateEventRouteHandlerFactory
         assert($clock instanceof Clock);
 
         return new CreateEventRouteHandler(
-            $responseFactory,
-            $streamFactory,
             $identifierGenerator,
             $matches['projectName'],
             $hydrator,

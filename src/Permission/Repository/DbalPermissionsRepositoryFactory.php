@@ -9,6 +9,9 @@ use LesHydrator\Hydrator;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated no replacement
+ */
 final class DbalPermissionsRepositoryFactory
 {
     public function __invoke(ContainerInterface $container): DbalPermissionsRepository

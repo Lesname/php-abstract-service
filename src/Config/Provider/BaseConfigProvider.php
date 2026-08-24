@@ -69,9 +69,11 @@ final class BaseConfigProvider
                 ],
                 'delegators' => [
                     ErrorHandler::class => [
+                        // @phpstan-ignore classConstant.deprecatedClass
                         ErrorHandlerDelegatorFactory::class,
                     ],
                     Logger::class => [
+                        // @phpstan-ignore classConstant.deprecatedClass
                         RollbarMonologDelegatorFactory::class,
                     ],
                 ],
@@ -88,7 +90,9 @@ final class BaseConfigProvider
                 'factories' => [
                     Application::class => ReflectionFactory::class,
 
+                    // @phpstan-ignore-next-line
                     TemplateContainer::class => TemplateContainerFactory::class,
+                    // @phpstan-ignore-next-line
                     SenderContainer::class => SenderContainerFactory::class,
 
                     CreateEventRouteHandler::class => CreateEventRouteHandlerFactory::class,

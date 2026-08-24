@@ -12,6 +12,9 @@ use LesAbstractService\Permission\Repository\PermissionsRepository;
 use LesAbstractService\Permission\Repository\Exception\NoPermission;
 use LesHttp\Middleware\AccessControl\Authorization\Constraint\AbstractIdentityAuthorizationConstraint;
 
+/**
+ * @deprecated no replacement
+ */
 abstract class AbstractPermissionAuthorization extends AbstractIdentityAuthorizationConstraint
 {
     /**
