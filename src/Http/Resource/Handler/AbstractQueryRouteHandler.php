@@ -16,29 +16,26 @@ use LesValueObject\ValueObject;
 use LesHttp\Router\Route\Route;
 use LesHttp\Response\ErrorResponse;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\StreamFactoryInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Container\ContainerExceptionInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use LesResource\Repository\Exception\NoResource;
 use LesHttp\Router\Route\Exception\OptionNotSet;
+use LesHttp\Middleware\Route\Handler\RouteHandler;
+use LesHttp\Middleware\Route\Handler\Response\HandleResponse;
+use LesHttp\Middleware\Route\Handler\Response\DynamicErrorHandleResponse;
 
-abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
+abstract class AbstractQueryRouteHandler implements RouteHandler
 {
     /**
      * @psalm-impure
      */
-    abstract protected function makeResponse(mixed $output): ResponseInterface;
+    abstract protected function makeResponse(mixed $output): HandleResponse;
 
     /**
      * @psalm-pure
      */
     final public function __construct(
-        protected readonly ResponseFactoryInterface $responseFactory,
-        protected readonly StreamFactoryInterface $streamFactory,
         protected readonly ContainerInterface $container,
         protected readonly Hydrator $hydrator,
     ) {}
@@ -51,25 +48,18 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
      * @throws ReflectionException
      */
     #[Override]
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request, Route $route): HandleResponse
     {
         try {
-            return $this->makeResponse($this->callProxy($request));
+            return $this->makeResponse($this->callProxy($request, $route));
         } catch (NoResource) {
-            $stream = $this->streamFactory->createStream(
-                json_encode(
-                    new ErrorResponse(
-                        'Request resource not found',
-                        'resourceExists'
-                    ),
-                    flags: JSON_THROW_ON_ERROR
+            return new DynamicErrorHandleResponse(
+                404,
+                new ErrorResponse(
+                    'Request resource not found',
+                    'resourceExists'
                 ),
             );
-
-            return $this
-                ->responseFactory
-                ->createResponse(404)
-                ->withBody($stream);
         }
     }
 
@@ -79,14 +69,8 @@ abstract class AbstractQueryRouteHandler implements RequestHandlerInterface
      * @throws ReflectionException
      * @throws OptionNotSet
      */
-    protected function callProxy(ServerRequestInterface $request): mixed
+    protected function callProxy(ServerRequestInterface $request, Route $route): mixed
     {
-        $route = $request->getAttribute('route');
-
-        if (!$route instanceof Route) {
-            throw new RuntimeException();
-        }
-
         $proxy = $route->getOption('proxy');
 
         assert(is_array($proxy));

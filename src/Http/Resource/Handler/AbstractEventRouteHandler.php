@@ -12,20 +12,20 @@ use LesHttp\Router\Route\Route;
 use LesDomain\Event\Store\Store;
 use LesAbstractService\Clock\Clock;
 use LesDomain\Event\Property\Headers;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\RequestHandlerInterface;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesHttp\Router\Route\Exception\OptionNotSet;
+use LesHttp\Middleware\Route\Handler\RouteHandler;
 use LesValueObject\String\Format\Exception\NotFormat;
+use LesHttp\Middleware\Route\Handler\Response\HandleResponse;
 
-abstract class AbstractEventRouteHandler implements RequestHandlerInterface
+abstract class AbstractEventRouteHandler implements RouteHandler
 {
     /**
      * @psalm-impure
      */
-    abstract protected function createResponse(ServerRequestInterface $request, Event $event): ResponseInterface;
+    abstract protected function createResponse(ServerRequestInterface $request, Event $event): HandleResponse;
 
     /**
      * @psalm-pure
@@ -43,9 +43,9 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws TooShort
      */
     #[Override]
-    public function handle(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request, Route $route): HandleResponse
     {
-        $event = $this->makeEvent($request);
+        $event = $this->makeEvent($request, $route);
         $this->store->persist($event);
 
         return $this->createResponse($request, $event);
@@ -57,10 +57,10 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @throws TooLong
      * @throws TooShort
      */
-    protected function makeEvent(ServerRequestInterface $request): Event
+    protected function makeEvent(ServerRequestInterface $request, Route $route): Event
     {
         return $this->hydrator->hydrate(
-            $this->getEventClass($request),
+            $this->getEventClass($request, $route),
             $this->getEventData($request),
         );
     }
@@ -69,19 +69,16 @@ abstract class AbstractEventRouteHandler implements RequestHandlerInterface
      * @return class-string<Event>
      *
      * @throws OptionNotSet
+     *
+     * @psalm-mutation-free
      */
-    protected function getEventClass(ServerRequestInterface $request): string
+    protected function getEventClass(ServerRequestInterface $request, Route $route): string
     {
-        $route = $request->getAttribute('route');
-
-        if (!$route instanceof Route) {
-            throw new RuntimeException();
-        }
-
         $event = $route->getOption('event');
 
-        assert(is_string($event));
-        assert(is_subclass_of($event, Event::class));
+        if (!is_string($event) || !is_subclass_of($event, Event::class)) {
+            throw new RuntimeException();
+        }
 
         return $event;
     }
