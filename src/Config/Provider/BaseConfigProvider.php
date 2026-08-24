@@ -24,6 +24,7 @@ use LesAbstractService\Cli\Queue\ProcessCommandFactory;
 use LesAbstractService\Container\Mail\TemplateContainer;
 use LesAbstractService\Cli\Queue\CountProcessingCommand;
 use LesAbstractService\Cli\Queue\CountProcessableCommand;
+use LesAbstractService\Cli\Documentor\WriteCommandFactory;
 use LesAbstractService\Factory\Container\ReflectionFactory;
 use LesAbstractService\Container\Mail\SenderContainerFactory;
 use LesAbstractService\Container\Mail\TemplateContainerFactory;
@@ -101,7 +102,7 @@ final class BaseConfigProvider
 
                     ClearCommand::class => ReflectionFactory::class,
 
-                    WriteCommand::class => ReflectionFactory::class,
+                    WriteCommand::class => WriteCommandFactory::class,
 
                     CleanUpCommand::class => ReflectionFactory::class,
                     UpdateCommand::class => ReflectionFactory::class,
