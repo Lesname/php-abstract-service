@@ -15,7 +15,7 @@
     "lesname/domain": "^0.7.7",
     "lesname/validator": "^0.6.11",
     "lesname/queue": "^0.9.3",
-    "lesname/http": "dev-main",
+    "lesname/http": "^0.9.6",
     "lesname/value-object": "^0.7.1",
     "lesname/token": "^0.4.0",
 
