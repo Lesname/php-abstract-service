@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace LesAbstractService;
 
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Psr7\Factory\ServerRequestFactory;
+use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
@@ -20,7 +21,16 @@ final class Application
 
     public function run(): void
     {
-        $this->handle(ServerRequestFactory::createFromGlobals());
+        $psr17Factory = new Psr17Factory();
+
+        $creator = new ServerRequestCreator(
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory,
+            $psr17Factory
+        );
+
+        $this->handle($creator->fromGlobals());
     }
 
     public function handle(ServerRequestInterface $request): void
