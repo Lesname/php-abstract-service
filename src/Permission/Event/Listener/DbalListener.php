@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace LesAbstractService\Permission\Event\Listener;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use LesDomain\Event\Listener\Listener;
 use LesAbstractService\Permission\Event;
 use LesDomain\Event\AbstractAggregateEvent;
-use LesDomain\Event\Listener\Helper\DelegateActionListenerHelper;
+use LesDatabase\Query\Builder\Applier\ChainApplier;
+use LesDomain\Event\Listener\AbstractDbalDelegateListener;
 use LesDatabase\Query\Builder\Applier\Values\InsertValuesApplier;
 use LesDatabase\Query\Builder\Applier\Values\UpdateValuesApplier;
 use LesDatabase\Query\Builder\Applier\Resource\UpdateResourceApplier;
@@ -18,16 +17,8 @@ use LesDatabase\Query\Builder\Applier\Resource\UpdateResourceApplier;
 /**
  * @deprecated no replacement
  */
-final class DbalListener implements Listener
+final class DbalListener extends AbstractDbalDelegateListener
 {
-    use DelegateActionListenerHelper;
-
-    /**
-     * @psalm-pure
-     */
-    public function __construct(private readonly Connection $connection)
-    {}
-
     /**
      * @throws Exception
      */
@@ -46,7 +37,7 @@ final class DbalListener implements Listener
                     'activity_last' => $event->occurredOn,
                 ],
             )
-            ->apply($this->connection->createQueryBuilder())
+            ->apply($this->db->createQueryBuilder())
             ->insert('permission')
             ->executeStatement();
     }
@@ -56,25 +47,20 @@ final class DbalListener implements Listener
      */
     protected function handleUpdated(Event\UpdatedEvent $event): void
     {
-        UpdateValuesApplier
-            ::forValues(
-                [
-                    'flags_grant' => $event->flags->grant,
-                    'flags_read' => $event->flags->read,
-                    'flags_create' => $event->flags->create,
-                    'flags_update' => $event->flags->update,
-                ],
-            )
-            ->apply($this->createUpdateBuilder($event))
+        ChainApplier::chain(
+            UpdateValuesApplier
+                ::forValues(
+                    [
+                        'flags_grant' => $event->flags->grant,
+                        'flags_read' => $event->flags->read,
+                        'flags_create' => $event->flags->create,
+                        'flags_update' => $event->flags->update,
+                    ],
+                ),
+            UpdateResourceApplier::fromEvent($event),
+        )
+            ->apply($this->db->createQueryBuilder())
+            ->update('permission')
             ->executeStatement();
-    }
-
-    private function createUpdateBuilder(AbstractAggregateEvent $event): QueryBuilder
-    {
-        $builder = $this->connection->createQueryBuilder();
-        $builder->update('permission');
-        UpdateResourceApplier::fromEvent($event)->apply($builder);
-
-        return $builder;
     }
 }
