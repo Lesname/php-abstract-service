@@ -69,6 +69,8 @@ final class WriteCommand extends Command
         Composite\Paginate::class,
         // Enum
         Enum\OrderDirection::class,
+        Enum\CountryCode2::class,
+        Enum\CountryCode3::class,
         // Number
         Number\Int\Date\Day::class,
         Number\Int\Date\MilliTimestamp::class,
