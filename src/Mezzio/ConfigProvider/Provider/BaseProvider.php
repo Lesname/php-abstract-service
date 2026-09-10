@@ -232,11 +232,11 @@ final class BaseProvider
             'cors' => [
                 'default' => [
                     'methods' => [
-                        'post',
-                        'put',
-                        'patch',
-                        'query',
-                        'delete',
+                        'POST',
+                        'PUT',
+                        'PATCH',
+                        'QUERY',
+                        'DELETE',
                     ],
                     'headers' => [
                         'Accept-Language',
