@@ -19,6 +19,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+use LesAbstractService\Cli\Queue\Exception\NoWorkerForJob;
 
 final class ProcessCommand extends Command
 {
@@ -100,12 +101,13 @@ final class ProcessCommand extends Command
 
     /**
      * @throws ContainerExceptionInterface
+     * @throws NoWorkerForJob
      * @throws NotFoundExceptionInterface
      */
     private function getWorkerForJob(Name $name): Worker
     {
         if (!array_key_exists($name->value, $this->workerMap)) {
-            throw new RuntimeException();
+            throw new NoWorkerForJob($name->value);
         }
 
         $mapped = $this->workerMap[$name->value];
